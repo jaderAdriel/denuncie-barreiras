@@ -1,0 +1,173 @@
+@startuml
+' https://plantuml.com/class-diagram
+
+skinparam Dpi 200
+skinparam Nodesep 80
+skinparam classBackgroundColor #F9F9F9
+skinparam classBorderColor #444444
+skinparam classArrowColor #555555
+skinparam noteBackgroundColor #FFF9C4
+skinparam noteBorderColor #E0E0E0
+skinparam groupInheritance 2
+
+package "Usuários" {
+    together {
+        class Pessoa {
+            - id : Long
+            - nome : String
+            - email : String
+            - dataNascimento : LocalDate
+            - genero : GeneroEnum
+        }
+
+        class Usuario {
+            - senha
+            - login
+            + autenticar()
+            + alterarSenha()
+            + realizarDenuncia(dadosDenuncia: Map<String, Object>): Denuncia
+        }
+
+        class Aluno {
+            - matricula : String
+            - anoIngresso : Integer
+        }
+        class FuncionarioEscolar {
+            - departamento : Departamento
+            - telefone : String
+        }
+    }
+}
+
+'top to bottom direction
+
+package Enums {
+    enum GeneroEnum {
+        MASCULINO
+        FEMININO
+        OUTRO
+    }
+    enum TipoAmbienteEnum {
+        SALA_DE_AULA
+        CORREDOR
+        REFEITORIO
+        BANHEIRO
+        OUTRO
+    }
+    enum TipoBarreiraAtitudinalEnum {
+        PRECONCEITO
+        FALTA_DE_CONSCIENCIA
+        DESRESPEITO
+        IGNORANCIA
+        OUTRO
+    }
+    enum StatusTramiteEnum {
+        RECEBIDO
+        ENCAMINHADO
+        FINALIZADO
+    }
+
+    enum TipoEvidenciaEnum {
+        CAPTURA_DE_TELA
+        FOTO
+        VIDEO
+    }
+}
+
+package "Denúncias"  {
+    together {
+        class Evidencia {
+            - id : Long
+            - descricao : Text
+            - tipo : TipoEvidenciaEnum
+            - anexo : Blob
+            - denuncia : Denuncia
+            - adicionadoPor : Usuario
+        }
+
+        class Local {
+            - pavilhao : String
+            - bloco : String
+            - andar : Integer
+            - sala : String
+            - descricaoAdicional : Text
+        }
+
+        class Departamento {
+            - nome : String
+            - responsavel : FuncionarioEscolar
+            - membros : List<FuncionarioEscolar>
+            + adicionarMembro(f : FuncionarioEscolar) : void
+            + removerMembro(f: FuncionarioEscolar) : void
+        }
+
+        class TramiteDenuncia {
+            - denuncia : Denuncia
+            - dataAbertura : LocalDate
+            - status: StatusTramiteEnum
+            - origem: Departamento
+            - destino: Departamento
+            - finalizarDenuncia()
+        }
+
+        together {
+
+            class Denuncia {
+                - tipo : BarreiraAtitudinal
+                - ambiente: TipoAmbienteEnum
+                - localizacaoOcorrido : Local
+                - severidade : Integer
+                - denunciaAnonima : Boolean
+                - detalhamentoOcorrido: Text
+                - vitima : Pessoa
+                - testemunhas : List<Testemunha>
+                - evidencias : List<Evidencia>
+                - denunciante : Usuario
+                - parecer : Parecer
+                + alterarStatus(novoStatus: StatusTramiteEnum):
+                + adicionarEvidencia(evidencia: Evidencia): void
+            }
+
+            class Parecer {
+                - descricao : String
+                - data : LocalDate
+                - tramiteDenunciaFinal: TramiteDenuncia
+                - autor : FuncionarioEscolar
+            }
+        }
+    }
+}
+
+
+Denuncia "1" -d- "1" Parecer
+'Herança de Pessoa
+Pessoa <|-- Usuario
+Usuario <|-- FuncionarioEscolar
+Usuario <|-- Aluno
+
+'Agregação
+FuncionarioEscolar "1.*" -- "1" Departamento
+FuncionarioEscolar "1" <-up- "0..1" Departamento : "É responsável"
+
+
+TramiteDenuncia "0..1" -- "0..1" Departamento : "origem/destino"
+TramiteDenuncia "1.*" -- "1" Denuncia
+
+Denuncia "0..1" -- "1" Pessoa
+(Denuncia, Pessoa) . Denúncias.Testemunha
+class Denúncias.Testemunha {
+    - relato: Text
+    - denuncia : Denuncia
+    - pessoa : Pessoa
+    - dataDeclaracao: LocalDate
+    - anonimato: Boolean
+}
+
+Local --* Denuncia
+
+Parecer "0..1" <-r- "1" TramiteDenuncia : "Gera"
+
+Denuncia *-right- Evidencia : "contém"
+Usuario "1" -- "0..*" Evidencia : ""
+
+@enduml

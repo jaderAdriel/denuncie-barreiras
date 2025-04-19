@@ -1,0 +1,71 @@
+@startuml
+!pragma useVerticalIf on
+
+skinparam usecase {
+    BackgroundColor #F9F9F9
+    BorderColor #444444
+    FontSize 12
+    ArrowColor #555555
+    ArrowFontSize 10
+}
+
+skinparam actor {
+    BackgroundColor #F9F9F9
+    BorderColor #555555
+    FontSize 13
+}
+
+' Definindo direção e espaçamento
+left to right direction
+
+' ##### ACTORS #####
+actor "Aluno" as a <<Pessoa>> #FFD700
+actor "Funcionário\nEscolar" as f <<Pessoa>> #87CEEB
+
+' Organizando em colunas com maior separação
+
+rectangle "Autenticação" <<boundary>> {
+    (UC0: Fazer Login) as uc0 #LightGray
+    note right of uc0
+      <b>Pré-requisito</b> para\n todas as operações
+    end note
+}
+
+rectangle "Denúncia" <<boundary>> {
+    (UC1: Realizar Denúncia) as uc1
+    (UC2: Anexar Evidências) as uc2
+    (UC3: Registrar Testemunha) as uc3
+}
+
+rectangle "Administração" <<boundary>> {
+    (UC4: Tramitar Denúncia) as uc4
+    (UC5: Emitir Parecer) as uc5
+    (UC6: Gerenciar Departamentos) as uc6
+}
+
+rectangle "Consultas" <<boundary>> {
+    (UC7: Consultar Status) as uc7
+}
+
+' Denúncia
+a --> uc1
+uc1 --> uc2 : <<extend>>
+uc1 --> uc3 : <<include>>
+uc0 .down.> uc1 : <<include>>
+
+' Administração
+f --> uc4
+uc4 --> uc5 : <<include>>
+f --> uc6
+uc0 .down.> uc4 : <<include>>
+
+' Consultas
+a --> uc7
+uc0 .down.> uc7 : <<include>>
+
+a --> uc0
+f --> uc0
+uc0 .down.> uc6 : <<include>>
+
+
+@enduml
