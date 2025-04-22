@@ -29,18 +29,20 @@ services:
       FLYWAY_USER: ${MYSQL_USER}
       FLYWAY_PASSWORD: ${MYSQL_PASSWORD}
       FLYWAY_BASELINE_ON_MIGRATE: "true"
+    command: migrate
 
   app:
     build:
       context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      flyway:
+        condition: service_completed_successfully
     environment:
       DB_URL: ${DB_URL}
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "8080:8080"
-    depends_on:
-      - flyway  # 👈 Agora espera o Flyway terminar
 
 volumes:
   mysql_data:
