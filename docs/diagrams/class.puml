@@ -1,8 +1,9 @@
 @startuml
 ' https://plantuml.com/class-diagram
 
-skinparam Dpi 200
+skinparam Dpi 150
 skinparam Nodesep 80
+skinparam Ranksep 80
 skinparam classBackgroundColor #F9F9F9
 skinparam classBorderColor #444444
 skinparam classArrowColor #555555
@@ -85,6 +86,14 @@ package "Denúncias"  {
             - adicionadoPor : Usuario
         }
 
+        class Testemunha {
+            - relato: Text
+            - denuncia : Denuncia
+            - pessoa : Pessoa
+            - dataDeclaracao: LocalDate
+            - anonimato: Boolean
+        }
+
         class Local {
             - pavilhao : String
             - bloco : String
@@ -107,39 +116,39 @@ package "Denúncias"  {
             - status: StatusTramiteEnum
             - origem: Departamento
             - destino: Departamento
+            - encaminhadoPor : FuncionarioEscolar
+            - receptor : FuncionarioEscolar
             - finalizarDenuncia()
         }
 
-        together {
 
-            class Denuncia {
-                - tipo : BarreiraAtitudinal
-                - ambiente: TipoAmbienteEnum
-                - localizacaoOcorrido : Local
-                - severidade : Integer
-                - denunciaAnonima : Boolean
-                - detalhamentoOcorrido: Text
-                - vitima : Pessoa
-                - testemunhas : List<Testemunha>
-                - evidencias : List<Evidencia>
-                - denunciante : Usuario
-                - parecer : Parecer
-                + alterarStatus(novoStatus: StatusTramiteEnum):
-                + adicionarEvidencia(evidencia: Evidencia): void
-            }
 
-            class Parecer {
-                - descricao : String
-                - data : LocalDate
-                - tramiteDenunciaFinal: TramiteDenuncia
-                - autor : FuncionarioEscolar
-            }
+        class Denuncia {
+            - tipo : BarreiraAtitudinal
+            - ambiente: TipoAmbienteEnum
+            - localizacaoOcorrido : Local
+            - severidade : Integer
+            - denunciaAnonima : Boolean
+            - detalhamentoOcorrido: Text
+            - vitima : Pessoa
+            - testemunhas : List<Testemunha>
+            - evidencias : List<Evidencia>
+            - denunciante : Usuario
+            + alterarStatus(novoStatus: StatusTramiteEnum):
+            + adicionarEvidencia(evidencia: Evidencia): void
+        }
+
+        class Parecer {
+            - descricao : Text
+            - data : LocalDate
+            - tramiteDenuncia: TramiteDenuncia
+            - autor : FuncionarioEscolar
         }
     }
 }
 
 
-Denuncia "1" -d- "1" Parecer
+'Denuncia "1" -d- "1" Parecer
 'Herança de Pessoa
 Pessoa <|-- Usuario
 Usuario <|-- FuncionarioEscolar
@@ -148,6 +157,7 @@ Usuario <|-- Aluno
 'Agregação
 FuncionarioEscolar "1.*" -- "1" Departamento
 FuncionarioEscolar "1" <-up- "0..1" Departamento : "É responsável"
+FuncionarioEscolar "1" -- "1..*" TramiteDenuncia
 
 
 TramiteDenuncia "0..1" -- "0..1" Departamento : "origem/destino"
@@ -155,19 +165,13 @@ TramiteDenuncia "1.*" -- "1" Denuncia
 
 Denuncia "0..1" -- "1" Pessoa
 (Denuncia, Pessoa) . Denúncias.Testemunha
-class Denúncias.Testemunha {
-    - relato: Text
-    - denuncia : Denuncia
-    - pessoa : Pessoa
-    - dataDeclaracao: LocalDate
-    - anonimato: Boolean
-}
+
 
 Local --* Denuncia
 
-Parecer "0..1" <-r- "1" TramiteDenuncia : "Gera"
+Parecer "1" <-r- "1" TramiteDenuncia : "Gera"
 
-Denuncia *-right- Evidencia : "contém"
+Denuncia *-- Evidencia : "contém"
 Usuario "1" -- "0..*" Evidencia : ""
 
 @enduml
