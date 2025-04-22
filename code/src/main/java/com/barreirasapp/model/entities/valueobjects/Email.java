@@ -1,4 +1,4 @@
-package com.barreirasapp.model.valueobjects;
+package com.barreirasapp.model.entities.valueobjects;
 import java.util.regex.Pattern;
 
 public record Email(String value) {
