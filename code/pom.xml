@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.aula01</groupId>
-    <artifactId>code</artifactId>
+    <groupId>com.barreirasapp</groupId>
+    <artifactId>barreiras-app</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <name>Denuncia de Barreiras atitudinais App</name>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -22,7 +22,6 @@
             <version>9.2.0</version>
         </dependency>
 
-        <!-- API do Servlet -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
