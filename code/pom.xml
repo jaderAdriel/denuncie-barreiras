@@ -8,6 +8,8 @@
     <artifactId>barreiras-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Denuncia de Barreiras atitudinais App</name>
+    <packaging>war</packaging>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
