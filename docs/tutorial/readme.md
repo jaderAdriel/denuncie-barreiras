@@ -67,17 +67,4 @@ project-root/
 docker-compose up -d --build
 ```
 
----
 
-## ❓ Dúvidas ou Problemas?
-
-- Consulte o [guia de troubleshooting](docs/troubleshooting.md)
-- Verifique os logs com:
-
-```bash
-docker-compose logs -f
-```
-
----
-
-Se quiser, posso gerar também os arquivos `docker-setup.md` e `migrations-guide.md` separadamente com base no conteúdo que criamos até aqui. Deseja isso também?
