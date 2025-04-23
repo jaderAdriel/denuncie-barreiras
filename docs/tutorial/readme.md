@@ -1,7 +1,3 @@
-Ótimo! Aqui está um `README.md` unificado que serve como **guia principal do projeto**, **linkando o guia de Docker** e o **guia de Migrations**, além de contextualizar a utilidade de cada um.
-
----
-
 # 🛠️ Guia de Ambiente de Desenvolvimento
 
 Este repositório contém os recursos necessários para configurar rapidamente um ambiente de desenvolvimento completo utilizando **Docker** e **migrations com Flyway**. A proposta é garantir que todos os desenvolvedores possam trabalhar com a mesma estrutura de forma padronizada, segura e automatizada.
