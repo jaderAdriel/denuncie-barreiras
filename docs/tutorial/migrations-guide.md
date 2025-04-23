@@ -164,7 +164,3 @@ docker-compose up -d --build
 
 - [Documentação oficial do Flyway](https://flywaydb.org/documentation/)
 - [Exemplos de Migrations](https://flywaydb.org/documentation/concepts/migrations)
-
----
-
-Se quiser, posso gerar também alguns exemplos práticos de migrations ou um comando para rodar o Flyway manualmente via CLI. Deseja?
