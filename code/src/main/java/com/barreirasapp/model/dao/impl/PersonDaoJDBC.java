@@ -51,7 +51,7 @@ public class PersonDaoJDBC implements PersonDao{
             if (rowsAffected > 0) {
                 rs = st.getGeneratedKeys();
                 if (rs.next()) {
-                    Integer id = rs.getInt("id");
+                    int id = rs.getInt(1);
                     person.setId(id);
                 }
             } else {
