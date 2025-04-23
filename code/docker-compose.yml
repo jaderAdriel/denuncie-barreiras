@@ -9,15 +9,15 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # DDL inicial
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql_data:/var/lib/mysql
-    healthcheck:  # 👈 Novo healthcheck
+    healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 10s
       retries: 10
 
-  flyway:  # 👈 Novo serviço para migrations
+  flyway:
     image: flyway/flyway:9
     depends_on:
       db:
@@ -31,18 +31,25 @@ services:
       FLYWAY_BASELINE_ON_MIGRATE: "true"
     command: migrate
 
-  app:
-    build:
-      context: .
-    ports:
-      - "8000:8000"
+  maven:
+    image: maven:3.9.4-eclipse-temurin-17
+    volumes:
+      - .:/app
+    working_dir: /app
     depends_on:
       flyway:
         condition: service_completed_successfully
-    environment:
-      DB_URL: ${DB_URL}
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
+    command: mvn clean package
+
+  tomcat:
+    image: tomcat:10.1-jdk17-temurin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/barreiras-app-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/ROOT.war
+    depends_on:
+      maven:
+        condition: service_completed_successfully
 
 volumes:
   mysql_data:
