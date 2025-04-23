@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: mysql:8
@@ -31,25 +33,19 @@ services:
       FLYWAY_BASELINE_ON_MIGRATE: "true"
     command: migrate
 
-  maven:
-    image: maven:3.9.4-eclipse-temurin-17
-    volumes:
-      - .:/app
-    working_dir: /app
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
     depends_on:
       flyway:
         condition: service_completed_successfully
-    command: mvn clean package
-
-  tomcat:
-    image: tomcat:10.1-jdk17-temurin
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./target/barreiras-app-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/ROOT.war
-    depends_on:
-      maven:
-        condition: service_completed_successfully
+    environment:
+      DB_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
 
 volumes:
   mysql_data:
