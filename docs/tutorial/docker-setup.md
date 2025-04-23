@@ -128,10 +128,3 @@ Consulte nosso guia específico para migrations:
 - [Flyway Migrations Guide](docs/migrations-flyway.md)
 - [Liquibase Migrations Guide](docs/migrations-liquibase.md)
 
-## Solução de Problemas
-
-Caso encontre problemas, consulte nosso [guia de troubleshooting](docs/troubleshooting.md) ou verifique os logs com:
-
-```bash
-docker-compose logs -f
-```
