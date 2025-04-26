@@ -1,5 +1,7 @@
 package com.barreirasapp.model.entities;
 
+import com.barreirasapp.model.dao.DaoFactory;
+import com.barreirasapp.model.dao.PersonDao;
 import com.barreirasapp.model.enums.Gender;
 import com.barreirasapp.model.entities.valueobjects.Email;
 
@@ -60,5 +62,10 @@ public class Person {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public void save() {
+        PersonDao dao = DaoFactory.createPersonDao();
+        dao.insert(this);
     }
 }
