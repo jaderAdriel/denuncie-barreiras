@@ -15,57 +15,84 @@ skinparam actor {
     FontSize 13
 }
 
-' Definindo direção e espaçamento
+skinparam actor {
+    BackgroundColor #F9F9F9
+    BorderColor #555555
+    FontSize 13
+}
+
 left to right direction
 
-' ##### ACTORS #####
-actor "Aluno" as a <<Pessoa>> #FFD700
-actor "Funcionário\nEscolar" as f <<Pessoa>> #87CEEB
+' ##### ACTORES #####
+actor "Usuário" as u #A2D2FF
+actor "Moderador" as m #BDE0FE
 
-' Organizando em colunas com maior separação
-
+' ##### AUTENTICAÇÃO #####
 rectangle "Autenticação" <<boundary>> {
-    (UC0: Fazer Login) as uc0 #LightGray
+    (UC0: Autenticar no sistema) as uc0 #LightGray
     note right of uc0
-      <b>Pré-requisito</b> para\n todas as operações
+      <b>Pré-requisito</b> para\n todas as interações
     end note
 }
 
+' ##### DENÚNCIA #####
 rectangle "Denúncia" <<boundary>> {
     (UC1: Realizar Denúncia) as uc1
-    (UC2: Anexar Evidências) as uc2
-    (UC3: Registrar Testemunha) as uc3
+    (UC2: Anexar Arquivos) as uc2
+    (UC3: Consultar Denúncia) as uc3
+    (UC10: Vincular Cenário à Denúncia) as uc10
 }
 
-rectangle "Administração" <<boundary>> {
-    (UC4: Tramitar Denúncia) as uc4
-    (UC5: Emitir Parecer) as uc5
-    (UC6: Gerenciar Departamentos) as uc6
+' ##### CENÁRIOS EDUCATIVOS #####
+rectangle "Cenários Educativos" <<boundary>> {
+    (UC4: Consultar Cenários) as uc4
+    (UC6: Curtir Cenário) as uc6
+    (UC7: Criar Cenário Educativo) as uc7
+    (UC8: Vincular Lei ao Cenário) as uc8
 }
 
-rectangle "Consultas" <<boundary>> {
-    (UC7: Consultar Status) as uc7
+' ##### LEGISLAÇÃO #####
+rectangle "Leis" <<boundary>> {
+    (UC9: Consultar Leis Relacionadas) as uc9
 }
 
-' Denúncia
-a --> uc1
+' Usuário
+u --> uc0
+u --> uc3
+u --> uc4
+u --> uc9
 uc1 --> uc2 : <<extend>>
-uc1 --> uc3 : <<include>>
 uc0 .down.> uc1 : <<include>>
-
-' Administração
-f --> uc4
-uc4 --> uc5 : <<include>>
-f --> uc6
 uc0 .down.> uc4 : <<include>>
+uc0 .down.> uc3 : <<include>>
+uc1 .down.> uc10 : <<extend>>
+uc3 .down.> uc10 : <<extend>>
 
-' Consultas
-a --> uc7
-uc0 .down.> uc7 : <<include>>
+' Moderador
+m --> uc0
+m --> uc4
+m --> uc3
+m --> uc9
+uc7 --> uc8 : <<extend>>
+uc0 .down.> uc7 : <<extend>>
+uc0 .down.> uc6 : <<extend>>
 
-a --> uc0
-f --> uc0
-uc0 .down.> uc6 : <<include>>
 
+note top of u
+  <b>Permissões do Usuário:</b>
+  - Realizar denúncias
+  - Anexar arquivos
+  - Consultar denúncias próprias
+  - Ver cenários educativos
+  - Curtir cenários
+  - Consultar leis
+end note
+
+note top of m
+  <b>Permissões do Moderador:</b>
+  - Todas do Usuário +
+  - Criar cenários
+  - Vincular leis a denuncias
+end note
 
 @enduml

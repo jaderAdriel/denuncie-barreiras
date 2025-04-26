@@ -1,7 +1,7 @@
 @startuml
 ' https://plantuml.com/class-diagram
 
-skinparam Dpi 150
+skinparam Dpi 100
 skinparam Nodesep 80
 skinparam Ranksep 80
 skinparam classBackgroundColor #F9F9F9
@@ -11,167 +11,89 @@ skinparam noteBackgroundColor #FFF9C4
 skinparam noteBorderColor #E0E0E0
 skinparam groupInheritance 2
 
+left to right direction
+
 package "Usuários" {
-    together {
-        class Pessoa {
-            - id : Long
-            - nome : String
-            - email : String
-            - dataNascimento : LocalDate
-            - genero : GeneroEnum
-        }
 
-        class Usuario {
-            - senha
-            - login
-            + autenticar()
-            + alterarSenha()
-            + realizarDenuncia(dadosDenuncia: Map<String, Object>): Denuncia
-        }
+    class Usuario {
+        - id : Long
+        - nome : String
+        - email : String
+        - dataNascimento : LocalDate
+        - genero : GeneroEnum
+        - senha
+        - login
+        + autenticar()
+        + alterarSenha()
+        + realizarDenuncia()
+    }
 
-        class Aluno {
-            - matricula : String
-            - anoIngresso : Integer
-        }
-        class FuncionarioEscolar {
-            - departamento : Departamento
-            - telefone : String
-        }
+     class Moderador {
+        - telefone : String
+        - 2Factor : boolean
+        + autenticar()
     }
 }
 
-'top to bottom direction
-
-package Enums {
-    enum GeneroEnum {
-        MASCULINO
-        FEMININO
-        OUTRO
-    }
-    enum TipoAmbienteEnum {
-        SALA_DE_AULA
-        CORREDOR
-        REFEITORIO
-        BANHEIRO
-        OUTRO
-    }
-    enum TipoBarreiraAtitudinalEnum {
-        PRECONCEITO
-        FALTA_DE_CONSCIENCIA
-        DESRESPEITO
-        IGNORANCIA
-        OUTRO
-    }
-    enum StatusTramiteEnum {
-        RECEBIDO
-        ENCAMINHADO
-        FINALIZADO
-    }
-
-    enum TipoEvidenciaEnum {
-        CAPTURA_DE_TELA
-        FOTO
-        VIDEO
-    }
+class CenarioBarreira {
+    - tipo : TipoBarreiraAtitudinal
+    - autor : Moderador
+    - conteudo: Text
+    - titulo: String
+    - dataCriacao: LocalDate
+    - curtidas : List<Usuario>
 }
 
-package "Denúncias"  {
-    together {
-        class Evidencia {
-            - id : Long
-            - descricao : Text
-            - tipo : TipoEvidenciaEnum
-            - anexo : Blob
-            - denuncia : Denuncia
-            - adicionadoPor : Usuario
-        }
+class Lei {
+    - codigo : String
+    - data: String
+    - link : URL
+    - titulo: String
+    - descricao: Text
+}
 
-        class Testemunha {
-            - relato: Text
-            - denuncia : Denuncia
-            - pessoa : Pessoa
-            - dataDeclaracao: LocalDate
-            - anonimato: Boolean
-        }
-
-        class Local {
-            - pavilhao : String
-            - bloco : String
-            - andar : Integer
-            - sala : String
-            - descricaoAdicional : Text
-        }
-
-        class Departamento {
-            - nome : String
-            - responsavel : FuncionarioEscolar
-            - membros : List<FuncionarioEscolar>
-            + adicionarMembro(f : FuncionarioEscolar) : void
-            + removerMembro(f: FuncionarioEscolar) : void
-        }
-
-        class TramiteDenuncia {
-            - denuncia : Denuncia
-            - dataAbertura : LocalDate
-            - status: StatusTramiteEnum
-            - origem: Departamento
-            - destino: Departamento
-            - encaminhadoPor : FuncionarioEscolar
-            - receptor : FuncionarioEscolar
-            - finalizarDenuncia()
-        }
-
-
-
-        class Denuncia {
-            - tipo : BarreiraAtitudinal
-            - ambiente: TipoAmbienteEnum
-            - localizacaoOcorrido : Local
-            - severidade : Integer
-            - denunciaAnonima : Boolean
-            - detalhamentoOcorrido: Text
-            - vitima : Pessoa
-            - testemunhas : List<Testemunha>
-            - evidencias : List<Evidencia>
-            - denunciante : Usuario
-            + alterarStatus(novoStatus: StatusTramiteEnum):
-            + adicionarEvidencia(evidencia: Evidencia): void
-        }
-
-        class Parecer {
-            - descricao : Text
-            - data : LocalDate
-            - tramiteDenuncia: TramiteDenuncia
-            - autor : FuncionarioEscolar
-        }
-    }
+class Comentario {
+    - dataHora : dateTime
+    - conteudo : Text
+    - comentarioPai : Comentario
 }
 
 
-'Denuncia "1" -d- "1" Parecer
+class Denuncia {
+    - tipo : TipoBarreiraAtitudinal
+    - ambiente: TipoAmbienteEnum
+    - localizacaoOcorrido : Endereco
+    - severidade : Integer
+    - denunciaAnonima : Boolean
+    - detalhamentoOcorrido: Text
+    - cenarioRelacionado : CenarioBarreira
+    - denunciante : Usuario
+}
+
+class Anexo {
+    - nomeArquivo : String
+    - tipo : String
+    - caminho : String
+    - dataEnvio : LocalDateTime
+}
+
+
+
 'Herança de Pessoa
-Pessoa <|-- Usuario
-Usuario <|-- FuncionarioEscolar
-Usuario <|-- Aluno
+'Pessoa <|-- Usuario
+Usuario <|-- Moderador
+Usuario "n" -- "n" Denuncia
 
-'Agregação
-FuncionarioEscolar "1.*" -- "1" Departamento
-FuncionarioEscolar "1" <-up- "0..1" Departamento : "É responsável"
-FuncionarioEscolar "1" -- "1..*" TramiteDenuncia
+Comentario "1" <-- "n" Comentario : "Responde"
 
 
-TramiteDenuncia "0..1" -- "0..1" Departamento : "origem/destino"
-TramiteDenuncia "1.*" -- "1" Denuncia
+Moderador "1"  -- "0..*" CenarioBarreira : "Cria"
 
-Denuncia "0..1" -- "1" Pessoa
-(Denuncia, Pessoa) . Denúncias.Testemunha
+Denuncia "*" -- "1" CenarioBarreira
+Denuncia "1" -- "0..*" Comentario
+Lei "0..*" -- "0..*" CenarioBarreira
 
-
-Local --* Denuncia
-
-Parecer "1" <-r- "1" TramiteDenuncia : "Gera"
-
-Denuncia *-- Evidencia : "contém"
-Usuario "1" -- "0..*" Evidencia : ""
+Denuncia *-- "0..*" Anexo
+CenarioBarreira *-- "0..*" Anexo
 
 @enduml
