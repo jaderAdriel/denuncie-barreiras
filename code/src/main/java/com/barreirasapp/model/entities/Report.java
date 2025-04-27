@@ -1,24 +1,27 @@
 package com.barreirasapp.model.entities;
 
+import com.barreirasapp.model.dao.DaoFactory;
+import com.barreirasapp.model.dao.ReportDao;
+import com.barreirasapp.model.dao.UserDao;
+
 public class Report {
 
+    private int id;
     private String type;
     private String ambient;
     private String address;
     private Integer severity;
     private Boolean anonymousReport;
     private String eventDetailing;
-    private String relatedScenario; //Alterar para o tipo Objeto CenarioBarreira
     private User reporter;
 
-    public Report(String type, String ambient, String adress, Integer severity, Boolean anonymousReport, String eventDetailing, String relatedScenario, User reporter) {
+    public Report(String type, String ambient, String address, Integer severity, Boolean anonymousReport, String eventDetailing, User reporter) {
         this.type = type;
         this.ambient = ambient;
-        this.address = adress;
+        this.address = address;
         this.severity = severity;
         this.anonymousReport = anonymousReport;
         this.eventDetailing = eventDetailing;
-        this.relatedScenario = relatedScenario;
         this.reporter = reporter;
     }
 
@@ -41,11 +44,11 @@ public class Report {
         this.ambient = ambient;
     }
 
-    public String getAdress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAdress(String adress) {
+    public void setAddress(String adress) {
         this.address = adress;
     }
 
@@ -73,19 +76,28 @@ public class Report {
         this.eventDetailing = eventDetailing;
     }
 
-    public String getRelatedScenario() {
-        return relatedScenario;
-    }
-
-    public void setRelatedScenario(String relatedScenario) {
-        this.relatedScenario = relatedScenario;
-    }
-
     public User getReporter() {
         return reporter;
     }
 
     public void setReporter(User reporter) {
         this.reporter = reporter;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getReporterId(){
+        return this.reporter.getId();
+    }
+
+    public void save() {
+        ReportDao dao = DaoFactory.createReportDao();
+        dao.insert(this);
     }
 }
