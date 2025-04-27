@@ -2,49 +2,46 @@ package com.barreirasapp.model.dao.impl;
 
 import com.barreirasapp.infra.db.DatabaseConnection;
 import com.barreirasapp.infra.exceptions.DatabaseException;
-import com.barreirasapp.model.dao.PersonDao;
-import com.barreirasapp.model.entities.Person;
+import com.barreirasapp.model.dao.UserDao;
+import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.entities.valueobjects.Email;
 import com.barreirasapp.model.enums.Gender;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 
-public class PersonDaoJDBC implements PersonDao{
+public class UserDaoJDBC implements UserDao {
 
     private final Connection conn;
 
-    public PersonDaoJDBC(Connection conn) {
+    public UserDaoJDBC(Connection conn) {
         this.conn = conn;
     }
 
 
     @Override
-    public void insert(Person person) {
+    public void insert(User User) {
         PreparedStatement st = null;
         ResultSet rs = null;
 
         try {
             st = conn.prepareStatement(
                     """
-                          INSERT INTO Person (name, email, birth_date, gender)
-                          VALUES (?, ?, ?, ?);
+                          INSERT INTO User (name, email, birth_date, gender, password)
+                          VALUES (?, ?, ?, ?, ?);
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
-            LocalDate birthDate = person.getBirthDate(); // Seu LocalDate
+            LocalDate birthDate = User.getBirthDate(); // Seu LocalDate
             java.sql.Date sqlDate = java.sql.Date.valueOf(birthDate);
 
-            st.setString(1, person.getName());
-            st.setString(2, person.getEmail().value());
+            st.setString(1, User.getName());
+            st.setString(2, User.getEmail().value());
             st.setDate(3, sqlDate);
-            st.setString(4, person.getGender().toString());
+            st.setString(4, User.getGender().toString());
+            st.setString(5, User.getPassword());
 
             int rowsAffected =  st.executeUpdate();
 
@@ -52,7 +49,7 @@ public class PersonDaoJDBC implements PersonDao{
                 rs = st.getGeneratedKeys();
                 if (rs.next()) {
                     int id = rs.getInt(1);
-                    person.setId(id);
+                    User.setId(id);
                 }
             } else {
                 throw new DatabaseException("Unexpect error: No rows affected");
@@ -68,26 +65,25 @@ public class PersonDaoJDBC implements PersonDao{
     }
 
     @Override
-    public void update(Person person) {
+    public void update(User User) {
         PreparedStatement st = null;
 
-        LocalDate birthDate = person.getBirthDate(); // Seu LocalDate
+        LocalDate birthDate = User.getBirthDate(); // Seu LocalDate
         java.sql.Date sqlDate = java.sql.Date.valueOf(birthDate);
 
         try {
             st = conn.prepareStatement(
                     """
                           UPDATE User
-                          SET name = ?, email = ?, birth_date = ?, gender = ?
+                          SET name = ?, birth_date = ?, gender = ?
                           WHERE id = ?;
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
-            st.setString(1, person.getName());
-            st.setString(2, person.getEmail().value());
-            st.setDate(3, sqlDate);
-            st.setString(4, person.getGender().toString());
-            st.setInt(5, person.getId());
+            st.setString(1, User.getName());
+            st.setDate(2, sqlDate);
+            st.setString(3, User.getGender().toString());
+            st.setInt(4, User.getId());
             st.executeUpdate();
 
         } catch (SQLException e) {
@@ -101,7 +97,7 @@ public class PersonDaoJDBC implements PersonDao{
     public void deleteById(Integer id) {
         PreparedStatement st = null;
         try {
-            st = conn.prepareStatement("DELETE FROM Person WHERE id = ?");
+            st = conn.prepareStatement("DELETE FROM User WHERE id = ?");
             st.setInt(1, id);
 
             st.executeUpdate();
@@ -113,14 +109,14 @@ public class PersonDaoJDBC implements PersonDao{
     }
 
     @Override
-    public Person findById(Integer id) {
+    public User findById(Integer id) {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
                     """
-                            SELECT id, name, email, birth_date, gender
-                            FROM Person
+                            SELECT id, name, email, birth_date, gender, password
+                            FROM User
                             WHERE id = ?;
                       """
             );
@@ -129,7 +125,7 @@ public class PersonDaoJDBC implements PersonDao{
             rs = st.executeQuery();
 
             if (rs.next()) {
-                return instantiatePerson(rs);
+                return instantiateUser(rs);
             }
 
         } catch (SQLException e) {
@@ -143,23 +139,23 @@ public class PersonDaoJDBC implements PersonDao{
     }
 
     @Override
-    public List<Person> findAll() {
+    public List<User> findAll() {
         Statement st = null;
         ResultSet rs = null;
-        List<Person> personList = new ArrayList<>();
+        List<User> UserList = new ArrayList<>();
         try {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, name, email, birth_date, gender
-                            FROM Person
+                            SELECT id, name, email, birth_date, gender, password
+                            FROM User
                       """
             );
 
             while (rs.next()) {
-                personList.add(instantiatePerson(rs));
+                UserList.add(instantiateUser(rs));
             }
-            return personList;
+            return UserList;
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
         } finally {
@@ -168,18 +164,19 @@ public class PersonDaoJDBC implements PersonDao{
         }
     }
 
-    private Person instantiatePerson(ResultSet rs) throws SQLException {
-        Person person = new Person();
-        person.setId(rs.getInt("id"));
-        person.setName(rs.getString("name"));
+    private User instantiateUser(ResultSet rs) throws SQLException {
+        User User = new User();
+        User.setId(rs.getInt("id"));
+        User.setName(rs.getString("name"));
+        User.setPassword(rs.getString("password"));
 
         Email email = new Email(rs.getString("email"));
         Gender gender = Gender.valueOf(rs.getString("gender"));
         LocalDate birth_date = LocalDate.parse(rs.getString("birth_date"));
 
-        person.setEmail(email);
-        person.setBirthDate(birth_date);
-        person.setGender(gender);
-        return person;
+        User.setEmail(email);
+        User.setBirthDate(birth_date);
+        User.setGender(gender);
+        return User;
     }
 }

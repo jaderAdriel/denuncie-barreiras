@@ -1,1 +1,0 @@
-ALTER TABLE Person ADD gender VARCHAR(10);
