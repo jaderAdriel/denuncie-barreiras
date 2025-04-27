@@ -4,7 +4,7 @@ public class Report {
 
     private String type;
     private String ambient;
-    private String adress;
+    private String address;
     private Integer severity;
     private Boolean anonymousReport;
     private String eventDetailing;
@@ -14,7 +14,7 @@ public class Report {
     public Report(String type, String ambient, String adress, Integer severity, Boolean anonymousReport, String eventDetailing, String relatedScenario, User reporter) {
         this.type = type;
         this.ambient = ambient;
-        this.adress = adress;
+        this.address = adress;
         this.severity = severity;
         this.anonymousReport = anonymousReport;
         this.eventDetailing = eventDetailing;
@@ -42,11 +42,11 @@ public class Report {
     }
 
     public String getAdress() {
-        return adress;
+        return address;
     }
 
     public void setAdress(String adress) {
-        this.adress = adress;
+        this.address = adress;
     }
 
     public Integer getSeverity() {
