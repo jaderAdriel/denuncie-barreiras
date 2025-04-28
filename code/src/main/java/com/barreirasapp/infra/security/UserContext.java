@@ -13,7 +13,7 @@ public class UserContext {
 
         SessionDao dao = DaoFactory.createSessionDao();
         Optional<Session> session = dao.findByid(sessionId);
-        System.out.println("Session id is not present? " + sessionId.isEmpty());
+
         return session.isPresent();
     }
 }

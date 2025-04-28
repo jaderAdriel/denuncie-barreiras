@@ -1,6 +1,7 @@
 CREATE TABLE Session (
     id VARCHAR(255) UNIQUE,
     user_id INT NOT NULL,
+
     CONSTRAINT FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );

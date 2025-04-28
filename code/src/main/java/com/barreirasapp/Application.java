@@ -7,7 +7,6 @@ public class Application {
     public static void main(String[] args) {
 
         var app = Javalin.create().start(7070);
-
         RouteProxy.registerRoutes(app);
     }
 }
