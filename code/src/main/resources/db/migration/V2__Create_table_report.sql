@@ -1,13 +1,12 @@
-CREATE TABLE IF NOT EXISTS REPORT(
+CREATE TABLE IF NOT EXISTS Report(
     id INT AUTO_INCREMENT,
-    user_id INT,
+    reporter_fk INT,
     type VARCHAR(45) NOT NULL,
     ambient VARCHAR(45) NOT NULL,
-    address VARCHAR(45),
     severity TINYINT NOT NULL,
     anonymous_report BOOLEAN NOT NULL,
     event_detailing TEXT NOT NULL,
-    related_scenario VARCHAR(45),
-    CONSTRAINT FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+    related_scenario_fk INT,
+    CONSTRAINT FOREIGN KEY (reporter) REFERENCES User(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );

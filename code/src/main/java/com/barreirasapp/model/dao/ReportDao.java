@@ -1,6 +1,10 @@
 package com.barreirasapp.model.dao;
 
+
 import com.barreirasapp.model.entities.Report;
 
-public interface ReportDao extends GenericDao<Report>{
+import java.util.List;
+
+public interface ReportDao extends GenericDao<Report> {
+    List<Report> findAllByReporterId(Integer id);
 }
