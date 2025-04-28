@@ -131,23 +131,25 @@ public class ReportDaoJDBC implements ReportDao {
     }
 
     @Override
-    public List<Report> findAll() {
+    public List<Report> findAllByReporterId(Integer id) {
         Statement st = null;
         ResultSet rs = null;
-        List<Report> UserList = new ArrayList<>();
+        List<Report> reportList = new ArrayList<>();
+
         try {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
                             SELECT id, reporter_fk, type, ambient, severity, anonymous_report, event_detailing, related_scenario_fk
                             FROM Report
+                            WHERE reporter_fk = ?;
                       """
             );
 
             while (rs.next()) {
-                UserList.add(instantiateReport(rs));
+                reportList.add(instantiateReport(rs));
             }
-            return UserList;
+            return reportList;
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
         } finally {
@@ -165,7 +167,7 @@ public class ReportDaoJDBC implements ReportDao {
             rs = st.executeQuery(
                     """
                             SELECT id, reporter_fk, type, ambient, severity, anonymous_report, event_detailing, related_scenario_fk
-                            FROM Report
+                            FROM Report;
                       """
             );
 
