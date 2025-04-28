@@ -11,6 +11,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDaoJDBC implements UserDao {
 
@@ -178,5 +179,35 @@ public class UserDaoJDBC implements UserDao {
         User.setBirthDate(birth_date);
         User.setGender(gender);
         return User;
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(Email email) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    """
+                            SELECT id, name, email, birth_date, gender, password
+                            FROM User
+                            WHERE email = ?;
+                      """
+            );
+
+            st.setString(1, email.value());
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(instantiateUser(rs)) ;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(st);
+        }
+
+        return Optional.empty();
     }
 }
