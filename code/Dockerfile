@@ -3,19 +3,21 @@ FROM maven:3.9.4-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+COPY src ./src
 
 RUN mvn clean package
 
-# Etapa 2: Deploy no Tomcat
-FROM tomcat:10.1-jdk17-temurin
+# Etapa 2: Execução
+FROM eclipse-temurin:17-jre-jammy
 
-# Apaga aplicações padrão
-RUN rm -rf /usr/local/tomcat/webapps/*
+WORKDIR /app
 
-# Copia o WAR gerado da etapa de build
-COPY --from=build /app/target/barreiras-app-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+# Copia o JAR gerado
+COPY --from=build /app/target/barreiras-app-1.0-SNAPSHOT.jar /app/app.jar
 
-EXPOSE 8080
+# Porta que o Javalin usará (deve bater com a configurada no código)
+EXPOSE 7070
 
-CMD ["catalina.sh", "run"]
+# Comando para executar o JAR
+CMD ["java", "-jar", "app.jar"]
