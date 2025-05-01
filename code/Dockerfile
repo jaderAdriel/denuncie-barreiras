@@ -1,23 +1,23 @@
-# Etapa 1: Build com Maven
 FROM maven:3.9.4-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY pom.xml .
-COPY src ./src
+COPY . .
 
 RUN mvn clean package
 
-# Etapa 2: Execução
-FROM eclipse-temurin:17-jre-jammy
+# Etapa 2: Deploy no Tomcat
+FROM tomcat:10.1-jdk17-temurin
 
-WORKDIR /app
+# Apaga aplicações padrão
+RUN rm -rf /usr/local/tomcat/webapps/*
+# Copia o WAR
+COPY --from=build /app/target/barreiras-app-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
-# Copia o JAR gerado
-COPY --from=build /app/target/barreiras-app-1.0-SNAPSHOT.jar /app/app.jar
+# Configuração de saúde
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD curl -f http://localhost:8080/ || exit 1
 
-# Porta que o Javalin usará (deve bater com a configurada no código)
-EXPOSE 7070
+EXPOSE 8080
 
-# Comando para executar o JAR
-CMD ["java", "-jar", "app.jar"]
+CMD ["catalina.sh", "run"]
