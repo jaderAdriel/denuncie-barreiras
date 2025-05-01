@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS Report(
     anonymous_report BOOLEAN NOT NULL,
     event_detailing TEXT NOT NULL,
     related_scenario_fk INT,
-    CONSTRAINT FOREIGN KEY (reporter) REFERENCES User(id) ON DELETE CASCADE,
+    CONSTRAINT FOREIGN KEY (reporter_fk) REFERENCES User(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );

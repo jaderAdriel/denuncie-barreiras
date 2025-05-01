@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS User (
 );
 
 CREATE TABLE IF NOT EXISTS Moderator (
-    user_id INT,
+    user_fk INT,
     cellphone VARCHAR(50) NOT NULL,
-    CONSTRAINT FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id)
+    CONSTRAINT FOREIGN KEY (user_fk) REFERENCES User(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_fk)
 );
 
