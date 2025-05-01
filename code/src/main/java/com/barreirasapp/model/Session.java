@@ -5,16 +5,17 @@ import com.barreirasapp.model.entities.User;
 import java.util.UUID;
 
 public class Session {
-    private String sessionId = UUID.randomUUID().toString();
+    private String id = UUID.randomUUID().toString();
     private User user;
 
-    public Session(String sessionId, User user) {
-        this.sessionId = sessionId;
+    public Session(String id, User user) {
+        this.id = id;
         this.user = user;
     }
 
     public Session(User user) {
         this.user = user;
+        this.id = UUID.randomUUID().toString();
     }
 
     public int getUserId() {
@@ -22,6 +23,6 @@ public class Session {
     }
 
     public String getSessionId() {
-        return this.sessionId;
+        return this.id;
     }
 }

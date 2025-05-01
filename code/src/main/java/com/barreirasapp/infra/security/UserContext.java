@@ -14,6 +14,8 @@ public class UserContext {
         SessionDao dao = DaoFactory.createSessionDao();
         Optional<Session> session = dao.findByid(sessionId);
 
+        System.out.println("Usuário está autenticado? " + session.isPresent());
+
         return session.isPresent();
     }
 }
