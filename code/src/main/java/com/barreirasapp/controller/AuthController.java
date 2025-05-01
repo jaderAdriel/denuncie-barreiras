@@ -1,6 +1,7 @@
 package com.barreirasapp.controller;
 
 import com.barreirasapp.annotation.HttpMethod;
+import com.barreirasapp.annotation.LoginRequired;
 import com.barreirasapp.annotation.Route;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.entities.valueobjects.Email;
@@ -78,6 +79,7 @@ public class AuthController extends HttpServlet {
         service.register(newUser);
     }
 
+    @LoginRequired
     @Route(value = "protegido/", method = HttpMethod.POST)
     public void handleProtegido(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/plain");

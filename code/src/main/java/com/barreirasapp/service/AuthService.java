@@ -41,11 +41,10 @@ public class AuthService {
             return;
         }
 
-        String sessionId = UUID.randomUUID().toString();
-        Session session = new Session(sessionId, foundedUser);
+        Session session = new Session(foundedUser);
 
         sessionRepository.insert(session);
 
-        resp.setHeader("Authorization", sessionId);
+        resp.setHeader("Authorization", session.getSessionId());
     }
 }

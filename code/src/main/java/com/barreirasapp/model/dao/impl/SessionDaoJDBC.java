@@ -52,7 +52,6 @@ public class SessionDaoJDBC implements SessionDao {
     public void insert(Session session) {
         PreparedStatement st = null;
         ResultSet rs = null;
-
         try {
             st = conn.prepareStatement(
                     """
@@ -61,10 +60,7 @@ public class SessionDaoJDBC implements SessionDao {
                       """
             );
 
-            // Gera um uuid aleatorio para sessao
-            String uuid = session.getSessionId() != null ? session.getSessionId() : String.valueOf(UUID.randomUUID());
-
-            st.setString(1, uuid);
+            st.setString(1, session.getSessionId());
             st.setInt(2, session.getUserId());
 
             int rowsAffected =  st.executeUpdate();
