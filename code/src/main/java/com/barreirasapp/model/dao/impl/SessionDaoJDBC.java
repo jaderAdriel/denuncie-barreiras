@@ -5,13 +5,9 @@ import com.barreirasapp.infra.exceptions.DatabaseException;
 import com.barreirasapp.model.Session;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.SessionDao;
-import com.barreirasapp.model.dao.UserDao;
 import com.barreirasapp.model.entities.User;
-import com.barreirasapp.model.entities.valueobjects.Email;
-import com.barreirasapp.model.enums.Gender;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.*;
 
 public class SessionDaoJDBC implements SessionDao {
