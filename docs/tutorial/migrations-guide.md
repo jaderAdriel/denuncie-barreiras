@@ -155,10 +155,16 @@ Se precisar **recomeçar do zero** (apenas para desenvolvimento):
 docker-compose down -v  # remove containers e volumes
 docker-compose up -d --build
 ```
-
 ⚠️ **Cuidado!** Esse comando apaga todos os dados do banco de dados (volume).
 
 ---
+## Conserte as migrations sem excluir tudo
+
+```bash
+sudo docker compose run flyway repair
+```
+
+
 
 ## 📄 Referências
 
