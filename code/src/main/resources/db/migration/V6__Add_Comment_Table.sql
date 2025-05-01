@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS Comment (
+    id INT AUTO_INCREMENT,
+    user_pk INT,
+    report_pk INT,
+    CONSTRAINT FOREIGN KEY (user_pk) REFERENCES User(id) on DELETE CASCADE,
+    CONSTRAINT FOREIGN KEY (report_pk) REFERENCES Report(id) on DELETE CASCADE,
+    PRIMARY KEY (id)
+);
