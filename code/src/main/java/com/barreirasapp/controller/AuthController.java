@@ -80,11 +80,11 @@ public class AuthController extends HttpServlet {
     }
 
     @LoginRequired
-    @Route(value = "protegido/", method = HttpMethod.POST)
-    public void handleProtegido(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/plain");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("Você acessou uma rota protegida!");
+    @Route(value = "logout/", method = HttpMethod.GET)
+    public void logoutUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        service.logout(req, resp);
+
+        resp.sendRedirect("/accounts/login/");
     }
 
     @Route(value = "publico/", method = HttpMethod.POST)
