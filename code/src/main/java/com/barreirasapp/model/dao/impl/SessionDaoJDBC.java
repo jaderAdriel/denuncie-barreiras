@@ -91,13 +91,25 @@ public class SessionDaoJDBC implements SessionDao {
         }
     }
 
-    private Session instantiateSession(ResultSet rs) throws SQLException {
+    @Override
+    public void deleteAllByUser(User user) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement("DELETE FROM Session WHERE user_id = ?");
+            st.setInt(1, user.getId());
+            st.executeUpdate();
+            System.out.println("Sessões removidas");
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeStatement(st);
+        }
+    }
 
+    private Session instantiateSession(ResultSet rs) throws SQLException {
         String sessionId = rs.getString("id");
         int userId = rs.getInt("user_id");
-
         User user = DaoFactory.createUserDao().findById(userId);
-
         return new Session(sessionId, user);
     }
 }

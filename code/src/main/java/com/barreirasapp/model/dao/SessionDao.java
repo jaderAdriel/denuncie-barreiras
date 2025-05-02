@@ -11,4 +11,5 @@ public interface SessionDao {
     Optional<Session> findByid (String sessionId);
     void insert(Session session);
     void deleteById (String sessionId);
+    void deleteAllByUser(User user);
 }
