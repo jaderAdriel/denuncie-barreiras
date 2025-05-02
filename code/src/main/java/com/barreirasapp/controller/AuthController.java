@@ -94,9 +94,10 @@ public class AuthController extends HttpServlet {
         resp.getWriter().write("Você acessou uma rota publica!");
     }
 
-    private void sendJsonResponse(HttpServletResponse resp, int status, Map<String, String> data) throws IOException {
-        resp.setContentType("application/json");
-        resp.setStatus(status);
-        resp.getWriter().write(new Gson().toJson(data));
+    public void sendErrorToForm(Map<String, String> errors, HttpServletRequest req) {
+        for (String errorName : errors.keySet()) {
+            System.out.println(errorName + "Error" + " : " + errors.get(errorName));
+            req.setAttribute(errorName+"Error", errors.get(errorName));
+        }
     }
 }
