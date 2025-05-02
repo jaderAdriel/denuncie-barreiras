@@ -67,7 +67,7 @@ public class Middleware {
         String method = req.getMethod();
         String routeKey = path + ":" + method;
 
-        System.out.println("Uma requisição foi feita: " + method +  " " + path + "  "  + routeKey);
+        System.out.println("Uma requisição foi feita para: " + routeKey);
 
         Method handlerMethod = routes.get(routeKey);
         if (handlerMethod != null) {
@@ -84,16 +84,5 @@ public class Middleware {
         }
         return path;
     }
-
-    private static void sendJsonError(HttpServletResponse resp, int status,
-                                      String error, String message) throws IOException {
-        resp.setContentType("application/json");
-        resp.setStatus(status);
-        resp.getWriter().write(String.format(
-                "{\"error\": \"%s\", \"message\": \"%s\"}",
-                error, message
-        ));
-    }
-
 
 }
