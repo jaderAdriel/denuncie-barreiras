@@ -3,19 +3,43 @@ package com.barreirasapp.infra.security;
 import com.barreirasapp.model.Session;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.SessionDao;
+import com.barreirasapp.model.entities.User;
+import jakarta.servlet.http.Cookie;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class UserContext {
 
+    public static String getSessionId(Cookie[] cookies) {
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("sessionId")) {
+                return cookie.getValue();
+            }
+        }
+
+        return null;
+    }
+
     public static boolean isUserAuthenticated(String sessionId) {
-
-        SessionDao dao = DaoFactory.createSessionDao();
-        Optional<Session> session = dao.findByid(sessionId);
-
-        System.out.println("Usuário está autenticado? " + session.isPresent());
+        SessionDao sessionRepository = DaoFactory.createSessionDao();
+        Optional<Session> session = sessionRepository.findByid(sessionId);
 
         return session.isPresent();
+    }
+
+    public static Session createSession(User user) {
+        SessionDao sessionRepository = DaoFactory.createSessionDao();
+        sessionRepository.deleteAllByUser(user);
+
+        Session session = new Session(user);
+        sessionRepository.insert(session);
+
+        return session;
+    }
+
+    public static void removeSession(String sessionId) {
+        SessionDao sessionRepository = DaoFactory.createSessionDao();
+        sessionRepository.deleteById(sessionId);
     }
 }

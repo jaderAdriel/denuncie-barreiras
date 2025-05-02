@@ -3,12 +3,12 @@ package com.barreirasapp.controller;
 import com.barreirasapp.annotation.HttpMethod;
 import com.barreirasapp.annotation.LoginRequired;
 import com.barreirasapp.annotation.Route;
-import com.barreirasapp.model.entities.User;
-import com.barreirasapp.model.entities.valueobjects.Email;
-import com.barreirasapp.model.enums.Gender;
+import com.barreirasapp.dto.LoginDTO;
+import com.barreirasapp.dto.RegisterDTO;
+import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.service.AuthService;
 
-import com.google.gson.Gson;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -37,46 +36,64 @@ public class AuthController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("configuração de middleware");
         Middleware.callRoute(this, routes, req, resp);
     }
 
     @Route(value = "login/", method = HttpMethod.POST)
-    public void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String email = req.getParameter("email");
+        req.setAttribute("email", email);
         String password = req.getParameter("password");
 
-        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-            sendJsonResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                    Map.of("error", "Email e senha são obrigatórios"));
-            return;
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
+
+        try {
+            LoginDTO loginDTO = new LoginDTO(email, password);
+            service.login(loginDTO, req, resp);
+            resp.sendRedirect("/accounts/protegido/");
+        } catch (ValidationError e) {
+            sendErrorToForm(e.getErrors(), req);
+            dispatcher.forward(req, resp);
         }
-        service.login(new Email(email), password, req, resp);
+    }
+
+    @Route(value = "login/", method = HttpMethod.GET)
+    public void renderLoginForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
+        dispatcher.forward(req, resp);
     }
 
     @Route(value = "register/", method = HttpMethod.POST)
-    public void handleRegister(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void registerUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
+        String password2 = req.getParameter("password");
         String birthDate = req.getParameter("birthDate");
         String gender = req.getParameter("gender");
 
-        if (name == null || email == null || password == null ||
-                birthDate == null || gender == null) {
-            sendJsonResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                    Map.of("error", "Todos os campos são obrigatórios"));
-            return;
+        req.setAttribute("name", name);
+        req.setAttribute("email", email);
+        req.setAttribute("birthDate", birthDate);
+        req.setAttribute("gender", gender);
+
+
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
+
+        try {
+            RegisterDTO registerDTO = new RegisterDTO(name, email, password2, password, birthDate, gender);
+            service.register(registerDTO);
+            resp.sendRedirect("/accounts/login/");
+        } catch (ValidationError e) {
+            sendErrorToForm(e.getErrors(), req);
+            dispatcher.forward(req, resp);
         }
+    }
 
-        User newUser = new User();
-        newUser.setName(name);
-        newUser.setPassword(password);
-        newUser.setEmail(new Email(email));
-        newUser.setBirthDate(LocalDate.parse(birthDate));
-        newUser.setGender(Gender.valueOf(gender.toUpperCase()));
-
-        service.register(newUser);
+    @Route(value = "register/", method = HttpMethod.GET)
+    public void renderRegisterForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
+        dispatcher.forward(req, resp);
     }
 
     @LoginRequired
@@ -87,11 +104,12 @@ public class AuthController extends HttpServlet {
         resp.sendRedirect("/accounts/login/");
     }
 
-    @Route(value = "publico/", method = HttpMethod.POST)
-    public void handlePublico(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @LoginRequired
+    @Route(value = "protegido/", method = HttpMethod.GET)
+    public void showProtectedRouteExample(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/plain");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("Você acessou uma rota publica!");
+        resp.getWriter().write("Você está autenticado");
     }
 
     public void sendErrorToForm(Map<String, String> errors, HttpServletRequest req) {
