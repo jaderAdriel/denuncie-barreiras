@@ -4,6 +4,6 @@ import com.barreirasapp.model.entities.BarrierScenario;
 
 import java.util.List;
 
-public interface BarrierScenarioDao extends GenericDao<BarrierScenario>{
+public interface BarrierScenarioDao extends GenericDao<BarrierScenario, Integer>{
     List<BarrierScenario> findAllByAuthorId(Integer id);
 }

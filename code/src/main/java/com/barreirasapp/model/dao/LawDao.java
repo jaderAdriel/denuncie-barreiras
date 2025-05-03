@@ -6,5 +6,5 @@ import com.barreirasapp.model.entities.valueobjects.Email;
 
 import java.util.Optional;
 
-public interface LawDao extends GenericDao<Law>{
+public interface LawDao extends GenericDao<Law, String>{
 }
