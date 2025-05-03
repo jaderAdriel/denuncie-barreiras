@@ -30,8 +30,13 @@ package "Usuários" {
 
      class Moderador {
         - telefone : String
-        - 2Factor : boolean
-        + autenticar()
+    }
+
+    class Endereco {
+        - cidade : String
+        - estado : String
+        - logradouro: String
+        - cep: String
     }
 }
 
@@ -56,6 +61,7 @@ class Comentario {
     - dataHora : dateTime
     - conteudo : Text
     - comentarioPai : Comentario
+    - autor : User
 }
 
 
@@ -85,8 +91,9 @@ Usuario <|-- Moderador
 Usuario "n" -- "n" Denuncia
 
 Comentario "1" <-- "n" Comentario : "Responde"
+Comentario "n" -- "1" Usuario : "Faz"
 
-
+Moderador *- Endereco
 Moderador "1"  -- "0..*" CenarioBarreira : "Cria"
 
 Denuncia "*" -- "1" CenarioBarreira
