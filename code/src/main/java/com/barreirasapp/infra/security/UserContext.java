@@ -11,6 +11,7 @@ import java.util.Optional;
 public class UserContext {
 
     public static String getSessionId(Cookie[] cookies) {
+        if (cookies == null) return null;
 
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("sessionId")) {
@@ -22,6 +23,8 @@ public class UserContext {
     }
 
     public static boolean isUserAuthenticated(String sessionId) {
+        if (sessionId == null) return false;
+
         SessionDao sessionRepository = DaoFactory.createSessionDao();
         Optional<Session> session = sessionRepository.findByid(sessionId);
 
