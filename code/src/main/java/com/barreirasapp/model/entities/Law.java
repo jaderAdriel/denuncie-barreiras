@@ -17,6 +17,14 @@ public class Law {
         this.description = description;
     }
 
+    public void setOfficialLink(String officialLink) {
+        this.officialLink = officialLink;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getCode() {
         return code;
     }
