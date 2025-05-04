@@ -9,6 +9,7 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.service.AuthService;
 
 import com.barreirasapp.utils.ControllerDispatcher;
+import com.barreirasapp.utils.Route.RouteInfo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 
 @WebServlet("/accounts/*")
 public class AuthController extends HttpServlet {
-    private Map<String, Method> routes;
+    private Map<String, RouteInfo> routes;
     private static final Logger LOGGER = Logger.getLogger(AuthController.class.getName());
 
     private AuthService service;
