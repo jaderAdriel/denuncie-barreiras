@@ -1,6 +1,7 @@
 package com.barreirasapp.model.dao;
 
 import com.barreirasapp.infra.db.DatabaseConnection;
+import com.barreirasapp.model.dao.impl.LawDaoJDBC;
 import com.barreirasapp.model.dao.impl.SessionDaoJDBC;
 import com.barreirasapp.model.dao.impl.ReportDaoJDBC;
 import com.barreirasapp.model.dao.impl.UserDaoJDBC;
@@ -14,5 +15,8 @@ public class DaoFactory {
     }
     public static SessionDao createSessionDao() {
         return new SessionDaoJDBC(DatabaseConnection.getConnection());
+    }
+    public static LawDao createLawDao() {
+        return new LawDaoJDBC(DatabaseConnection.getConnection());
     }
 }
