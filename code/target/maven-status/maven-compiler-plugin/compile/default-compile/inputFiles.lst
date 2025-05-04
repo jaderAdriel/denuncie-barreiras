@@ -1,9 +1,0 @@
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/infra/db/DatabaseConnection.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/infra/exceptions/DatabaseException.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/entities/Person.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/entities/SchoolStaff.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/entities/Student.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/entities/User.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/entities/valueobjects/CellPhone.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/entities/valueobjects/Email.java
-/home/ana/Documentos/denuncie-barreiras/code/src/main/java/com/barreirasapp/model/enums/Gender.java
