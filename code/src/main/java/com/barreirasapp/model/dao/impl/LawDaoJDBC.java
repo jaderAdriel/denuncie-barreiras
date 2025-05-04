@@ -73,10 +73,15 @@ public class LawDaoJDBC implements LawDao{
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
-            st.setString(1, law.getTitle());
+            st.setString(1, law.getDescription());
             st.setString(2, law.getOfficialLink());
             st.setString(3, law.getCode());
 
+            int rowsAffected =  st.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new DatabaseException("Unexpect error: No rows affected");
+            }
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
         } finally {
