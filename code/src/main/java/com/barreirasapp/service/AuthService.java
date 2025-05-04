@@ -1,7 +1,7 @@
 package com.barreirasapp.service;
 
-import com.barreirasapp.dto.LoginDTO;
-import com.barreirasapp.dto.RegisterDTO;
+import com.barreirasapp.dto.auth.LoginDTO;
+import com.barreirasapp.dto.auth.RegisterUserDTO;
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.infra.security.UserContext;
 import com.barreirasapp.model.Session;
@@ -21,19 +21,19 @@ public class AuthService {
         userRepository = DaoFactory.createUserDao();
     }
 
-    public void register(RegisterDTO registerDTO) throws ValidationError {
-        Optional<User> existentUser = this.userRepository.getUserByEmail(registerDTO.getEmail());
+    public void register(RegisterUserDTO registerUserDTO) throws ValidationError {
+        Optional<User> existentUser = this.userRepository.getUserByEmail(registerUserDTO.getEmail());
 
         if (existentUser.isPresent()) {
             throw new ValidationError("Erro de validação", Map.of("error", "Já existe um usuário com esse email"));
         }
 
         User user = new User(
-                registerDTO.getName(),
-                registerDTO.getEmail(),
-                registerDTO.getBirthDate(),
-                registerDTO.getGender(),
-                registerDTO.getPassword()
+                registerUserDTO.getName(),
+                registerUserDTO.getEmail(),
+                registerUserDTO.getBirthDate(),
+                registerUserDTO.getGender(),
+                registerUserDTO.getPassword()
         );
 
         userRepository.insert(user);
