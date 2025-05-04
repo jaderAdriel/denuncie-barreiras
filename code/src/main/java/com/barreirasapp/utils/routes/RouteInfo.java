@@ -1,4 +1,4 @@
-package com.barreirasapp.utils.Route;
+package com.barreirasapp.utils.routes;
 
 import com.barreirasapp.annotation.HttpMethod;
 

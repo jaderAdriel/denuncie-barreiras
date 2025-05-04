@@ -1,9 +1,6 @@
-package com.barreirasapp.utils.Route;
-
-import com.barreirasapp.annotation.HttpMethod;
+package com.barreirasapp.utils.routes;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class RouteParser {
