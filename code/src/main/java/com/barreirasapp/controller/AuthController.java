@@ -3,11 +3,12 @@ package com.barreirasapp.controller;
 import com.barreirasapp.annotation.HttpMethod;
 import com.barreirasapp.annotation.LoginRequired;
 import com.barreirasapp.annotation.Route;
-import com.barreirasapp.dto.LoginDTO;
-import com.barreirasapp.dto.RegisterDTO;
+import com.barreirasapp.dto.auth.LoginDTO;
+import com.barreirasapp.dto.auth.RegisterUserDTO;
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.service.AuthService;
 
+import com.barreirasapp.utils.ControllerDispatcher;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -52,7 +53,7 @@ public class AuthController extends HttpServlet {
             service.login(loginDTO, req, resp);
             resp.sendRedirect("/accounts/protegido/");
         } catch (ValidationError e) {
-            sendErrorToForm(e.getErrors(), req);
+            ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);
         }
     }
@@ -81,11 +82,11 @@ public class AuthController extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
 
         try {
-            RegisterDTO registerDTO = new RegisterDTO(name, email, password2, password, birthDate, gender);
-            service.register(registerDTO);
+            RegisterUserDTO registerUserDTO = new RegisterUserDTO(name, email, password2, password, birthDate, gender);
+            service.register(registerUserDTO);
             resp.sendRedirect("/accounts/login/");
         } catch (ValidationError e) {
-            sendErrorToForm(e.getErrors(), req);
+            ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);
         }
     }
@@ -110,12 +111,5 @@ public class AuthController extends HttpServlet {
         resp.setContentType("text/plain");
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write("Você está autenticado");
-    }
-
-    public void sendErrorToForm(Map<String, String> errors, HttpServletRequest req) {
-        for (String errorName : errors.keySet()) {
-            System.out.println(errorName + "Error" + " : " + errors.get(errorName));
-            req.setAttribute(errorName+"Error", errors.get(errorName));
-        }
     }
 }
