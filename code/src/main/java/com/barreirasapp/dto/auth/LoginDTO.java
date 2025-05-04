@@ -1,7 +1,8 @@
-package com.barreirasapp.dto;
+package com.barreirasapp.dto.auth;
 
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.model.entities.valueobjects.Email;
+import com.barreirasapp.utils.Validator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +13,11 @@ public class LoginDTO {
     Map<String, String> errors = new HashMap<>();
 
     public LoginDTO(String email, String password) throws ValidationError {
+        Map<String, String> requiredFields = new HashMap<>();
+        requiredFields.put("email" , email);
+        requiredFields.put("password", password);
 
-        if (email == null || email.isEmpty()) {
-            this.errors.put("email" , "Este campo é obrigatório");
-        }
-
-        if (password == null || password.isEmpty()) {
-            this.errors.put("password" , "Este campo é obrigatório");
-        }
+        Validator.checkRequiredFields(requiredFields);
 
         validateEmail(email);
         validatePassword(password);

@@ -1,8 +1,9 @@
-package com.barreirasapp.dto;
+package com.barreirasapp.dto.auth;
 
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.model.entities.valueobjects.Email;
 import com.barreirasapp.model.enums.Gender;
+import com.barreirasapp.utils.Validator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RegisterDTO {
+public class RegisterUserDTO {
     private String name;
     private Email email;
     private LocalDate birthDate;
@@ -21,8 +22,16 @@ public class RegisterDTO {
 
     List<String> requiredFields = List.of("name", "email", "birthDate", "gender", "password", "password2");
 
-    public RegisterDTO(String name, String email, String password, String password2, String birthDate, String gender) throws ValidationError {
-        checkRequiredFields(name, email, password, password2, birthDate, gender);
+    public RegisterUserDTO(String name, String email, String password, String password2, String birthDate, String gender) throws ValidationError {
+        Map<String, String> requiredFields = new HashMap<>();
+        requiredFields.put("name" , name);
+        requiredFields.put("email", email);
+        requiredFields.put("birthDate", birthDate);
+        requiredFields.put("gender", gender);
+        requiredFields.put("password", password);
+        requiredFields.put("password2", password2);
+
+        Validator.checkRequiredFields(requiredFields);
 
         validateEmail(email);
         validateName(name);
@@ -55,7 +64,7 @@ public class RegisterDTO {
         try {
             this.birthDate = LocalDate.parse(birthDate);
         } catch (DateTimeParseException e) {
-            errors.put("birthDate", "Formato inválido");
+            errors.put("birthDate", "Valor inválido");
         }
     }
 
@@ -86,27 +95,6 @@ public class RegisterDTO {
         }
 
         this.password = password;
-    }
-
-    public void checkRequiredFields(String name, String email, String password, String password2, String birthDate, String gender) throws ValidationError {
-        Map<String, String> requiredFields = new HashMap<>();
-        requiredFields.put("name" , name);
-        requiredFields.put("email", email);
-        requiredFields.put("birthDate", birthDate);
-        requiredFields.put("gender", gender);
-        requiredFields.put("password", password);
-        requiredFields.put("password2", password2);
-
-        for (String field : requiredFields.keySet()) {
-            String value = requiredFields.get(field);
-            if (value == null || value.isEmpty()) {
-                this.errors.put(field, "Este campo é obrigatório");
-            }
-        }
-
-        if (!errors.isEmpty()) {
-            throw new ValidationError("Campos requeridos", this.getErrors());
-        }
     }
 
     public Map<String, String> getErrors() {
@@ -149,7 +137,4 @@ public class RegisterDTO {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
