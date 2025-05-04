@@ -46,14 +46,11 @@ public class LawService {
         String lawOfficialLink = updateLawDTO.getOfficialLink();
         String lawDescription = updateLawDTO.getDescription();
 
-        if (lawOfficialLink == null || lawOfficialLink.isEmpty())
-            lawOfficialLink = lawToUpdate.getOfficialLink();
+        if (lawOfficialLink != null)
+            lawToUpdate.setOfficialLink(lawOfficialLink);
 
-        if (lawDescription == null || lawDescription.isEmpty())
-            lawDescription = lawToUpdate.getDescription();
-
-        lawToUpdate.setOfficialLink(lawOfficialLink);
-        lawToUpdate.setDescription(lawDescription);
+        if (lawDescription != null)
+            lawToUpdate.setDescription(lawDescription);
 
         this.lawRepository.update(lawToUpdate);
     }

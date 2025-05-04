@@ -1,4 +1,6 @@
 package com.barreirasapp.controller;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import com.barreirasapp.annotation.HttpMethod;
 import com.barreirasapp.annotation.Route;
@@ -13,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -24,7 +27,6 @@ public class Middleware {
     //    /law/create/:POST -> Method
     public static Map<String, RouteInfo> setupRoutes (Class<?> controllerClass) {
         Map<String, RouteInfo> routes = new HashMap<>();
-
         if (!controllerClass.isAnnotationPresent(WebServlet.class)) {
             LOGGER.warning("Classe " + controllerClass.getSimpleName() + " não está marcada como @WebServlet");
             return routes;
@@ -71,20 +73,32 @@ public class Middleware {
     }
 
     public static void callRoute(Object controllerInstance, Map<String, RouteInfo> routes, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        req.setCharacterEncoding("UTF-8");
         Optional<RouteMatchResult> routeMatchResult = findRoute(req, routes);
 
         if (routeMatchResult.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
 
         RouteInfo routeInfo = routeMatchResult.get().getRouteInfo();
 
+        String methods = routeInfo.toString() + routeInfo.path();
+
         Map<String, String> params = routeMatchResult.get().getParams();
 
         params.forEach((key, value) -> {
-            req.setAttribute(key,  params.get(key));
+
+            String finalValue = value;
+
+            if (value.matches(".*%[0-9A-Fa-f]{2}.*")) {
+                finalValue = URLDecoder.decode(value, StandardCharsets.UTF_8);
+            }
+
+            req.setAttribute(key, finalValue);
         });
+
+
 
         invokeRoute(controllerInstance, routeInfo.handlerMethod(), req, resp);
 

@@ -27,6 +27,7 @@ public final class RouteParser {
             }
         }
 
+        System.out.println(requestMethod + ":" + requestPath);
         return new RouteMatchResult(true, routeInfo, params);
     }
 

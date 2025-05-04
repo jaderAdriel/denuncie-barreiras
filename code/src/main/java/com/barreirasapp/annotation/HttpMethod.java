@@ -5,5 +5,5 @@ public enum HttpMethod {
     POST,
     PUT,
     DELETE,
-    GET_POST
+    GET_POST,
 };
