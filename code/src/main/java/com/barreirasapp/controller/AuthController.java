@@ -41,8 +41,17 @@ public class AuthController extends HttpServlet {
         Middleware.callRoute(this, routes, req, resp);
     }
 
-    @Route(value = "login/", method = HttpMethod.POST)
+    @Route(value = "login/", method = HttpMethod.GET_POST)
     public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        HttpMethod method = HttpMethod.valueOf(req.getMethod().toUpperCase());
+
+        if (method.equals(HttpMethod.GET)) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
+            dispatcher.forward(req, resp);
+            return;
+        }
+
+
         String email = req.getParameter("email");
         req.setAttribute("email", email);
         String password = req.getParameter("password");
@@ -59,14 +68,16 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    @Route(value = "login/", method = HttpMethod.GET)
-    public void renderLoginForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
-        dispatcher.forward(req, resp);
-    }
-
-    @Route(value = "register/", method = HttpMethod.POST)
+    @Route(value = "register/", method = HttpMethod.GET_POST)
     public void registerUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        HttpMethod method = HttpMethod.valueOf(req.getMethod().toUpperCase());
+
+        if (method.equals(HttpMethod.GET)) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
+            dispatcher.forward(req, resp);
+            return;
+        }
+
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
@@ -92,14 +103,9 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    @Route(value = "register/", method = HttpMethod.GET)
-    public void renderRegisterForm(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
-        dispatcher.forward(req, resp);
-    }
 
     @LoginRequired
-    @Route(value = "logout/", method = HttpMethod.GET)
+    @Route(value = "logout/", method = HttpMethod.GET_POST)
     public void logoutUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         service.logout(req, resp);
 

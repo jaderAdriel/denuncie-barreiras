@@ -1,5 +1,6 @@
 package com.barreirasapp.controller;
 
+import com.barreirasapp.annotation.HttpMethod;
 import com.barreirasapp.annotation.Route;
 import com.barreirasapp.infra.proxy.AuthProxy;
 import com.barreirasapp.utils.Route.RouteInfo;
@@ -12,9 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,9 +49,14 @@ public class Middleware {
             String path = endpoint + route.value();
             String httpMethod = route.method().toString().toUpperCase();
 
-            RouteInfo routeInfo = new RouteInfo(normalizePath(path), route.method(), method, controllerClass);
+            List<HttpMethod> methods = Arrays.stream(httpMethod.split("_"))
+                    .map(String::trim)
+                    .map(HttpMethod::valueOf)
+                    .toList();
 
-            routes.put(path + ":" +  httpMethod, routeInfo);
+            RouteInfo routeInfo = new RouteInfo(normalizePath(path), methods, method, controllerClass);
+
+            routes.put( httpMethod + ":" + path, routeInfo);
             System.out.println("configuração endpoint " + path + " : " +  httpMethod);
         }
 
@@ -68,38 +72,50 @@ public class Middleware {
     }
 
     public static void callRoute(Object controllerInstance, Map<String, RouteInfo> routes, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        Optional<RouteMatchResult> routeMatchResult = findRoute(req, routes);
+
+        if (routeMatchResult.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+
+        RouteInfo routeInfo = routeMatchResult.get().getRouteInfo();
+
+        Map<String, String> params = routeMatchResult.get().getParams();
+
+        params.forEach((key, value) -> {
+            req.setAttribute(key,  params.get(key));
+        });
+
+        invokeRoute(controllerInstance, routeInfo.handlerMethod(), req, resp);
+
+    }
+
+    public static Optional<RouteMatchResult> findRoute(HttpServletRequest req, Map<String, RouteInfo> routes) {
         String path = req.getRequestURI();
-        String method = req.getMethod();
-        String routeKey = path + ":" + method ;
+        String reqMethod = req.getMethod();
+        String routeKey = reqMethod + ":" + path ;
 
-        System.out.println("Uma requisição foi feita para: " + routeKey);
+        if (routes.containsKey(routeKey)) {
+            RouteInfo routeInfo = routes.get(routeKey);
+            RouteMatchResult matchResult = RouteParser.matchAndExtract(routeInfo, path, reqMethod);
 
-        RouteInfo route = routes.get(routeKey);
+            return Optional.of(matchResult);
+        }
 
-        if (!routes.containsKey(routeKey)) {
-            Optional<RouteInfo> findResult = findRoute(path, routes);
+        for (RouteInfo routeInfo : routes.values()) {
+            RouteMatchResult matchResult = RouteParser.matchAndExtract(routeInfo, path, reqMethod);
 
-            if (findResult.isPresent()) {
-                route = findResult.get();
+            if (matchResult.isMatch()) {
+                return Optional.of(matchResult);
             }
         }
 
-        if (route != null) {
-            invokeRoute(controllerInstance, route.handlerMethod(), req, resp);
-        } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-    }
-
-    public static Optional<RouteInfo> findRoute(String path, Map<String, RouteInfo> routes) {
-        for (RouteInfo route : routes.values()) {
-            RouteMatchResult matchResult = RouteParser.matchAndExtract(route.path(), path);
-
-            if (matchResult.isMatch())
-                System.out.println("Foi achado um método para " + path );
-                return Optional.of(route);
-        }
-        return Optional.empty();
+        return routes.values().stream()
+                .filter(route -> route.supportsMethod(HttpMethod.valueOf(reqMethod)))
+                .map(route -> RouteParser.matchAndExtract(route, path, reqMethod))
+                .filter(RouteMatchResult::isMatch)
+                .findFirst();
     }
 
     public static String normalizePath(String path) {
