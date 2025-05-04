@@ -9,7 +9,7 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.service.AuthService;
 
 import com.barreirasapp.utils.ControllerDispatcher;
-import com.barreirasapp.utils.Route.RouteInfo;
+import com.barreirasapp.utils.routes.RouteInfo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.logging.Logger;
 

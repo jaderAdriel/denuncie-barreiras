@@ -3,9 +3,9 @@ package com.barreirasapp.controller;
 import com.barreirasapp.annotation.HttpMethod;
 import com.barreirasapp.annotation.Route;
 import com.barreirasapp.infra.proxy.AuthProxy;
-import com.barreirasapp.utils.Route.RouteInfo;
-import com.barreirasapp.utils.Route.RouteMatchResult;
-import com.barreirasapp.utils.Route.RouteParser;
+import com.barreirasapp.utils.routes.RouteInfo;
+import com.barreirasapp.utils.routes.RouteMatchResult;
+import com.barreirasapp.utils.routes.RouteParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Middleware {
