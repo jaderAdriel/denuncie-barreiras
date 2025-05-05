@@ -1,107 +1,65 @@
+## Documentação do Diagrama de Caso de Uso
 
----
+Este documento descreve o diagrama de caso de uso apresentado, detalhando os atores, casos de uso e seus relacionamentos. O diagrama visa representar as funcionalidades de um sistema, provavelmente uma plataforma online focada em denúncias, cenários educativos e legislação relacionada.
 
-## 🧾 Casos de Uso – Descrição
+**1. Visão Geral**
 
----
+O diagrama de caso de uso representa um sistema dividido em quatro grandes áreas:
 
-### ✅ **UC0 – Fazer Login**
-**Ator Principal:** Aluno, Funcionário Escolar  
-**Pré-condições:** O usuário deve estar cadastrado no sistema.  
-**Fluxo Principal:**
-1. O usuário acessa a tela de login.
-2. Informa seu login e senha.
-3. O sistema valida as credenciais.
-4. O sistema concede acesso às funcionalidades de acordo com o perfil do usuário.  
-   **Fluxo Alternativo:**
-- 3a. Credenciais inválidas → exibir mensagem de erro e solicitar nova tentativa.  
-  **Pós-condição:** Usuário autenticado no sistema.
+*   **Autenticação:** Gerencia o acesso seguro ao sistema.
+*   **Denúncia:** Permite que usuários reportem incidentes ou irregularidades.
+*   **Cenários Educativos:** Oferece recursos educacionais relacionados aos temas abordados nas denúncias.
+*   **Leis:** Permite o acesso e consulta de legislação relevante.
 
----
+**2. Atores**
 
-### ✅ **UC1 – Realizar Denúncia**
-**Ator Principal:** Aluno  
-**Pré-condição:** Usuário autenticado  
-**Fluxo Principal:**
-1. O aluno acessa a funcionalidade para registrar uma denúncia.
-2. Informa os dados da ocorrência (ambiente, tipo de barreira, severidade, descrição etc.).
-3. Escolhe se deseja manter o anonimato.
-4. Informa os dados da vítima (se aplicável).
-5. Registra a denúncia.  
-   **Inclusões:** UC3 – Registrar Testemunha  
-   **Extensões:** UC2 – Anexar Evidências  
-   **Pós-condição:** Denúncia registrada no sistema.
+O diagrama identifica dois atores principais:
 
----
+*   **Usuário:** É o ator principal, representando qualquer indivíduo que interage com o sistema para realizar denúncias, consultar informações e interagir com os cenários educativos.
+*   **Moderador:** Possui privilégios adicionais para gerenciar o conteúdo do sistema, como criar cenários educativos e vincular leis a denúncias.
 
-### ✅ **UC2 – Anexar Evidências**
-**Ator Principal:** Aluno  
-**Pré-condição:** Denúncia iniciada  
-**Fluxo Principal:**
-1. O aluno seleciona a opção de anexar evidências.
-2. Escolhe o tipo de evidência (imagem, vídeo, captura de tela).
-3. Anexa os arquivos e descreve-os.
-4. Confirma o envio.  
-   **Pós-condição:** Evidência vinculada à denúncia.
+**3. Casos de Uso**
 
----
+Cada caso de uso representa uma funcionalidade específica do sistema.
 
-### ✅ **UC3 – Registrar Testemunha**
-**Ator Principal:** Aluno  
-**Pré-condição:** Denúncia iniciada  
-**Fluxo Principal:**
-1. O aluno acessa a seção de testemunhas.
-2. Informa os dados da testemunha (nome, contato, relato, data).
-3. Indica se o depoimento é anônimo.
-4. Confirma o registro da testemunha.  
-   **Pós-condição:** Testemunha associada à denúncia.
+**3.1. Autenticação**
 
----
+*   **UC0: Autenticar no Sistema:** Permite que os usuários e moderadores façam login no sistema, verificando suas credenciais e concedendo acesso às funcionalidades permitidas. Este caso de uso é um pré-requisito para a maioria das interações.
 
-### ✅ **UC4 – Tramitar Denúncia**
-**Ator Principal:** Funcionário Escolar  
-**Pré-condição:** Denúncia registrada  
-**Fluxo Principal:**
-1. O funcionário escolar visualiza denúncias recebidas.
-2. Seleciona uma denúncia e define o departamento de destino.
-3. Altera o status da denúncia para "encaminhado" ou "finalizado".
-4. Encaminha para o próximo responsável.  
-   **Inclusões:** UC5 – Emitir Parecer  
-   **Pós-condição:** Denúncia tramitada para outro departamento.
+**3.2. Denúncia**
 
----
+*   **UC1: Realizar Denúncia:** Permite que os usuários registrem denúncias, fornecendo informações detalhadas sobre o incidente ou irregularidade.
+*   **UC2: Anexar Arquivos:** Permite que os usuários adicionem arquivos (imagens, vídeos, documentos, etc.) às suas denúncias como evidência.
+*   **UC3: Consultar Denúncia:** Permite que usuários visualizem o status e detalhes das suas próprias denúncias.
+*   **UC10: Vincular Cenário à Denúncia:** Permite que tanto o usuário ao criar uma denúncia, quanto o usuário ao consultar a denúncia, vincule um cenário educativo já existente a denúncia.
 
-### ✅ **UC5 – Emitir Parecer**
-**Ator Principal:** Funcionário Escolar  
-**Pré-condição:** Denúncia tramitada para o departamento  
-**Fluxo Principal:**
-1. O funcionário acessa a denúncia recebida.
-2. Analisa os dados, evidências e testemunhos.
-3. Registra o parecer descritivo.
-4. Finaliza o trâmite, alterando o status para "finalizado".  
-   **Pós-condição:** Parecer registrado e denúncia encerrada.
+**3.3. Cenários Educativos**
 
----
+*   **UC4: Consultar Cenários:** Permite que usuários e moderadores pesquisem e visualizem cenários educativos disponíveis.
+*   **UC6: Curtir Cenário:** Permite que usuários e moderadores curtam cenários educativos para mostrar seu apoio ou interesse.
+*   **UC7: Criar Cenário Educativo:** Permite que moderadores criem novos cenários educativos, adicionando conteúdo, informações e recursos relevantes.
+*   **UC8: Vincular Lei ao Cenário:** Permite que moderadores vinculem leis específicas aos cenários educativos, relacionando o conteúdo educativo ao arcabouço legal.
+*   **UC11: Comentar Cenário:** Permite que usuários e moderadores comentem nos cenários educativos, criando um espaço para discussões e feedback.
 
-### ✅ **UC6 – Gerenciar Departamentos**
-**Ator Principal:** Funcionário Escolar  
-**Pré-condição:** Usuário autenticado com permissão  
-**Fluxo Principal:**
-1. O funcionário acessa a tela de gerenciamento de departamentos.
-2. Visualiza lista de departamentos existentes.
-3. Pode adicionar, editar ou remover membros.
-4. Define o responsável por cada departamento.  
-   **Pós-condição:** Departamentos atualizados.
+**3.4. Leis**
 
----
+*   **UC9: Consultar Leis Relacionadas:** Permite que usuários e moderadores pesquisem e visualizem leis relacionadas aos temas abordados nas denúncias e cenários educativos.
 
-### ✅ **UC7 – Consultar Status**
-**Ator Principal:** Aluno  
-**Pré-condição:** Usuário autenticado  
-**Fluxo Principal:**
-1. O aluno acessa a tela de acompanhamento.
-2. Visualiza as denúncias registradas por ele.
-3. Consulta o status atual de cada denúncia (recebido, encaminhado, finalizado).  
-   **Pós-condição:** Aluno informado sobre o andamento de suas denúncias.
+**4. Relacionamentos**
 
----
+O diagrama utiliza diferentes tipos de relacionamentos para representar a interação entre os atores e os casos de uso:
+
+*   **Associação:** Representada por uma linha sólida, indica que um ator participa de um caso de uso (por exemplo, o Usuário pode Realizar Denúncia).
+*   **<<include>>:** Representada por uma linha tracejada com a etiqueta `<<include>>`, indica que um caso de uso depende obrigatoriamente da execução de outro (por exemplo, Realizar Denúncia *inclui* Autenticar no Sistema).  Isso significa que antes de realizar uma denúncia, o usuário precisa estar autenticado.
+*   **<<extend>>:** Representada por uma linha tracejada com a etiqueta `<<extend>>`, indica que um caso de uso pode opcionalmente estender a funcionalidade de outro (por exemplo, Realizar Denúncia *estende* Anexar Arquivos).  Isso significa que um usuário *pode* anexar arquivos ao realizar uma denúncia, mas não é obrigatório.
+
+**5. Notas**
+
+As notas no diagrama fornecem informações adicionais sobre as permissões de cada ator:
+
+*   **Usuário:** Tem permissão para realizar denúncias, consultar informações e interagir com os cenários educativos.
+*   **Moderador:** Tem todas as permissões do usuário, além da capacidade de criar cenários educativos e vincular leis a cenários.
+
+**6. Conclusão**
+
+O diagrama de caso de uso fornece uma visão geral clara e concisa das funcionalidades do sistema e das interações entre os atores e os casos de uso. Ele serve como um guia para o desenvolvimento e teste do sistema, garantindo que todas as funcionalidades sejam implementadas corretamente e que os atores possam realizar suas tarefas de forma eficiente.

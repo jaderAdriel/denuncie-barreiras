@@ -1,106 +1,162 @@
 @startuml
 ' https://plantuml.com/class-diagram
 
-skinparam Dpi 100
-skinparam Nodesep 80
-skinparam Ranksep 80
+skinparam Dpi 150
+skinparam shadowing true
+skinparam Nodesep 100
+skinparam Ranksep 100
 skinparam classBackgroundColor #F9F9F9
 skinparam classBorderColor #444444
 skinparam classArrowColor #555555
 skinparam noteBackgroundColor #FFF9C4
 skinparam noteBorderColor #E0E0E0
-skinparam groupInheritance 2
+skinparam groupInheritance 1
+
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 14
+'skinparam linetype ortho
 
 left to right direction
 
-package "Usuários" {
+package "Users"  <<Rectangle>> {
 
-    class Usuario {
+    class User {
         - id : Long
-        - nome : String
+        - name : String
         - email : String
-        - dataNascimento : LocalDate
-        - genero : GeneroEnum
-        - senha
-        - login
-        + autenticar()
-        + alterarSenha()
-        + realizarDenuncia()
+        - birthDate : LocalDate
+        - gender : GenderEnum
+        - password : String
+        - username : String
+        + authenticate()
+        + changePassword()
+        + reportIncident()
     }
 
-     class Moderador {
-        - telefone : String
+    class Moderator {
+        - phone : String
     }
 
-    class Endereco {
-        - cidade : String
-        - estado : String
-        - logradouro: String
-        - cep: String
+    class Address {
+        - city : String
+        - state : String
+        - street : String
+        - zipCode : String
     }
+
+    note right of User
+        Represents a system user who can
+        authenticate, report incidents,
+        and participate in discussions.
+    end note
+
+
 }
 
-class CenarioBarreira {
-    - tipo : TipoBarreiraAtitudinal
-    - autor : Moderador
-    - conteudo: Text
-    - titulo: String
-    - dataCriacao: LocalDate
-    - curtidas : List<Usuario>
+package "Social"  <<Rectangle>> {
+    class BarrierScenario {
+        - type : AttitudinalBarrierType
+        - author : Moderator
+        - content: Text
+        - title: String
+        - creationDate: LocalDate
+        - likes : List<User>
+        - comments : List<Comment>
+        + addComment
+    }
+
+    class Comment {
+        - dateTime : DateTime
+        - content : Text
+        - parentComment : Comment
+        - author : User
+    }
+
+    note right of BarrierScenario
+        Represents real-world attitudinal
+        barrier situations, created by moderators.
+    end note
+
+    note right of Comment
+        User-generated content that allows
+        discussion and replies on scenarios.
+    end note
 }
 
-class Lei {
-    - codigo : String
-    - data: String
+class Law {
+    - code : String
+    - date: String
     - link : URL
-    - titulo: String
-    - descricao: Text
+    - title: String
+    - description: Text
 }
 
-class Comentario {
-    - dataHora : dateTime
-    - conteudo : Text
-    - comentarioPai : Comentario
-    - autor : User
+note right of Law
+    Legal information relevant to
+    attitudinal barriers and rights.
+end note
+
+package "Reports"  <<Rectangle>> {
+    class Report {
+        - type : AttitudinalBarrierType
+        - environment: EnvironmentTypeEnum
+        - incidentLocation : Address
+        - severity : Integer
+        - anonymous : Boolean
+        - incidentDetails: Text
+        - relatedScenario : BarrierScenario
+        - reporter : User
+    }
+
+    class Attachment {
+        - fileName : String
+        - fileType : String
+        - filePath : String
+        - uploadDate : LocalDateTime
+    }
+
+    class ReportReview {
+        - description : String
+        - date : LocalDate
+        - finalStatus : ReportStatus
+        - author : Moderator
+    }
+
+    note right of Report
+        Represents a user-submitted complaint
+        about a specific barrier incident.
+    end note
+
+    note right of Attachment
+        Files (e.g. images, documents) related
+        to reports or scenarios for evidence.
+    end note
+
+    note left of ReportReview
+        Moderator's evaluation and
+        decision on a reported incident.
+    end note
 }
 
+' Inheritance and relationships
+User <|-- Moderator
 
-class Denuncia {
-    - tipo : TipoBarreiraAtitudinal
-    - ambiente: TipoAmbienteEnum
-    - localizacaoOcorrido : Endereco
-    - severidade : Integer
-    - denunciaAnonima : Boolean
-    - detalhamentoOcorrido: Text
-    - cenarioRelacionado : CenarioBarreira
-    - denunciante : Usuario
-}
+User "1" -- "n" Report : "submits"
 
-class Anexo {
-    - nomeArquivo : String
-    - tipo : String
-    - caminho : String
-    - dataEnvio : LocalDateTime
-}
+ReportReview "n" -- "1" Moderator : "written by"
+ReportReview "n" -* "1" Report : "analyzes"
 
+Comment "1" <-- "n" Comment : "replies to"
+Comment "n" -- "1" User : "authored by"
 
+Moderator *- Address : "has address"
+Moderator "1" -- "0..*" BarrierScenario : "creates"
 
-'Herança de Pessoa
-'Pessoa <|-- Usuario
-Usuario <|-- Moderador
-Usuario "n" -- "n" Denuncia
+Report "*" -- "1" BarrierScenario : "describes"
+BarrierScenario "1" *-- "0..*" Comment : "has comments"
+Law "0..*" -- "0..*" BarrierScenario : "related to"
 
-Comentario "1" <-- "n" Comentario : "Responde"
-Comentario "n" -- "1" Usuario : "Faz"
-
-Moderador *- Endereco
-Moderador "1"  -- "0..*" CenarioBarreira : "Cria"
-
-Denuncia "*" -- "1" CenarioBarreira
-Denuncia "1" -- "0..*" Comentario
-Lei "0..*" -- "0..*" CenarioBarreira
-
-Denuncia *-- "0..*" Anexo
-CenarioBarreira *-- "0..*" Anexo
+Report *-- "0..*" Attachment : "includes"
+BarrierScenario *-- "0..*" Attachment : "includes"
 
 @enduml

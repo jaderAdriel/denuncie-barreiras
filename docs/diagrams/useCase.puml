@@ -1,5 +1,8 @@
 @startuml
 !pragma useVerticalIf on
+' Ajustar o espaçamento
+skinparam Nodesep 150
+skinparam Ranksep 150
 
 skinparam usecase {
     BackgroundColor #F9F9F9
@@ -49,6 +52,7 @@ rectangle "Cenários Educativos" <<boundary>> {
     (UC6: Curtir Cenário) as uc6
     (UC7: Criar Cenário Educativo) as uc7
     (UC8: Vincular Lei ao Cenário) as uc8
+    (UC11: Comentar Cenário) as uc11
 }
 
 ' ##### LEGISLAÇÃO #####
@@ -67,6 +71,8 @@ uc0 .down.> uc4 : <<include>>
 uc0 .down.> uc3 : <<include>>
 uc1 .down.> uc10 : <<extend>>
 uc3 .down.> uc10 : <<extend>>
+uc0 .down.> uc11 : <<extend>>
+
 
 ' Moderador
 m --> uc0
@@ -77,7 +83,6 @@ uc7 --> uc8 : <<extend>>
 uc0 .down.> uc7 : <<extend>>
 uc0 .down.> uc6 : <<extend>>
 
-
 note top of u
   <b>Permissões do Usuário:</b>
   - Realizar denúncias
@@ -86,6 +91,7 @@ note top of u
   - Ver cenários educativos
   - Curtir cenários
   - Consultar leis
+  - Comentar denúncias
 end note
 
 note top of m
