@@ -3,8 +3,10 @@ package com.barreirasapp.infra.security;
 import com.barreirasapp.model.Session;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.SessionDao;
+import com.barreirasapp.model.dao.UserDao;
 import com.barreirasapp.model.entities.User;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 
@@ -29,6 +31,20 @@ public class UserContext {
         Optional<Session> session = sessionRepository.findByid(sessionId);
 
         return session.isPresent();
+    }
+
+    public static Optional<User> getUserFromSession(String sessionId) {
+
+        SessionDao sessionRepository = DaoFactory.createSessionDao();
+        Optional<Session> session = sessionRepository.findByid(sessionId);
+
+        if (session.isEmpty()) {
+            return Optional.empty();
+        }
+        UserDao userRepository = DaoFactory.createUserDao();
+        Integer userId = session.get().getUserId();
+
+        return Optional.of(userRepository.findById(userId));
     }
 
     public static Session createSession(User user) {
