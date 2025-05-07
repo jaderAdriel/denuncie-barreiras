@@ -80,7 +80,7 @@ public class AuthController extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        String password2 = req.getParameter("password");
+        String password2 = req.getParameter("password2");
         String birthDate = req.getParameter("birthDate");
         String gender = req.getParameter("gender");
 
