@@ -14,8 +14,9 @@ public class Report {
     private Boolean anonymousReport;
     private String eventDetailing;
     private User reporter;
+    private BarrierScenario barrierScenario;
 
-    public Report(String type, String ambient, String address, Integer severity, Boolean anonymousReport, String eventDetailing, User reporter) {
+    public Report(String type, String ambient, String address, Integer severity, Boolean anonymousReport, String eventDetailing, User reporter, BarrierScenario barrierScenario) {
         this.type = type;
         this.ambient = ambient;
         this.address = address;
@@ -23,9 +24,17 @@ public class Report {
         this.anonymousReport = anonymousReport;
         this.eventDetailing = eventDetailing;
         this.reporter = reporter;
+        this.barrierScenario = barrierScenario;
     }
 
     public Report() {
+    }
+
+    public Report(String ambient, String eventDetailing, Boolean anonymousReport, BarrierScenario barrierScenario) {
+        this.ambient = ambient;
+        this.eventDetailing = eventDetailing;
+        this.anonymousReport = anonymousReport;
+        this.barrierScenario = barrierScenario;
     }
 
     public String getType() {
@@ -94,6 +103,14 @@ public class Report {
 
     public int getReporterId(){
         return this.reporter.getId();
+    }
+
+    public BarrierScenario getBarrierScenario() {
+        return barrierScenario;
+    }
+
+    public void setBarrierScenario(BarrierScenario barrierScenario) {
+        this.barrierScenario = barrierScenario;
     }
 
     public void save() {
