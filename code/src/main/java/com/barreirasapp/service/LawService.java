@@ -6,21 +6,19 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.LawDao;
 import com.barreirasapp.model.entities.Law;
-import com.barreirasapp.model.entities.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class LawService {
-    private final LawDao lawRepository;
     
     public LawService() {
-        this.lawRepository= DaoFactory.createLawDao();
     }
     
     public void insert(RegisterLawDTO lawDTO) throws ValidationError {
         
-        if (lawRepository.findById(lawDTO.getCode()) != null) {
+        if (Law.find(lawDTO.getCode()).isPresent()) {
             throw new ValidationError("Erro de integridade", Map.of("error", "Já existe um lei com esse código"));
         }
         
@@ -32,16 +30,18 @@ public class LawService {
                 lawDTO.getDescription()
         );
 
-        lawRepository.insert(law);
+        law.save();
     }
 
     public void update(UpdateLawDTO updateLawDTO) throws ValidationError {
 
-        Law lawToUpdate = lawRepository.findById(updateLawDTO.getCode());
+        Optional<Law> lawOptional = Law.find(updateLawDTO.getCode());
 
-        if (lawToUpdate == null) {
+        if (lawOptional.isEmpty()) {
             throw new ValidationError("Erro de integridade", Map.of("error", "Lei com este código não existe"));
         }
+
+        Law lawToUpdate = lawOptional.get();
 
         String lawOfficialLink = updateLawDTO.getOfficialLink();
         String lawDescription = updateLawDTO.getDescription();
@@ -52,23 +52,24 @@ public class LawService {
         if (lawDescription != null)
             lawToUpdate.setDescription(lawDescription);
 
-        this.lawRepository.update(lawToUpdate);
+        lawToUpdate.update();
     }
 
     public void deleteById(String lawCode) throws ValidationError {
+        Optional<Law> lawToDelete = Law.find(lawCode);
 
-        if (lawRepository.findById(lawCode) == null) {
+        if (lawToDelete.isEmpty()) {
             throw new ValidationError("Erro de integridade", Map.of("error", "Lei com este código não existe"));
         }
 
-        lawRepository.deleteById(lawCode);
+        lawToDelete.get().delete();
     }
 
     public List<Law> listAll() {
-        return lawRepository.findAll();
+        return Law.findAll();
     }
 
-    public Law findById(String code) {
-        return lawRepository.findById(code);
+    public Optional<Law> findById(String code) {
+        return Law.find(code);
     }
 }

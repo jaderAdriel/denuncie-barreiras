@@ -1,6 +1,11 @@
 package com.barreirasapp.model.entities;
 
+import com.barreirasapp.model.dao.DaoFactory;
+import com.barreirasapp.model.dao.LawDao;
+
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public class Law {
     private String code;
@@ -43,5 +48,30 @@ public class Law {
 
     public String getDescription() {
         return description;
+    }
+
+    public void save() {
+        LawDao dao = DaoFactory.createLawDao();
+        dao.insert(this);
+    }
+
+    public void update() {
+        LawDao dao = DaoFactory.createLawDao();
+        dao.update(this);
+    }
+
+    public void delete() {
+        LawDao dao = DaoFactory.createLawDao();
+        dao.deleteById(this.getCode());
+    }
+
+    public static Optional<Law> find(String lawCode) {
+        LawDao dao = DaoFactory.createLawDao();
+        return Optional.ofNullable(dao.findById(lawCode));
+    }
+
+    public static List<Law> findAll() {
+        LawDao dao = DaoFactory.createLawDao();
+        return dao.findAll();
     }
 }

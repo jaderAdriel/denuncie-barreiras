@@ -6,6 +6,8 @@ import com.barreirasapp.model.enums.Gender;
 import com.barreirasapp.model.entities.valueobjects.Email;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public class User {
     private Integer id;
@@ -23,7 +25,8 @@ public class User {
         this.password = password;
     }
 
-    public User(String password, Gender gender, LocalDate birthDate, Email email, String name) {
+    public User(Integer id, String password, Gender gender, LocalDate birthDate, Email email, String name) {
+        this.id = id;
         this.password = password;
         this.gender = gender;
         this.birthDate = birthDate;
@@ -39,10 +42,6 @@ public class User {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -53,10 +52,6 @@ public class User {
 
     public Email getEmail() {
         return email;
-    }
-
-    public void setEmail(Email email) {
-        this.email = email;
     }
 
     public LocalDate getBirthDate() {
@@ -71,10 +66,6 @@ public class User {
         return gender;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -83,13 +74,33 @@ public class User {
         return this.password.equals(password);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
     public void save() {
         UserDao dao = DaoFactory.createUserDao();
         dao.insert(this);
+    }
+
+    public void update() {
+        UserDao dao = DaoFactory.createUserDao();
+        dao.update(this);
+    }
+
+    public void delete() {
+        UserDao dao = DaoFactory.createUserDao();
+        dao.deleteById(this.getId());
+    }
+
+    public static Optional<User> find(Integer userId) {
+        UserDao dao = DaoFactory.createUserDao();
+        return Optional.ofNullable(dao.findById(userId));
+    }
+
+    public static Optional<User> find(Email userEmail) {
+        UserDao dao = DaoFactory.createUserDao();
+        return dao.getUserByEmail(userEmail);
+    }
+
+    public static List<User> findAll() {
+        UserDao dao = DaoFactory.createUserDao();
+        return dao.findAll();
     }
 }

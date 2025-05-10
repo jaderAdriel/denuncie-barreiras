@@ -15,14 +15,9 @@ import java.util.*;
 
 public class AuthService {
 
-    private final UserDao userRepository;
-
-    public AuthService() {
-        userRepository = DaoFactory.createUserDao();
-    }
-
     public void register(RegisterUserDTO registerUserDTO) throws ValidationError {
-        Optional<User> existentUser = this.userRepository.getUserByEmail(registerUserDTO.getEmail());
+
+        Optional<User> existentUser = User.find(registerUserDTO.getEmail());
 
         if (existentUser.isPresent()) {
             throw new ValidationError("Erro de validação", Map.of("error", "Já existe um usuário com esse email"));
@@ -35,8 +30,7 @@ public class AuthService {
                 registerUserDTO.getGender(),
                 registerUserDTO.getPassword()
         );
-
-        userRepository.insert(user);
+        user.save();
     }
 
     public void logout(HttpServletRequest req, HttpServletResponse resp) {
@@ -48,7 +42,7 @@ public class AuthService {
     }
 
     public void login(LoginDTO loginDTO, HttpServletRequest req, HttpServletResponse resp) throws ValidationError {
-        Optional<User> user = userRepository.getUserByEmail(loginDTO.email);
+        Optional<User> user = User.find(loginDTO.email);
 
         if (user.isEmpty()) {
             throw new ValidationError( "" ,Map.of("email", "Usuário não encontrado"));

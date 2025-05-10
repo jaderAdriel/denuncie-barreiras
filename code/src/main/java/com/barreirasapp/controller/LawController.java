@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @WebServlet("/law/*")
@@ -151,7 +152,12 @@ public class LawController extends HttpServlet {
 
 
     public void setLawFields(HttpServletRequest req, String lawCode) {
-        Law law = service.findById(lawCode);
+
+        Optional<Law> lawOptional =  service.findById(lawCode);
+
+        if (lawOptional.isEmpty()) {return;}
+
+        Law law =lawOptional.get();
 
         req.setAttribute("code", law.getCode());
         req.setAttribute("date", law.getDate());
