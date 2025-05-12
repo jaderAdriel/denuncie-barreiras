@@ -59,6 +59,8 @@ public class UserDaoJDBC implements UserDao {
 
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         } finally {
             DatabaseConnection.closeResultSet(rs);
             DatabaseConnection.closeStatement(st);
@@ -166,19 +168,14 @@ public class UserDaoJDBC implements UserDao {
     }
 
     private User instantiateUser(ResultSet rs) throws SQLException {
-        User User = new User();
-        User.setId(rs.getInt("id"));
-        User.setName(rs.getString("name"));
-        User.setPassword(rs.getString("password"));
-
+        Integer id = rs.getInt("id");
+        String name = rs.getString("name");
+        String password = rs.getString("password");
         Email email = new Email(rs.getString("email"));
         Gender gender = Gender.valueOf(rs.getString("gender"));
-        LocalDate birth_date = LocalDate.parse(rs.getString("birth_date"));
+        LocalDate birthDate = LocalDate.parse(rs.getString("birth_date"));
 
-        User.setEmail(email);
-        User.setBirthDate(birth_date);
-        User.setGender(gender);
-        return User;
+        return new User(id, password, gender, birthDate, email, name);
     }
 
     @Override

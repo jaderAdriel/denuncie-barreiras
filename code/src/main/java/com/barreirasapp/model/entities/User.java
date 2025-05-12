@@ -74,6 +74,14 @@ public class User {
         return this.password.equals(password);
     }
 
+    public void setId(Integer id) throws IllegalAccessException {
+        if (this.id != null) {
+            throw new IllegalAccessException("Não é permitidio alterar um id existente");
+        }
+
+        this.id = id;
+    }
+
     public void save() {
         UserDao dao = DaoFactory.createUserDao();
         dao.insert(this);
