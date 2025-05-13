@@ -3,6 +3,8 @@ Sistema de Denúncia e Monitoramento de Barreiras Atitudinais
 
 Acesse [Guia de Ambiente de Desenvolvimento](docs/tutorial/readme.md)
 
+Acesse [Protótipo no figma](https://www.figma.com/design/bInOXDxtwPHx7JtDIwLM7W/Trabalho-LPOO?node-id=0-1&p=f&t=zs4tu1UJYzwB5dQ5-0)
+
 ---
 
 ## Visão Geral
@@ -65,9 +67,6 @@ Suporte ao crescimento de usuários e registros.
 RNF05 - Compatibilidade:
 Funciona em navegadores e dispositivos móveis.
 
-RNF06 - Registro de Atividades:
-Log de ações para monitoramento e auditoria.
-
 ---
 
 ## Tecnologias Utilizadas
@@ -112,8 +111,8 @@ Projeto realizado como atividade avaliativa da disciplina **Linguagem de Program
 
 ## Documentação Complementar
 
-* [Guia de Migrations (Flyway)](docs/migrations-guide.md)
-* [Guia do Ambiente com Docker](docs/docker-setup.md)
+* [Guia de Migrations (Flyway)](docs/tutorial/migrations-guide.md)
+* [Guia do Ambiente com Docker](docs/tutorial/docker-setup.md)
 * [Tutorial Inicial](docs/tutorial/readme.md)
 
 ---
