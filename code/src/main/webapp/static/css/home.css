@@ -53,14 +53,16 @@ header#page-header {
         gap: 1.5rem;
         height: fit-content;
 
-        li {
+        .nav-item {
             padding: 0 0.5rem;
-            a {
-            font-size: 1.25rem;
-            }
+
         }
 
-        li.active, li:hover {
+        a {
+            font-size: 1.25rem;
+        }
+
+        .nav-item.active, .nav-item:hover {
             transition: color 100ms ease-in-out;
             color: var(--primary-color);
             border-bottom: 2px solid var(--primary-color);

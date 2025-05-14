@@ -4,11 +4,12 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Denuncie Barreiras</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/static/css/home.css'>
 <%--    <script src='assets/index.js' defer></script>--%>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="../../static/images/logo.png" type="image/x-icon">
     <style>
         .material-symbols-outlined {
           font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
@@ -30,9 +31,9 @@
             <nav id="nav-menu">
                 <ul>
                     <li class="nav-item active"><a href="#">Home</a></li>
-                    <li><a href="#">Denúncias</a></li>
-                    <li><a href="#">Cenários educativos</a></li>
-                    <li><a href="#" class="btn-primary">Login</a></li>
+                    <li class="nav-item"><a href="#">Denúncias</a></li>
+                    <li class="nav-item"><a href="#">Cenários educativos</a></li>
+                    <li class="nav-button"><a href="${pageContext.request.contextPath}/accounts/login/" class="btn-primary">Login</a></li>
                 </ul>
             </nav>
         </header>
