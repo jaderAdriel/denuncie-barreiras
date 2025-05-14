@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="." method="POST" autocomplete="off">
+            <form class="space-y-6" action="../.." method="POST" autocomplete="off">
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Email</label>
                     <div class="mt-2">

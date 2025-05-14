@@ -14,7 +14,7 @@
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-lg">
-            <form class="space-y-6" action="." method="POST" autocomplete="off">
+            <form class="space-y-6" action="../.." method="POST" autocomplete="off">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-900">Nome completo</label>
                     <div class="mt-2">

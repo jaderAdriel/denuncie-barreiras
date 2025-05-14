@@ -43,9 +43,9 @@ public class AuthController extends HttpServlet {
     @Route(value = "login/", method = HttpMethod.GET_POST)
     public void authenticateUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpMethod method = HttpMethod.valueOf(req.getMethod().toUpperCase());
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/accounts/login.jsp");
 
         if (method.equals(HttpMethod.GET)) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
             dispatcher.forward(req, resp);
             return;
         }
@@ -54,8 +54,6 @@ public class AuthController extends HttpServlet {
         String email = req.getParameter("email");
         req.setAttribute("email", email);
         String password = req.getParameter("password");
-
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
 
         try {
             LoginDTO loginDTO = new LoginDTO(email, password);
@@ -70,9 +68,9 @@ public class AuthController extends HttpServlet {
     @Route(value = "register/", method = HttpMethod.GET_POST)
     public void registerUser(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpMethod method = HttpMethod.valueOf(req.getMethod().toUpperCase());
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/accounts/register.jsp");
 
         if (method.equals(HttpMethod.GET)) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
             dispatcher.forward(req, resp);
             return;
         }
@@ -88,9 +86,6 @@ public class AuthController extends HttpServlet {
         req.setAttribute("email", email);
         req.setAttribute("birthDate", birthDate);
         req.setAttribute("gender", gender);
-
-
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
 
         try {
             RegisterUserDTO registerUserDTO = new RegisterUserDTO(name, email, password2, password, birthDate, gender);
