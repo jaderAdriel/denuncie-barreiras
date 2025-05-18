@@ -12,13 +12,13 @@ public class BarrierScenario {
     LocalDate creationDate;
     List<User> likes;
 
-    public BarrierScenario(List<User> likes, LocalDate creationDate, String title, String content, User author, String type) {
-        this.likes = likes;
-        this.creationDate = creationDate;
-        this.title = title;
-        this.content = content;
-        this.author = author;
+    public BarrierScenario(int id, String type, User author, String content, String title, LocalDate creationDate) {
+        this.id = id;
         this.type = type;
+        this.author = author;
+        this.content = content;
+        this.title = title;
+        this.creationDate = creationDate;
     }
 
     public BarrierScenario() {

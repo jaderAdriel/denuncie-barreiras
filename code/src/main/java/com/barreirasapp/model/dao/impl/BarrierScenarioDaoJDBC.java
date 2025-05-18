@@ -29,7 +29,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         try {
             st = conn.prepareStatement(
                     """
-                          INSERT INTO BarrierScenario (type, author, content, title, creation_date)
+                          INSERT INTO BarrierScenario (type, author_fk, content, title, creation_date)
                           VALUES (?, ?, ?, ?, ?);
                       """, Statement.RETURN_GENERATED_KEYS
             );
@@ -38,7 +38,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
             java.sql.Date sqlDate = java.sql.Date.valueOf(birthDate);
 
             st.setString(1, scenario.getType());
-            st.setString(2, scenario.getAuthor().toString());
+            st.setInt(2, scenario.getAuthor().getId());
             st.setString (3, scenario.getContent());
             st.setString(4, scenario.getTitle());
             st.setDate(5, sqlDate);
@@ -71,7 +71,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         try {
             st = conn.prepareStatement(
                     """
-                          UPDATE Report
+                          UPDATE BarrierScenario
                           SET type = ?, content = ?, title = ?
                           WHERE id = ?;
                       """, Statement.RETURN_GENERATED_KEYS
@@ -111,7 +111,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         try {
             st = conn.prepareStatement(
                     """
-                            SELECT id, type, author_fk, content, title, creation_date, likes                            FROM BarrierScenario
+                            SELECT id, author_fk, type, content, title, creation_date, likes
                             FROM BarrierScenario
                             WHERE id = ?;
                       """
@@ -188,21 +188,18 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
     }
 
     private BarrierScenario instantiateScenario(ResultSet rs) throws SQLException {
-
         UserDao userDao = DaoFactory.createUserDao();
+
         int authorId = rs.getInt("author_fk");
         User author = userDao.findById(authorId);
 
         LocalDate creationDate = LocalDate.parse(rs.getString("creation_date"));
+        int scenarioId = rs.getInt("id");
+        String scenarioType = rs.getString("type");
+        String scenarioContent = rs.getString("content");
+        String scenarioTitle = rs.getString("title");
 
-        BarrierScenario scenario = new BarrierScenario();
-        scenario.setId(rs.getInt("id"));
-        scenario.setType(rs.getString("type"));
-        scenario.setContent(rs.getString("content"));
-        scenario.setAuthor(author);
-        scenario.setTitle(rs.getString("title"));
-
-        return scenario;
+        return new BarrierScenario(scenarioId, scenarioType, author, scenarioContent, scenarioTitle, creationDate );
     }
 
 }
