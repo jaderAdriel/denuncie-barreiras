@@ -9,7 +9,8 @@
     <link rel='stylesheet' type='text/css' media='screen' href='/static/css/home.css'>
 <%--    <script src='assets/index.js' defer></script>--%>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="shortcut icon" href="../../static/images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
+    <base href="<%= request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/" %>">
     <style>
         .material-symbols-outlined {
           font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
@@ -21,22 +22,8 @@
 </head>
 <body>
     <div class="wrapper">
-        <header id="page-header">
-            <img src="../../static/images/logo.png" alt="Logo" class="logo">
 
-            <button class="hamburger" id="hamburger-btn" aria-label="Abrir menu">
-                ☰
-            </button>
-        
-            <nav id="nav-menu">
-                <ul>
-                    <li class="nav-item active"><a href="#">Home</a></li>
-                    <li class="nav-item"><a href="#">Denúncias</a></li>
-                    <li class="nav-item"><a href="#">Cenários educativos</a></li>
-                    <li class="nav-button"><a href="${pageContext.request.contextPath}/accounts/login/" class="btn-primary">Login</a></li>
-                </ul>
-            </nav>
-        </header>
+        <%@ include file="parts/_header.jsp"%>
         
         <main>
             <section class="page-section section hero" id="hero-section" >
@@ -56,7 +43,7 @@
 
 
                 <div class="hero-image">
-                    <img src="../../static/images/man-breaking-wall.png" alt="Hero Image">
+                    <img src="static/images/man-breaking-wall.png" alt="Hero Image">
                 </div>
         
             </section>
@@ -66,7 +53,7 @@
                 </header>
                 
                 <div class="section-content">
-                    <img src="../../static/images/woman-hands-up.png" alt="Mulher levantando as mãos">
+                    <img src="static/images/woman-hands-up.png" alt="Mulher levantando as mãos">
                     <div class="text">
                         <p>
                             A conscientização é o primeiro passo para combater barreiras atitudinais. O sistema oferece uma galeria de Cenários Educativos, criados por moderadores capacitados, que representam situações comuns de discriminação em diversos contextos sociais.
@@ -92,7 +79,7 @@
                             Além do relato detalhado, é possível anexar arquivos (como fotos, vídeos ou documentos) e, se desejar, relacionar a denúncia a um cenário educativo semelhante. Isso fortalece a base de dados do sistema e auxilia na identificação de padrões de discriminação.
                         </p>
                     </div>
-                    <img src="../../static/images/megaphone-report.png" alt="Mulher levantando as mãos">
+                    <img src="static/images/megaphone-report.png" alt="Mulher levantando as mãos">
                 </div>
             </section>
 
@@ -102,7 +89,7 @@
                 </header>
                 
                 <div class="section-content">
-                    <img src="../../static/images/people-talking.png" alt="Mulher levantando as mãos">
+                    <img src="static/images/people-talking.png" alt="Mulher levantando as mãos">
                     <div class="text">
                         <p>
                             A plataforma não é apenas um repositório de denúncias, mas também um espaço de diálogo e apoio mútuo. Usuários podem comentar nos cenários e nas postagens de outros membros, criando uma rede colaborativa de troca de experiências e soluções. 
@@ -116,64 +103,6 @@
         </main>
     </div>
 
-    <footer id="page-footer">
-        <div class="top">
-            <!-- <img src="static/images/logo.png" alt="Company Logo"> -->
-        </div>
-    
-        <div class="middle">
-            <div class="contato">
-                <div>
-                    <h2>Entre em contato conosco</h2>
-                    <ul class="contato-list">
-                        <li class="contato-item">
-                            <span class="material-symbols-outlined">mail</span>
-                            <p>email@empresa.com</p>
-                        </li>
-                        <li class="contato-item">
-                            <span class="material-symbols-outlined">call</span>
-                            <p>
-                                <a href="#">(00) 0000-0000</a><br>
-                                <a href="#">(00) 0000-0000</a>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-    
-            <div class="endereco">
-                <div>
-                    <h2>Visite-nos</h2>
-                    <ul class="address-list">
-                        <li class="address-item">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <p>Endereço fictício 1 – Cidade – Estado – CEP</p>
-                        </li>
-                        <li class="address-item">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <p>Endereço fictício 2 – Cidade – Estado – CEP</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    
-        <div class="bottom">
-            <p>© 2025 by NOME DA EMPRESA.<br>Todos os direitos reservados.</p>
-    
-            <div class="links">
-                <a href="#" aria-label="Twitter"><span class="material-symbols-outlined">public</span></a>
-                <a href="#" aria-label="Instagram"><span class="material-symbols-outlined">photo_camera</span></a>
-                <a href="#" aria-label="Facebook"><span class="material-symbols-outlined">group</span></a>
-                <a href="#" aria-label="LinkedIn"><span class="material-symbols-outlined">work</span></a>
-            </div>
-    
-            <p>
-                CNPJ: 00.000.000/0000-00 – CRC/XX 0000/O<br>
-                CNPJ: 00.000.000/0000-00
-            </p>
-        </div>
-    </footer>
-    
+    <%@ include file="parts/_footer.jsp" %>
 </body>
 </html>

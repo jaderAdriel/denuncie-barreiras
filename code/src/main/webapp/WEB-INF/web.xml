@@ -13,5 +13,6 @@
         <url-pattern>*.png</url-pattern>
         <url-pattern>*.jpg</url-pattern>
         <url-pattern>*.gif</url-pattern>
+        <url-pattern>*.svg</url-pattern>
     </servlet-mapping>
 </web-app>
