@@ -6,12 +6,12 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Denuncie Barreiras</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <base href="<%= request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/" %>">
     <link rel='stylesheet' type='text/css' media='screen' href='/static/css/public/style.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='/static/css/public/home.css'>
 <%--    <script src='assets/index.js' defer></script>--%>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
-    <base href="<%= request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/" %>">
     <style>
         .material-symbols-outlined {
           font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
@@ -80,7 +80,7 @@
                             Além do relato detalhado, é possível anexar arquivos (como fotos, vídeos ou documentos) e, se desejar, relacionar a denúncia a um cenário educativo semelhante. Isso fortalece a base de dados do sistema e auxilia na identificação de padrões de discriminação.
                         </p>
                     </div>
-                    <img src="static/images/megaphone-report.png" alt="Mulher levantando as mãos">
+                    <img src="static/images/megaphone.svg" alt="Mulher levantando as mãos">
                 </div>
             </section>
 
