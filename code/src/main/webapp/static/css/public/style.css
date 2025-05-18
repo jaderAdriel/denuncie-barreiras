@@ -15,7 +15,7 @@
 html {
     font-size: 16px;
 }
-  
+
 
 :root {
     --primary-color: #2998DD;
@@ -39,8 +39,7 @@ header#page-header {
     justify-content: space-between;
     align-items: flex-end;
     width: 100%;
-    padding: 1rem 2rem;
-    padding-top: 2rem;
+    padding: 2rem 2rem 1rem;
     color: #495057;
 
     img.logo {
@@ -55,7 +54,6 @@ header#page-header {
 
         .nav-item {
             padding: 0 0.5rem;
-
         }
 
         a {
@@ -65,7 +63,6 @@ header#page-header {
         .nav-item.active, .nav-item:hover {
             transition: color 100ms ease-in-out;
             color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
         }
     }
 }
@@ -120,12 +117,12 @@ section#hero-section {
     gap: 2rem;
     position: relative;
 
-    background-image: url('../images/waves.svg');
+    background-image: url('../../images/waves.svg');
     background-repeat: no-repeat;
     background-position-y: 100%;
     background-size: contain;
 
-    
+
 
     .hero-content {
         display: flex;
@@ -194,81 +191,6 @@ section#hero-section {
         }
     }
 }
-
-.section.info:last-child {
-    padding-bottom: 8rem;
-}
-
-.section.info {
-
-    .section-header {
-        .section-title {
-            font-size: clamp(1.5rem, 2vw + 1rem, 3rem);
-            font-weight: 300;
-            color: var(--secondary-color);    
-        }
-    }
-
-    &:nth-child(even) .section-header .section-title {
-        color: var(--primary-color);
-    } 
-
-    .section-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 4rem;
-        padding: 2rem 1rem;
-    
-        img {
-            width: clamp(15rem, 40vw, 30.75rem);
-            flex: 1 1 300px;
-        }
-    
-        .text {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            margin-top: 2rem;
-            max-width: 47rem;
-            flex: 1 1 300px;
-            text-align: justify;
-    
-            p {
-                font-size: 1.25rem;
-                line-height: 2;
-                font-weight: 300;
-            }
-        }
-    
-        @media (max-width: 768px) {
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-    
-            img {
-                width: 100%;
-            }
-    
-            .text {
-                margin-top: 0;
-                width: 100%;
-            }
-        }
-    
-        @media (max-width: 480px) {
-            .text p {
-                font-size: 1rem;
-                line-height: 1.8;
-            }
-    
-            gap: 2rem;
-        }
-    }
-    
-}
-
 
 #page-footer {
     background-color: #1c6b9c;

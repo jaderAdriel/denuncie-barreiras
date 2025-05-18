@@ -22,7 +22,7 @@
             let navItemPath = item.querySelector("a").getAttribute("href");
             console.log(navItemPath);
 
-            if (navItemPath === urlPath || navItemPath === '') {
+            if (navItemPath === urlPath || navItemPath === '.') {
                 console.log("Active item: ", item);
                 item.classList.add("active");
             }

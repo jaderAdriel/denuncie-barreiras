@@ -6,7 +6,8 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Denuncie Barreiras</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='/static/css/home.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/static/css/public/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/static/css/public/home.css'>
 <%--    <script src='assets/index.js' defer></script>--%>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
