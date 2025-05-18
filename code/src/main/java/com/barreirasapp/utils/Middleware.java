@@ -1,5 +1,4 @@
-package com.barreirasapp.controller;
-import java.io.UnsupportedEncodingException;
+package com.barreirasapp.utils;
 import java.net.URLDecoder;
 
 import com.barreirasapp.annotation.HttpMethod;

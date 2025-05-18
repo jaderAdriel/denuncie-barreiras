@@ -9,6 +9,7 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.service.AuthService;
 
 import com.barreirasapp.utils.ControllerDispatcher;
+import com.barreirasapp.utils.Middleware;
 import com.barreirasapp.utils.routes.RouteInfo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;

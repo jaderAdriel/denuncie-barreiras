@@ -76,7 +76,7 @@ public class User {
 
     public void setId(Integer id) throws IllegalAccessException {
         if (this.id != null) {
-            throw new IllegalAccessException("Não é permitidio alterar um id existente");
+            throw new IllegalAccessException("Não é permitido alterar um id existente");
         }
 
         this.id = id;

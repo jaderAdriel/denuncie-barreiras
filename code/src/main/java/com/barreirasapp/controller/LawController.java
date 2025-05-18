@@ -9,6 +9,7 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.model.entities.Law;
 import com.barreirasapp.service.LawService;
 import com.barreirasapp.utils.ControllerDispatcher;
+import com.barreirasapp.utils.Middleware;
 import com.barreirasapp.utils.routes.RouteInfo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -18,7 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
