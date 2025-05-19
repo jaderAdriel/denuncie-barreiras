@@ -1,0 +1,134 @@
+/* Estilos para a pré-visualização do editor */
+.editor-preview {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Títulos */
+.editor-preview h1 { font-size: 2em; margin: 0.67em 0; font-weight: bold; }
+.editor-preview h2 { font-size: 1.5em; margin: 0.83em 0; font-weight: bold; }
+.editor-preview h3 { font-size: 1.17em; margin: 1em 0; font-weight: bold; }
+.editor-preview h4 { font-size: 1em; margin: 1.33em 0; font-weight: bold; }
+.editor-preview h5 { font-size: 0.83em; margin: 1.67em 0; font-weight: bold; }
+.editor-preview h6 { font-size: 0.67em; margin: 2.33em 0; font-weight: bold; }
+
+/* Parágrafos e quebras de linha */
+.editor-preview p { margin: 1em 0; }
+
+/* Listas */
+.editor-preview ul,
+.editor-preview ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+.editor-preview ul {
+    list-style-type: disc;
+}
+
+.editor-preview ol {
+    list-style-type: decimal;
+}
+
+.editor-preview li {
+    margin: 0.5em 0;
+}
+
+/* Blocos de código */
+.editor-preview pre {
+    background: #f5f5f5;
+    padding: 1em;
+    border-radius: 4px;
+    overflow: auto;
+    margin: 1em 0;
+}
+
+.editor-preview code {
+    background: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+/* Citações */
+.editor-preview blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 1em;
+    color: #666;
+    margin: 1em 0;
+}
+
+/* Linhas horizontais */
+.editor-preview hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 2em 0;
+}
+
+/* Links */
+.editor-preview a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+.editor-preview a:hover {
+    text-decoration: underline;
+}
+
+/* Imagens */
+.editor-preview img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tabelas */
+.editor-preview table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.editor-preview table th,
+.editor-preview table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+}
+
+.editor-preview table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Texto em negrito e itálico */
+.editor-preview strong {
+    font-weight: bold;
+}
+
+.editor-preview em {
+    font-style: italic;
+}
+
+/* Estilos para o editor ativo */
+.CodeMirror {
+    font-size: 16px;
+    line-height: 1.6;
+    font-family: monospace;
+}
+
+.CodeMirror .cm-header-1 { font-size: 2em; }
+.CodeMirror .cm-header-2 { font-size: 1.5em; }
+.CodeMirror .cm-header-3 { font-size: 1.17em; }
+.CodeMirror .cm-header-4 { font-size: 1em; }
+.CodeMirror .cm-header-5 { font-size: 0.83em; }
+.CodeMirror .cm-header-6 { font-size: 0.67em; }
+
+.CodeMirror .cm-comment { background: #f5f5f5; }
+.CodeMirror .cm-quote { color: #666; font-style: italic; }
+.CodeMirror .cm-link { color: #0366d6; }
+.CodeMirror .cm-url { color: #0366d6; text-decoration: underline; }
+.CodeMirror .cm-string { color: #d14; }
+.CodeMirror .cm-tag { color: #22863a; }
+.CodeMirror .cm-attribute { color: #6f42c1; }

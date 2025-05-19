@@ -47,6 +47,11 @@ public class UserContext {
         return Optional.of(userRepository.findById(userId));
     }
 
+    public static Optional<User> getUserFromSession(HttpServletRequest req) {
+        String sessionId = UserContext.getSessionId(req.getCookies());
+        return getUserFromSession(sessionId);
+    }
+
     public static Session createSession(User user) {
         SessionDao sessionRepository = DaoFactory.createSessionDao();
         sessionRepository.deleteAllByUser(user);

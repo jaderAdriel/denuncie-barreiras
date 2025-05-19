@@ -4,7 +4,9 @@ import com.barreirasapp.model.entities.Law;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.entities.valueobjects.Email;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LawDao extends GenericDao<Law, String>{
+    List<Law> findByBarrierScenario(int barrierScenarioID);
 }

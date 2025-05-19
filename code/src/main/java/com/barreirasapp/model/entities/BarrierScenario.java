@@ -1,6 +1,10 @@
 package com.barreirasapp.model.entities;
 
+import com.barreirasapp.model.dao.DaoFactory;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BarrierScenario {
@@ -9,16 +13,26 @@ public class BarrierScenario {
     User author; //Mudar para tipo moderator
     String content;
     String title;
-    LocalDate creationDate;
+    LocalDateTime creationDate;
     List<User> likes;
+    List<Law> associatedLaws;
 
-    public BarrierScenario(int id, String type, User author, String content, String title, LocalDate creationDate) {
+    public BarrierScenario(String title, String content, String type, User author) {
+        this.title = title;
+        this.content = content;
+        this.type = type;
+        this.author = author;
+        this.associatedLaws = new ArrayList<>();
+    }
+
+    public BarrierScenario(int id, String type, User author, String content, String title, LocalDateTime creationDate, List<Law> associatedLaws ) {
         this.id = id;
         this.type = type;
         this.author = author;
         this.content = content;
         this.title = title;
         this.creationDate = creationDate;
+        this.associatedLaws = associatedLaws;
     }
 
     public BarrierScenario() {
@@ -64,11 +78,19 @@ public class BarrierScenario {
         this.title = title;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public List<Law> getAssociatedLaws() {
+        return associatedLaws;
+    }
+
+    public void setAssociatedLaws(List<Law> associatedLaws) {
+        this.associatedLaws = associatedLaws;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -78,5 +100,9 @@ public class BarrierScenario {
 
     public void setLikes(List<User> likes) {
         this.likes = likes;
+    }
+
+    public void save() {
+        DaoFactory.createBarrierScenario().insert(this);
     }
 }

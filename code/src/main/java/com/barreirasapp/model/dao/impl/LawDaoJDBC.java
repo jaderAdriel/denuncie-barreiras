@@ -134,6 +134,37 @@ public class LawDaoJDBC implements LawDao{
         return null;
     }
 
+    public List<Law> findByBarrierScenario(int barrierScenarioID) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        List<Law> lawList = new ArrayList<>();
+        try {
+            st = conn.prepareStatement(
+                    """
+                            SELECT BL.law_fk, code, date, officialLink, title, description
+                            FROM BarrierScenario_Law as BL
+                            JOIN Law on BL.law_fk = Law.code
+                            WHERE BL.barrierScenario_fk = ?;
+                      """
+            );
+
+            st.setInt(1, barrierScenarioID);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                lawList.add(instantiateLaw(rs));
+            }
+
+            return lawList;
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(st);
+        }
+    }
+
     @Override
     public List<Law> findAll() {
         Statement st = null;

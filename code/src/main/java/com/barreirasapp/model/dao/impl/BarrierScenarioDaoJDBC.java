@@ -6,10 +6,12 @@ import com.barreirasapp.model.dao.BarrierScenarioDao;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.UserDao;
 import com.barreirasapp.model.entities.BarrierScenario;
+import com.barreirasapp.model.entities.Law;
 import com.barreirasapp.model.entities.User;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,21 +29,23 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         ResultSet rs = null;
 
         try {
+            conn.setAutoCommit(false);
             st = conn.prepareStatement(
                     """
-                          INSERT INTO BarrierScenario (type, author_fk, content, title, creation_date)
-                          VALUES (?, ?, ?, ?, ?);
+                              INSERT INTO BarrierScenario (type, author_fk, content, title)
+                              VALUES (?, ?, ?, ?);
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
-            LocalDate birthDate = scenario.getCreationDate(); // Seu LocalDate
-            java.sql.Date sqlDate = java.sql.Date.valueOf(birthDate);
 
             st.setString(1, scenario.getType());
             st.setInt(2, scenario.getAuthor().getId());
             st.setString (3, scenario.getContent());
             st.setString(4, scenario.getTitle());
-            st.setDate(5, sqlDate);
+
+            for (Law law : scenario.getAssociatedLaws()) {
+                associateToLaw(scenario, law);
+            }
 
             int rowsAffected =  st.executeUpdate();
 
@@ -51,17 +55,38 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
                     int id = rs.getInt(1);
                     scenario.setId(id);
                 }
+                conn.commit();
             } else {
+                conn.rollback();
                 throw new DatabaseException("Unexpect error: No rows affected");
             }
 
 
         } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new DatabaseException(e.getMessage());
         } finally {
             DatabaseConnection.closeResultSet(rs);
             DatabaseConnection.closeStatement(st);
         }
+    }
+
+    public void associateToLaw(BarrierScenario scenario, Law law) throws SQLException {
+        PreparedStatement st = conn.prepareStatement(
+                """
+                          INSERT INTO BarrierScenario_Law (barrierScenario_fk, law_fk)
+                          VALUES (?, ?);
+                  """, Statement.RETURN_GENERATED_KEYS
+        );
+
+        st.setInt( 1 , scenario.getId());
+        st.setString( 2 , law.getCode());
+
+        st.execute();
     }
 
     @Override
@@ -193,13 +218,16 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         int authorId = rs.getInt("author_fk");
         User author = userDao.findById(authorId);
 
-        LocalDate creationDate = LocalDate.parse(rs.getString("creation_date"));
+        LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
+
         int scenarioId = rs.getInt("id");
         String scenarioType = rs.getString("type");
         String scenarioContent = rs.getString("content");
         String scenarioTitle = rs.getString("title");
 
-        return new BarrierScenario(scenarioId, scenarioType, author, scenarioContent, scenarioTitle, creationDate );
+        List<Law> associatedLaws = DaoFactory.createLawDao().findByBarrierScenario(scenarioId);
+
+        return new BarrierScenario(scenarioId, scenarioType, author, scenarioContent, scenarioTitle, creationDate, associatedLaws );
     }
 
 }
