@@ -10,89 +10,146 @@ O sistema foi projetado para mapear, registrar e combater barreiras atitudinais 
 
 ## Diagrama de Classes - Explicação
 
-O diagrama apresenta 7 classes principais:
+O diagrama apresenta 9 classes principais:
 
 ### Classes Principais
-- **Usuario**: Classe base para todos os usuários do sistema
-- **Moderador**: Usuário com privilégios para criar cenários educativos
-- **CenarioBarreira**: Casos-modelo de barreiras atitudinais
-- **Denuncia**: Registros de ocorrências reais
-- **Lei**: Legislações relacionadas às barreiras
-- **Comentario**: Interações dos usuários
-- **Anexo**: Arquivos complementares
+- **User**: Classe base para todos os usuários do sistema
+- **Moderator**: Usuário com privilégios para criar cenários educativos
+- **BarrierScenario**: Casos-modelo de barreiras atitudinais
+- **Report**: Registros de ocorrências reais
+- **Law**: Legislações relacionadas às barreiras
+- **Comment**: Interações dos usuários
+- **Attachment**: Arquivos complementares
+- **Address**: Informações de endereço
+- **ReportReview**: Análises de denúncias por moderadores
 
 ## Dicionário de Dados
 
-### 1. Usuario
-| Atributo | Tipo | Descrição | Obrigatório |
-|----------|------|-----------|-------------|
-| id | Long | Identificador único | Sim |
-| nome | String | Nome completo | Sim |
-| email | String | E-mail válido | Sim |
-| dataNascimento | LocalDate | Data de nascimento | Sim |
-| genero | GeneroEnum | Identidade de gênero | Sim |
-| senha | String | Senha criptografada | Sim |
-| login | String | Nome de usuário único | Sim |
+### 1. User
+| Atributo       | Tipo | Descrição                                    | Obrigatório |
+|----------------|------|----------------------------------------------|-------------|
+| id             | Long | Identificador único                          | Sim |
+| name           | String | Nome completo                                | Sim |
+| email          | String | E-mail válido                                | Sim |
+| birthDate      | LocalDate | Data de nascimento                           | Sim |
+| gender         | GenderEnum | Identidade de gênero                         | Sim |
+| password       | String | Senha criptografada                          | Sim |
+| username       | String | Nome de usuário único                        | Sim |
 
 Métodos:
-- autenticar(): Valida credenciais
-- alterarSenha(): Atualiza senha
-- realizarDenuncia(): Inicia processo de denúncia
+- authenticate(): Valida credenciais
+- changePassword(): Atualiza senha
+- reportIncident(): Inicia processo de denúncia
 
-### 2. Moderador
+### 2. Moderator
 | Atributo | Tipo | Descrição | Obrigatório |
 |----------|------|-----------|-------------|
-| telefone | String | Contato principal | Sim |
-| 2Factor | boolean | Autenticação em dois fatores | Sim |
+| phone    | String | Contato principal | Sim |
+
+Herda todos atributos e métodos de User
+
+### 3. BarrierScenario
+| Atributo | Tipo | Descrição | Obrigatório |
+|----------|------|-----------|-------------|
+| type     | AttitudinalBarrierType | Classificação da barreira | Sim |
+| author   | Moderator | Criador do cenário | Sim |
+| content  | Text | Descrição detalhada | Sim |
+| title    | String | Título resumido | Sim |
+| creationDate | LocalDate | Data de registro | Sim |
+| likes    | List<User> | Usuários que aprovaram | Não |
+| comments | List<Comment> | Comentários associados | Não |
 
 Métodos:
-- autenticar(): Valida credenciais com fatores adicionais
+- addComment(): Adiciona novo comentário
 
-### 3. CenarioBarreira
+### 4. Report
 | Atributo | Tipo | Descrição | Obrigatório |
 |----------|------|-----------|-------------|
-| tipo | TipoBarreiraAtitudinal | Classificação da barreira | Sim |
-| autor | Moderador | Criador do cenário | Sim |
-| conteudo | Text | Descrição detalhada | Sim |
-| titulo | String | Título resumido | Sim |
-| dataCriacao | LocalDate | Data de registro | Sim |
-| curtidas | List<Usuario> | Usuários que aprovaram | Não |
+| type     | AttitudinalBarrierType | Classificação | Sim |
+| environment | EnvironmentTypeEnum | Local da ocorrência | Sim |
+| incidentLocation | Address | Dados geográficos | Sim |
+| severity | Integer | Nível de gravidade | Sim |
+| anonymous | Boolean | Identidade oculta | Sim |
+| incidentDetails | Text | Relato completo | Sim |
+| relatedScenario | BarrierScenario | Cenário inspirador | Não |
+| reporter | User | Autor da denúncia | Não |
 
-### 4. Denuncia
+### 5. Law
 | Atributo | Tipo | Descrição | Obrigatório |
 |----------|------|-----------|-------------|
-| tipo | TipoBarreiraAtitudinal | Classificação | Sim |
-| ambiente | TipoAmbienteEnum | Local da ocorrência | Sim |
-| localizacaoOcorrido | Endereco | Dados geográficos | Sim |
-| severidade | Integer | Nível de gravidade (1-5) | Sim |
-| denunciaAnonima | Boolean | Identidade oculta | Sim |
-| detalhamentoOcorrido | Text | Relato completo | Sim |
-| cenarioRelacionado | CenarioBarreira | Cenário inspirador | Não |
-| denunciante | Usuario | Autor da denúncia | Não |
+| code     | String | Identificação legal | Sim |
+| date     | String | Data de promulgação | Sim |
+| link     | URL | Acesso ao texto completo | Sim |
+| title    | String | Nome popular | Sim |
+| description | Text | Resumo do conteúdo | Sim |
 
-### 5. Lei
+### 6. Comment
 | Atributo | Tipo | Descrição | Obrigatório |
 |----------|------|-----------|-------------|
-| codigo | String | Identificação legal | Sim |
-| data | String | Data de promulgação | Sim |
-| link | URL | Acesso ao texto completo | Sim |
-| titulo | String | Nome popular | Sim |
-| descricao | Text | Resumo do conteúdo | Sim |
+| dateTime | DateTime | Data e hora | Sim |
+| content  | Text | Texto do comentário | Sim |
+| parentComment | Comment | Resposta a outro comentário | Não |
+| author   | User | Autor do comentário | Sim |
 
-### 6. Comentario
+### 7. Attachment
 | Atributo | Tipo | Descrição | Obrigatório |
 |----------|------|-----------|-------------|
-| dataHora | DateTime | Data e hora | Sim |
-| conteudo | Text | Texto do comentário | Sim |
-| comentarioPai | Comentario | Resposta a outro comentário | Não |
+| fileName | String | Nome original | Sim |
+| fileType | String | Extensão/Formato | Sim |
+| filePath | String | Local de armazenamento | Sim |
+| uploadDate | LocalDateTime | Data/hora do upload | Sim |
 
-### 7. Anexo
+### 8. Address
 | Atributo | Tipo | Descrição | Obrigatório |
 |----------|------|-----------|-------------|
-| nomeArquivo | String | Nome original | Sim |
-| tipo | String | Extensão/Formato | Sim |
-| caminho | String | Local de armazenamento | Sim |
-| dataEnvio | LocalDateTime | Data/hora do upload | Sim |
+| city     | String | Cidade | Sim |
+| state    | String | Estado | Sim |
+| street   | String | Rua | Sim |
+| zipCode  | String | CEP | Sim |
+
+### 9. ReportReview
+| Atributo | Tipo | Descrição | Obrigatório |
+|----------|------|-----------|-------------|
+| description | String | Análise detalhada | Sim |
+| date     | LocalDate | Data da análise | Sim |
+| finalStatus | ReportStatus | Status final | Sim |
+| author   | Moderator | Moderador responsável | Sim |
+
+
+## **Relacionamentos Entre Classes**
+
+| **Classe Origem**       | **Cardinalidade** | **Classe Destino**       | **Tipo de Relacionamento** | **Descrição** |
+|-------------------------|------------------|--------------------------|---------------------------|---------------|
+| **User**                | 1 → N            | **Report**               | Associação                | Um usuário pode submeter múltiplas denúncias. |
+| **Moderator**           | 1 → 0..*         | **BarrierScenario**      | Associação                | Um moderador pode criar vários cenários de barreira. |
+| **Moderator**           | 1 → 1            | **Address**              | Composição (`*--`)        | Um moderador tem um endereço cadastrado. |
+| **Report**              | 1 → 0..*         | **BarrierScenario**      | Associação (`--`)         | Uma denúncia pode estar relacionada a um cenário (opcional). |
+| **BarrierScenario**     | 1 → 0..*         | **Comment**              | Agregação (`*--`)         | Um cenário pode ter vários comentários. |
+| **BarrierScenario**     | 1 → 0..*         | **Attachment**           | Agregação (`*--`)         | Um cenário pode ter múltiplos anexos (imagens, documentos). |
+| **Report**              | 1 → 0..*         | **Attachment**           | Agregação (`*--`)         | Uma denúncia pode incluir vários anexos (provas). |
+| **Report**              | 1 → N            | **ReportReview**         | Associação (`-*`)         | Uma denúncia pode ter várias análises de moderadores. |
+| **Moderator**           | 1 → N            | **ReportReview**         | Associação (`--`)         | Um moderador pode revisar várias denúncias. |
+| **Comment**             | 1 → N            | **Comment** (self)       | Auto-relacionamento       | Um comentário pode ter respostas (hierarquia). |
+| **User**                | 1 → N            | **Comment**              | Associação (`--`)         | Um usuário pode fazer vários comentários. |
+| **Law**                 | N → M            | **BarrierScenario**      | Associação (`--`)         | Leis podem estar vinculadas a múltiplos cenários (e vice-versa). |
+
+---
+
+### **Observações sobre os Relacionamentos**
+
+[//]: # (1. **Agregação &#40;`*--`&#41; vs. Composição &#40;`--*`&#41;**)
+
+[//]: # (   - **Agregação** &#40;ex: `BarrierScenario *-- Attachment`&#41;: Os anexos podem existir independentemente do cenário.)
+
+[//]: # (   - **Composição** &#40;ex: `Moderator *-- Address`&#41;: O endereço não existe sem o moderador &#40;dependência forte&#41;.)
+
+1. **Cardinalidades**
+   - `1 → N`: Um para muitos (ex: Um `User` tem N `Reports`).
+   - `0..*`: Opcional e múltiplo (ex: Um `Report` pode ter 0 ou N `Attachments`).
+
+2. **Auto-relacionamento**
+   - `Comment` pode responder a outro `Comment` (árvore de comentários).
+---
 
 ## Enums Utilizados
 
