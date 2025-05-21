@@ -5,6 +5,7 @@ import com.barreirasapp.model.dao.LawDao;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Law {
@@ -73,5 +74,17 @@ public class Law {
     public static List<Law> findAll() {
         LawDao dao = DaoFactory.createLawDao();
         return dao.findAll();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Law law = (Law) o;
+        return Objects.equals(code, law.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(code);
     }
 }

@@ -168,7 +168,8 @@ body > div:first-child{
 main {
     flex: 1;
     padding: 1rem;
-    overflow-y: auto;
+    min-height: fit-content;
+    height: fit-content;
     background-color: #F5F5F5;
 
 

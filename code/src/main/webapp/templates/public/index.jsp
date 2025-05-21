@@ -39,7 +39,7 @@
                     <p class="hero-description">
                         Denuncie comportamentos discriminatórios, explore cenários educativos e engaje-se por uma sociedade mais justa.
                     </p>
-                    <a href="#" class="btn btn-primary">Faça uma denúncia</a>
+                    <a href="report/create/" class="btn btn-primary">Faça uma denúncia</a>
                 </div>
 
 

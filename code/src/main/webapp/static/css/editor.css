@@ -1,66 +1,137 @@
-/* Estilos para a pré-visualização do editor */
-.editor-preview {
+/* Estilos base para a tag html */
+html.markdown-content, #post-content {
     font-size: 16px;
     line-height: 1.6;
     color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Títulos */
-.editor-preview h1 { font-size: 2em; margin: 0.67em 0; font-weight: bold; }
-.editor-preview h2 { font-size: 1.5em; margin: 0.83em 0; font-weight: bold; }
-.editor-preview h3 { font-size: 1.17em; margin: 1em 0; font-weight: bold; }
-.editor-preview h4 { font-size: 1em; margin: 1.33em 0; font-weight: bold; }
-.editor-preview h5 { font-size: 0.83em; margin: 1.67em 0; font-weight: bold; }
-.editor-preview h6 { font-size: 0.67em; margin: 2.33em 0; font-weight: bold; }
+/* Títulos - aplicados para editor, preview e post-content */
+.editor-preview h1,
+.CodeMirror .cm-header-1,
+#post-content h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+    font-weight: bold;
+    color: #222;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.3em;
+}
+
+.editor-preview h2,
+.CodeMirror .cm-header-2,
+#post-content h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.2em;
+}
+
+.editor-preview h3,
+.CodeMirror .cm-header-3,
+#post-content h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+    font-weight: bold;
+    color: #444;
+}
+
+.editor-preview h4,
+.CodeMirror .cm-header-4,
+#post-content h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+    font-weight: bold;
+    color: #555;
+}
+
+.editor-preview h5,
+.CodeMirror .cm-header-5,
+#post-content h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.editor-preview h6,
+.CodeMirror .cm-header-6,
+#post-content h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+    font-weight: bold;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
 /* Parágrafos e quebras de linha */
-.editor-preview p { margin: 1em 0; }
+.editor-preview p,
+#post-content p {
+    margin: 1em 0;
+}
 
 /* Listas */
 .editor-preview ul,
-.editor-preview ol {
+.editor-preview ol,
+#post-content ul,
+#post-content ol {
     margin: 1em 0;
     padding-left: 2em;
 }
 
-.editor-preview ul {
+.editor-preview ul,
+#post-content ul {
     list-style-type: disc;
 }
 
-.editor-preview ol {
+.editor-preview ol,
+#post-content ol {
     list-style-type: decimal;
 }
 
-.editor-preview li {
+.editor-preview li,
+#post-content li {
     margin: 0.5em 0;
 }
 
 /* Blocos de código */
-.editor-preview pre {
+.editor-preview pre,
+#post-content pre {
     background: #f5f5f5;
     padding: 1em;
     border-radius: 4px;
     overflow: auto;
     margin: 1em 0;
+    font-family: monospace;
 }
 
-.editor-preview code {
+.editor-preview code,
+#post-content code {
     background: #f5f5f5;
     padding: 0.2em 0.4em;
     border-radius: 3px;
     font-family: monospace;
+    font-size: 0.9em;
 }
 
 /* Citações */
-.editor-preview blockquote {
+.editor-preview blockquote,
+#post-content blockquote {
     border-left: 4px solid #ddd;
     padding-left: 1em;
     color: #666;
     margin: 1em 0;
+    font-style: italic;
 }
 
 /* Linhas horizontais */
-.editor-preview hr {
+.editor-preview hr,
+#post-content hr {
     border: 0;
     height: 1px;
     background: #ddd;
@@ -68,67 +139,99 @@
 }
 
 /* Links */
-.editor-preview a {
+.editor-preview a,
+#post-content a {
     color: #0366d6;
     text-decoration: none;
 }
 
-.editor-preview a:hover {
+.editor-preview a:hover,
+#post-content a:hover {
     text-decoration: underline;
 }
 
 /* Imagens */
-.editor-preview img {
+.editor-preview img,
+#post-content img {
     max-width: 100%;
     height: auto;
+    display: block;
+    margin: 1em auto;
 }
 
 /* Tabelas */
-.editor-preview table {
+.editor-preview table,
+#post-content table {
     border-collapse: collapse;
     width: 100%;
     margin: 1em 0;
 }
 
 .editor-preview table th,
-.editor-preview table td {
+.editor-preview table td,
+#post-content table th,
+#post-content table td {
     border: 1px solid #ddd;
     padding: 8px 12px;
 }
 
-.editor-preview table th {
+.editor-preview table th,
+#post-content table th {
     background-color: #f5f5f5;
     font-weight: bold;
     text-align: left;
 }
 
 /* Texto em negrito e itálico */
-.editor-preview strong {
+.editor-preview strong,
+#post-content strong {
     font-weight: bold;
 }
 
-.editor-preview em {
+.editor-preview em,
+#post-content em {
     font-style: italic;
 }
 
-/* Estilos para o editor ativo */
+/* Estilos específicos para o editor */
 .CodeMirror {
     font-size: 16px;
     line-height: 1.6;
+    max-height: 400px !important;
+    overflow-y: auto;
     font-family: monospace;
 }
 
-.CodeMirror .cm-header-1 { font-size: 2em; }
-.CodeMirror .cm-header-2 { font-size: 1.5em; }
-.CodeMirror .cm-header-3 { font-size: 1.17em; }
-.CodeMirror .cm-header-4 { font-size: 1em; }
-.CodeMirror .cm-header-5 { font-size: 0.83em; }
-.CodeMirror .cm-header-6 { font-size: 0.67em; }
+.CodeMirror,
+.CodeMirror-scroll {
+    max-height: 600px;
+}
 
-.CodeMirror .cm-comment { background: #f5f5f5; }
-.CodeMirror .cm-quote { color: #666; font-style: italic; }
-.CodeMirror .cm-link { color: #0366d6; }
-.CodeMirror .cm-url { color: #0366d6; text-decoration: underline; }
-.CodeMirror .cm-string { color: #d14; }
-.CodeMirror .cm-tag { color: #22863a; }
-.CodeMirror .cm-attribute { color: #6f42c1; }
+.CodeMirror .cm-header {
+    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Destaque para headings no editor */
+.CodeMirror .cm-header-1 { color: #d32f2f; }
+.CodeMirror .cm-header-2 { color: #1976d2; }
+.CodeMirror .cm-header-3 { color: #388e3c; }
+.CodeMirror .cm-header-4 { color: #ff8f00; }
+.CodeMirror .cm-header-5 { color: #7b1fa2; }
+.CodeMirror .cm-header-6 { color: #616161; }
+
+/* Espaçamento entre seções */
+.editor-preview h1 + *,
+.editor-preview h2 + *,
+.editor-preview h3 + *,
+.editor-preview h4 + *,
+.editor-preview h5 + *,
+.editor-preview h6 + *,
+#post-content h1 + *,
+#post-content h2 + *,
+#post-content h3 + *,
+#post-content h4 + *,
+#post-content h5 + *,
+#post-content h6 + * {
+    margin-top: 0;
+}

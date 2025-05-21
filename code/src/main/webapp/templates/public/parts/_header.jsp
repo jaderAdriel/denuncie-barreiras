@@ -10,7 +10,7 @@
         <ul>
             <li class="nav-item"><a href=".">Home</a></li>
             <li class="nav-item"><a href="#">Denúncias</a></li>
-            <li class="nav-item"><a href="#">Cenários educativos</a></li>
+            <li class="nav-item"><a href="/scenario/">Cenários educativos</a></li>
             <li class="nav-button"><a href="${pageContext.request.contextPath}/accounts/login/" class="btn-primary">Login</a></li>
         </ul>
     </nav>
@@ -20,10 +20,8 @@
 
         document.querySelectorAll("#nav-menu .nav-item").forEach(item => {
             let navItemPath = item.querySelector("a").getAttribute("href");
-            console.log(navItemPath);
 
-            if (navItemPath === urlPath || navItemPath === '.') {
-                console.log("Active item: ", item);
+            if (navItemPath === urlPath || (navItemPath === '.' && urlPath === "" )) {
                 item.classList.add("active");
             }
         });

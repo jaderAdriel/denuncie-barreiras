@@ -16,6 +16,11 @@ html {
     font-size: 16px;
 }
 
+body > div.wrapper {
+    max-width: 95.375rem;
+    margin: 0 auto;
+}
+
 
 :root {
     --primary-color: #2998DD;
@@ -29,10 +34,7 @@ html {
     border-radius: 0.5rem;
 }
 
-body > div.wrapper {
-    max-width: 90.375rem;
-    margin: 0 auto;
-}
+
 
 header#page-header {
     display: flex;
@@ -57,7 +59,7 @@ header#page-header {
         }
 
         a {
-            font-size: 1.25rem;
+            font-size: 1rem;
         }
 
         .nav-item.active, .nav-item:hover {

@@ -9,8 +9,26 @@
   <!-- EasyMDE CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
   <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <link rel='stylesheet' type='text/css' media='screen' href="/static/css/editor.css">
+  <style>
+    .CodeMirror {
+      min-height: 500px;
+      max-height: 600px; /* ou qualquer valor desejado */
+      overflow-y: auto;
+    }
+
+    .CodeMirror-fullscreen.CodeMirror {
+      max-height: none;
+    }
+
+    .CodeMirror-fullscreen .CodeMirror-scroll {
+      max-height: none;
+    }
+  </style>
 </head>
 <body>
 <%@ include file="../_sidebar.jsp"%>
@@ -44,30 +62,37 @@
       <div class="w-full">
         <label for="title" class="block text-md font-medium text-gray-900">Tipo de barreira</label>
         <div class="mt-2">
-          <input class="block  border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md"
-                 type="text"
-                 name="type"
-                 id="type"
-                 required
-          <c:if test="${not empty type}"> value="${type}" </c:if>
+          <select name="barrierType"
+                  class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
+            <c:if test="${not empty barrierTypeOptions}">
+              <c:forEach items="${barrierTypeOptions}" var="typeOption">
+                <option value="${typeOption.toString()}"
+                        <c:if test="${not empty barrierType}">
+                          <c:if test="${barrierType eq typeOption}">selected</c:if>
+                        </c:if>
+                >
+                    ${typeOption.getTranslation()}
+                </option>
+              </c:forEach>
+            </c:if>
+          </select>
           >
-          <c:if test="${not empty typeError}"><p class="text-red-500 text-sm mt-2">${typeError}</p></c:if>
+          <c:if test="${not empty barrierTypeError}"><p class="text-red-500 text-sm mt-2">${barrierTypeError}</p></c:if>
         </div>
       </div>
 
     </div>
 
     <div class="w-full mb-8">
-      <label for="associatedLaw" class="block text-md font-medium text-gray-900">Leis associadas</label>
+      <label for="associatedLaws" class="block text-md font-medium text-gray-900">Leis associadas</label>
       <div class="mt-2 relative">
-        <select name="associatedLaw"
+        <select name="associatedLaws" multiple
                 class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
-          <option></option>
           <c:if test="${not empty lawOptions}">
             <c:forEach items="${lawOptions}" var="law">
               <option value="${law.code}"
-                      <c:forEach items="${selectedLaw}" var="selected">
-                        <c:if test="${selected.code eq law.code}">selected</c:if>
+                      <c:forEach items="${associatedLaws}" var="associated">
+                        <c:if test="${associated.code eq law.code}">selected</c:if>
                       </c:forEach>
               >
                   ${law.code} - ${law.title}
@@ -75,9 +100,6 @@
             </c:forEach>
           </c:if>
         </select>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" class="h-5 w-5 ml-1 absolute top-2.5 right-2.5 text-slate-700">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-        </svg>
         <c:if test="${not empty lawError}"><p class="text-red-500 text-sm mt-2">${lawError}</p></c:if>
       </div>
     </div>
@@ -100,6 +122,13 @@
 
 <%@ include file="../_footer.jsp"%>
 
+<script>
+  $(document).ready(function() {
+    $('select[name="associatedLaws"]').select2(),
+    $('select[name="associatedLaws"]').select2('container').addClass('block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md');
+
+  });
+</script>
 <!-- Inicialização do SimpleMDE -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {

@@ -10,28 +10,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RegisterBarrierScenarioDTO {
+public class UpdateBarrierScenarioDTO {
+    private int id;
     private String title;
     private String content;
     private BarrierType barrierType;
-    private User author;
     private String[] associatedLawsIds;
 //    private ArrayList<File> files;
     Map<String, String> errors = new HashMap<>();
 
-    public RegisterBarrierScenarioDTO(String title, String content, String barrierType, User author, String[] associatedLawsIds) throws ValidationError {
-        Map<String, String> requiredFields = new HashMap<>();
-        requiredFields.put("content" , content);
-        requiredFields.put("title", title);
-        requiredFields.put("barrierType", barrierType);
-
-        Validator.checkRequiredFields(requiredFields);
-
+    public UpdateBarrierScenarioDTO(int id, String title, String content, String barrierType, String[] associatedLawsIds) throws ValidationError {
         this.setContent(content);
         this.setBarrierType(barrierType);
         this.setTitle(title);
-        this.setAuthor(author);
         this.setAssociatedLawsIds(associatedLawsIds);
+        this.setId(id);
     }
 
     public String getTitle() {
@@ -62,23 +55,23 @@ public class RegisterBarrierScenarioDTO {
         }
     }
 
-    public User getAuthor() {
-        return author;
-    }
-
-    private void setAuthor(User author) {
-        this.author = author;
-    }
-
     public Map<String, String> getErrors() {
         return errors;
     }
 
     public String[] getAssociatedLawsIds() {
-        return associatedLawsIds;
+        return this.associatedLawsIds;
     }
 
     private void setAssociatedLawsIds(String[] associatedLawsIds) {
         this.associatedLawsIds = associatedLawsIds;
+    }
+
+    private void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }
