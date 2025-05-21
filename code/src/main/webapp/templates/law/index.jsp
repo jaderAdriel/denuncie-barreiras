@@ -92,8 +92,8 @@
 
               <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500">Descrição</th>
 
-              <th scope="col" class="relative py-3.5 px-4">
-                <span class="sr-only">Ações</span>
+              <th scope="col" class="px-4 py-3.5 text-sm font-normal rtl:text-right text-gray-500">
+                <span>Ações</span>
               </th>
             </tr>
             </thead>

@@ -4,8 +4,11 @@ import com.barreirasapp.infra.db.DatabaseConnection;
 import com.barreirasapp.infra.exceptions.DatabaseException;
 import com.barreirasapp.model.dao.ReportDao;
 import com.barreirasapp.model.entities.Report;
+import com.barreirasapp.model.enums.BarrierType;
+import com.barreirasapp.model.enums.EnvironmentType;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,19 +27,32 @@ public class ReportDaoJDBC implements ReportDao {
         ResultSet rs = null;
 
         try {
-            st = conn.prepareStatement(
-                    """
-                          INSERT INTO Report (type, ambient, severity, anonymous_report, event_detailing, reporter_fk)
-                          VALUES (?, ?, ?, ?, ?, ?);
-                      """, Statement.RETURN_GENERATED_KEYS
-            );
+            System.out.println(report.getAnonymousReport());
+            if(!report.getAnonymousReport()){
+                st = conn.prepareStatement(
+                        """
+                              INSERT INTO Report (type, ambient, anonymous_report, event_detailing, reporter_fk)
+                              VALUES (?, ?, ?, ?, ?);
+                          """, Statement.RETURN_GENERATED_KEYS
+                );
 
-            st.setString(1, report.getType());
-            st.setString(2, report.getAmbient());
-            st.setInt (3, report.getSeverity());
-            st.setBoolean(4, report.getAnonymousReport());
-            st.setString(5, report.getEventDetailing());
-            st.setInt(6, report.getReporterId());
+                st.setInt(5, report.getReporterId());
+            }else {
+                st = conn.prepareStatement(
+                        """
+                              INSERT INTO Report (type, ambient, anonymous_report, event_detailing)
+                              VALUES (?, ?, ?, ?);
+                          """, Statement.RETURN_GENERATED_KEYS
+                );
+            }
+
+            String barrierType = report.getType() == null ? null : report.getType().toString();
+            String ambient = report.getAmbient() == null ? null : report.getAmbient().toString();
+
+            st.setString(1, barrierType);
+            st.setString(2,  ambient);
+            st.setBoolean(3, report.getAnonymousReport());
+            st.setString(4, report.getEventDetailing());
 
             int rowsAffected =  st.executeUpdate();
 
@@ -67,15 +83,14 @@ public class ReportDaoJDBC implements ReportDao {
             st = conn.prepareStatement(
                     """
                           UPDATE Report
-                          SET type = ?, ambient = ?, severity = ?, event_detailing = ?
+                          SET type = ?, ambient = ?, event_detailing = ?
                           WHERE id = ?;
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
-            st.setString(1, report.getType());
-            st.setString(2, report.getAmbient());
-            st.setInt(3, report.getSeverity());
-            st.setString(4, report.getEventDetailing());
+            st.setString(1, String.valueOf(report.getType()));
+            st.setString(2, String.valueOf(report.getAmbient()));
+            st.setString(3, report.getEventDetailing());
             st.executeUpdate();
 
         } catch (SQLException e) {
@@ -107,7 +122,7 @@ public class ReportDaoJDBC implements ReportDao {
         try {
             st = conn.prepareStatement(
                     """
-                            SELECT id, type, ambient, severity, anonymous_report, event_detailing, reporter_fk
+                            SELECT id, type, ambient, anonymous_report, event_detailing, reporter_fk, creation_date
                             FROM Report
                             WHERE id = ?;
                       """
@@ -140,7 +155,7 @@ public class ReportDaoJDBC implements ReportDao {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, reporter_fk, type, ambient, severity, anonymous_report, event_detailing, related_scenario_fk
+                            SELECT id, reporter_fk, type, ambient, anonymous_report, event_detailing, related_scenario_fk, creation_date
                             FROM Report
                             WHERE reporter_fk = ?;
                       """
@@ -166,7 +181,7 @@ public class ReportDaoJDBC implements ReportDao {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, reporter_fk, type, ambient, severity, anonymous_report, event_detailing, related_scenario_fk
+                            SELECT id, reporter_fk, type, ambient, anonymous_report, event_detailing, related_scenario_fk, creation_date
                             FROM Report;
                       """
             );
@@ -186,11 +201,17 @@ public class ReportDaoJDBC implements ReportDao {
     private Report instantiateReport(ResultSet rs) throws SQLException {
         Report report = new Report();
         report.setId(rs.getInt("id"));
-        report.setType(rs.getString("type"));
-        report.setAmbient(rs.getString("ambient"));
-        report.setSeverity(rs.getInt("severity"));
+
+        String typeValue = rs.getString("type");
+        if(!(typeValue.isEmpty() || typeValue.equals("null"))) {
+            report.setType(BarrierType.valueOf(typeValue));
+        }
+
+        report.setAmbient(EnvironmentType.valueOf(rs.getString("ambient")));
         report.setAnonymousReport(rs.getBoolean("anonymous_report"));
         report.setEventDetailing(rs.getString("event_detailing"));
+
+        LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
 
         return report;
     }

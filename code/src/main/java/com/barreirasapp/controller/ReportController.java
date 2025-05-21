@@ -9,6 +9,9 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.infra.security.UserContext;
 import com.barreirasapp.model.entities.Report;
 import com.barreirasapp.model.entities.User;
+import com.barreirasapp.model.enums.BarrierType;
+import com.barreirasapp.model.enums.EnvironmentType;
+import com.barreirasapp.service.BarrierScenarioService;
 import com.barreirasapp.service.ReportService;
 import com.barreirasapp.utils.ControllerDispatcher;
 import com.barreirasapp.utils.Middleware;
@@ -29,13 +32,14 @@ import java.util.Optional;
 @WebServlet("/report/*")
 public class ReportController extends HttpServlet {
     private Map<String, RouteInfo> routes;
-
+    private BarrierScenarioService barrierScenario;
     private ReportService service;
 
     @Override
     public void init() throws ServletException {
         this.service = new ReportService();
         this.routes = Middleware.setupRoutes(this.getClass());
+        this.barrierScenario = new BarrierScenarioService();
     }
 
     @Override
@@ -54,49 +58,56 @@ public class ReportController extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-    @LoginRequired
     @Route(value = "create/", method = HttpMethod.GET_POST)
     public void createReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.setAttribute("action", "/report/create/");
         req.setAttribute("method", "POST");
+        req.setAttribute("barrierScenarioOptions", barrierScenario.listAll());
+        req.setAttribute("barrierTypeOptions", BarrierType.values());
+
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/form.jsp");
 
         if (req.getMethod().equalsIgnoreCase("GET")) {
+            Optional<User> reporter = UserContext.getUserFromSession(UserContext.getSessionId(req.getCookies()));
+            req.setAttribute("reporter", reporter.orElse(null));
             dispatcher.forward(req, resp);
             return;
         }
 
+        String type = req.getParameter("barrierType");
         String environment = req.getParameter("environment");
         String incidentDetails = req.getParameter("incidentDetails");
         String barrierScenario = req.getParameter("barrierScenario");
         String anonymous = req.getParameter("anonymous");
+        boolean isAnonymous = anonymous != null && anonymous.equals("true");
 
-
-
+        req.setAttribute("barrierType", type);
         req.setAttribute("environment", environment);
         req.setAttribute("incidentDetails", incidentDetails);
         req.setAttribute("barrierScenario", barrierScenario);
         req.setAttribute("anonymous", anonymous);
 
+        System.out.println(anonymous);
+
         try {
-            RegisterReportDTO reportDTO = new RegisterReportDTO(environment, incidentDetails, barrierScenario, anonymous);
+            RegisterReportDTO reportDTO = new RegisterReportDTO(
+                    environment,
+                    incidentDetails,
+                    barrierScenario,
+                    anonymous,
+                    type
+            );
 
-            if (!reportDTO.getAnonymous()) {
-                String sessionId = UserContext.getSessionId(req.getCookies());
-                Optional<User> reporter = UserContext.getUserFromSession(sessionId);
-
-                if (reporter.isEmpty()) {
-                    resp.sendRedirect("/accounts/login/");
-                    return;
-                }
-
-                reportDTO.setReporter(reporter.get());
+            if (!isAnonymous) {
+                User reporter = UserContext.getUserFromSession(UserContext.getSessionId(req.getCookies())).get();
+                reportDTO.setReporter(reporter);
             }
 
             this.service.insert(reportDTO);
             resp.sendRedirect("/report/index/");
         } catch (ValidationError e) {
+            req.setAttribute("anonymous", isAnonymous ? "true" : "false");
             ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);
         }

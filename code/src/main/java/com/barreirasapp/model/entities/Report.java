@@ -3,63 +3,58 @@ package com.barreirasapp.model.entities;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.ReportDao;
 import com.barreirasapp.model.dao.UserDao;
+import com.barreirasapp.model.enums.BarrierType;
+import com.barreirasapp.model.enums.EnvironmentType;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Report {
 
     private int id;
-    private String type;
-    private String ambient;
-    private Integer severity;
+    private BarrierType type;
+    private EnvironmentType ambient;
     private Boolean anonymousReport;
     private String eventDetailing;
     private User reporter;
     private BarrierScenario barrierScenario;
+    private LocalDateTime creationDate;
 
     public Report() {
     }
 
-    public Report(String ambient, String eventDetailing, Boolean anonymousReport, BarrierScenario barrierScenario) {
+    public Report(EnvironmentType ambient, String eventDetailing, Boolean anonymousReport, BarrierScenario barrierScenario) {
         this.ambient = ambient;
         this.eventDetailing = eventDetailing;
         this.anonymousReport = anonymousReport;
         this.barrierScenario = barrierScenario;
     }
 
-    public Report(int id, String type, String ambient, Integer severity, Boolean anonymousReport, String eventDetailing, User reporter, BarrierScenario barrierScenario) {
+    public Report(int id, BarrierType type, EnvironmentType ambient, Boolean anonymousReport, String eventDetailing, User reporter, BarrierScenario barrierScenario, LocalDateTime creationDate) {
         this.id = id;
         this.type = type;
         this.ambient = ambient;
-        this.severity = severity;
         this.anonymousReport = anonymousReport;
         this.eventDetailing = eventDetailing;
         this.reporter = reporter;
         this.barrierScenario = barrierScenario;
+        this.creationDate = creationDate;
     }
 
-
-
-    public String getType() {
+    public BarrierType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(BarrierType type) {
         this.type = type;
     }
 
-    public String getAmbient() {
+    public EnvironmentType getAmbient() {
         return ambient;
     }
 
-    public void setAmbient(String ambient) {
+    public void setAmbient(EnvironmentType ambient) {
         this.ambient = ambient;
-    }
-
-    public Integer getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(Integer severity) {
-        this.severity = severity;
     }
 
     public Boolean getAnonymousReport() {
@@ -104,6 +99,14 @@ public class Report {
 
     public void setBarrierScenario(BarrierScenario barrierScenario) {
         this.barrierScenario = barrierScenario;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void save() {

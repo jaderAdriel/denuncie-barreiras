@@ -2,6 +2,7 @@ package com.barreirasapp.dto.report;
 
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.model.entities.User;
+import com.barreirasapp.model.enums.EnvironmentType;
 import com.barreirasapp.utils.Validator;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UpdateReportDTO {
-    private String environment;
+    private EnvironmentType environment;
     private String incidentDetails;
     private Integer relatedScenarioId;
     private User reporter;
@@ -32,12 +33,20 @@ public class UpdateReportDTO {
 
 
 
-    public String getEnvironment() {
+    public EnvironmentType getEnvironment() {
         return environment;
     }
 
     public void setEnvironment(String environment) {
-        this.environment = environment;
+        if(environment == null || environment.isEmpty()){
+            this.environment = null;
+            return;
+        }
+        try {
+            this.environment = EnvironmentType.valueOf(environment);
+        } catch (NumberFormatException e) {
+            errors.put("environment", "Valor inválido");
+        }
     }
 
     public String getIncidentDetails() {

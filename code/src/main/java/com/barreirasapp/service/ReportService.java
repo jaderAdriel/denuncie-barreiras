@@ -8,7 +8,9 @@ import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.ReportDao;
 import com.barreirasapp.model.entities.BarrierScenario;
 import com.barreirasapp.model.entities.Report;
+import com.barreirasapp.model.enums.EnvironmentType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +27,14 @@ public class ReportService {
 
         BarrierScenario barrierScenario = barrierScenarioRepository.findById(reportDTO.getRelatedScenarioId());
 
-        Report report= new Report(
+
+        Report report = new Report(
                 reportDTO.getEnvironment(),
                 reportDTO.getIncidentDetails(),
                 reportDTO.getAnonymous(),
                 barrierScenario
         );
+        report.setType(reportDTO.getType());
 
         reportRepository.insert(report);
     }
@@ -43,7 +47,7 @@ public class ReportService {
             throw new ValidationError("Erro de integridade", Map.of("error", "Denúncia com este Id não existe"));
         }
 
-        String environment = updateReportDTO.getEnvironment();
+        EnvironmentType environment = updateReportDTO.getEnvironment();
         String incidentDetails = updateReportDTO.getIncidentDetails();
 
         if (environment != null)
