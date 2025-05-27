@@ -25,8 +25,11 @@ public class ReportService {
 
     public void insert(RegisterReportDTO reportDTO) throws ValidationError {
 
-        BarrierScenario barrierScenario = barrierScenarioRepository.findById(reportDTO.getRelatedScenarioId());
+        BarrierScenario barrierScenario = null;
 
+        if(reportDTO.getRelatedScenarioId() != null){
+            barrierScenario = barrierScenarioRepository.findById(reportDTO.getRelatedScenarioId());
+        }
 
         Report report = new Report(
                 reportDTO.getEnvironment(),
@@ -34,6 +37,9 @@ public class ReportService {
                 reportDTO.getAnonymous(),
                 barrierScenario
         );
+
+        report.setReporter(reportDTO.getReporter());
+
         report.setType(reportDTO.getType());
 
         reportRepository.insert(report);

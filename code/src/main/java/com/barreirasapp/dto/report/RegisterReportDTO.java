@@ -22,7 +22,6 @@ public class RegisterReportDTO {
         Map<String, String> requiredFields = new HashMap<>();
         requiredFields.put("environment", environment);
         requiredFields.put("incidentDetails", incidentDetails);
-        requiredFields.put("anonymous_report", anonymous);
 
         Validator.checkRequiredFields(requiredFields);
 

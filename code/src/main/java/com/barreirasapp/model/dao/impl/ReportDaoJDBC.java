@@ -2,8 +2,11 @@ package com.barreirasapp.model.dao.impl;
 
 import com.barreirasapp.infra.db.DatabaseConnection;
 import com.barreirasapp.infra.exceptions.DatabaseException;
+import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.ReportDao;
+import com.barreirasapp.model.dao.UserDao;
 import com.barreirasapp.model.entities.Report;
+import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
 import com.barreirasapp.model.enums.EnvironmentType;
 
@@ -11,13 +14,15 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ReportDaoJDBC implements ReportDao {
-
+    private UserDao userDao;
     private final Connection conn;
 
     public ReportDaoJDBC(Connection conn) {
         this.conn = conn;
+        this.userDao = DaoFactory.createUserDao();
     }
 
 
@@ -28,23 +33,12 @@ public class ReportDaoJDBC implements ReportDao {
 
         try {
             System.out.println(report.getAnonymousReport());
-            if(!report.getAnonymousReport()){
-                st = conn.prepareStatement(
-                        """
-                              INSERT INTO Report (type, ambient, anonymous_report, event_detailing, reporter_fk)
-                              VALUES (?, ?, ?, ?, ?);
-                          """, Statement.RETURN_GENERATED_KEYS
-                );
-
-                st.setInt(5, report.getReporterId());
-            }else {
-                st = conn.prepareStatement(
-                        """
-                              INSERT INTO Report (type, ambient, anonymous_report, event_detailing)
-                              VALUES (?, ?, ?, ?);
-                          """, Statement.RETURN_GENERATED_KEYS
-                );
-            }
+            st = conn.prepareStatement(
+                    """
+                          INSERT INTO Report (type, ambient, anonymous_report, event_detailing, related_scenario_fk, reporter_fk)
+                          VALUES (?, ?, ?, ?, ?, ?);
+                      """, Statement.RETURN_GENERATED_KEYS
+            );
 
             String barrierType = report.getType() == null ? null : report.getType().toString();
             String ambient = report.getAmbient() == null ? null : report.getAmbient().toString();
@@ -53,6 +47,16 @@ public class ReportDaoJDBC implements ReportDao {
             st.setString(2,  ambient);
             st.setBoolean(3, report.getAnonymousReport());
             st.setString(4, report.getEventDetailing());
+            if(report.getBarrierScenarioId() == null){
+                st.setNull(5, Types.INTEGER);
+            }else{
+                st.setInt(5, report.getBarrierScenarioId());
+            }
+            if(report.getAnonymousReport()){
+                st.setNull(6, Types.BOOLEAN);
+            }else {
+                st.setInt(6, report.getReporterId());
+            }
 
             int rowsAffected =  st.executeUpdate();
 
@@ -211,7 +215,13 @@ public class ReportDaoJDBC implements ReportDao {
         report.setAnonymousReport(rs.getBoolean("anonymous_report"));
         report.setEventDetailing(rs.getString("event_detailing"));
 
+        if (!report.getAnonymousReport()) {
+            User reporter = userDao.findById(rs.getInt("reporter_fk"));
+            report.setReporter(reporter);
+        }
+
         LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
+        report.setCreationDate(creationDate);
 
         return report;
     }

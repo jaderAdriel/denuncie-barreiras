@@ -7,6 +7,7 @@ import com.barreirasapp.dto.report.RegisterReportDTO;
 import com.barreirasapp.dto.report.UpdateReportDTO;
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.infra.security.UserContext;
+import com.barreirasapp.model.entities.BarrierScenario;
 import com.barreirasapp.model.entities.Report;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
@@ -61,24 +62,30 @@ public class ReportController extends HttpServlet {
     @Route(value = "create/", method = HttpMethod.GET_POST)
     public void createReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.setAttribute("action", "/report/create/");
-        req.setAttribute("method", "POST");
+        req.setAttribute("method", "PUT");
         req.setAttribute("barrierScenarioOptions", barrierScenario.listAll());
         req.setAttribute("barrierTypeOptions", BarrierType.values());
+        req.setAttribute("environmentOptions", EnvironmentType.values());
 
+        String barrierScenario = req.getParameter("barrierScenario");
+        try{
+            barrierScenario = req.getAttribute("barrierScenarioId").toString();
+        }catch(Exception ignore){
+
+        }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/form.jsp");
 
         if (req.getMethod().equalsIgnoreCase("GET")) {
             Optional<User> reporter = UserContext.getUserFromSession(UserContext.getSessionId(req.getCookies()));
-            req.setAttribute("reporter", reporter.orElse(null));
             dispatcher.forward(req, resp);
             return;
         }
 
+        String[] barrierScenarioIds = req.getParameterValues("barrierScenarioIds");
         String type = req.getParameter("barrierType");
         String environment = req.getParameter("environment");
         String incidentDetails = req.getParameter("incidentDetails");
-        String barrierScenario = req.getParameter("barrierScenario");
         String anonymous = req.getParameter("anonymous");
         boolean isAnonymous = anonymous != null && anonymous.equals("true");
 
@@ -87,6 +94,7 @@ public class ReportController extends HttpServlet {
         req.setAttribute("incidentDetails", incidentDetails);
         req.setAttribute("barrierScenario", barrierScenario);
         req.setAttribute("anonymous", anonymous);
+        req.setAttribute("barrierScenarioIds", barrierScenarioIds);
 
         System.out.println(anonymous);
 
@@ -99,9 +107,14 @@ public class ReportController extends HttpServlet {
                     type
             );
 
-            if (!isAnonymous) {
-                User reporter = UserContext.getUserFromSession(UserContext.getSessionId(req.getCookies())).get();
-                reportDTO.setReporter(reporter);
+            if (!reportDTO.getAnonymous()) {
+                Optional<User> reporter = UserContext.getUserFromSession(req);
+
+                if(reporter.isPresent()){
+                    reportDTO.setReporter(reporter.get());
+                }else{
+                    reportDTO.setAnonymous("true");
+                }
             }
 
             this.service.insert(reportDTO);
@@ -113,14 +126,21 @@ public class ReportController extends HttpServlet {
         }
     }
 
+    @Route(value = "create/{barrierScenarioId}", method = HttpMethod.GET_POST)
+    public void createReportByScenario(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        this.createReport(req, resp);
+    }
+
     @LoginRequired
     @Route(value = "update/{id}", method = HttpMethod.GET_POST)
     public void updateReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String reportId = req.getAttribute("id").toString();
         req.setAttribute("action", "/report/update/" + reportId);
         req.setAttribute("method", "PUT");
+        req.setAttribute("barrierTypeOptions", BarrierType.values());
+        req.setAttribute("environmentOptions", EnvironmentType.values());
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/form.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/update.jsp");
         if (req.getMethod().equalsIgnoreCase("GET")) {
             setReportFields(req, reportId);
             dispatcher.forward(req, resp);
@@ -130,13 +150,14 @@ public class ReportController extends HttpServlet {
         String newEnvironment = req.getParameter("environment");
         String newIncidentDetails = req.getParameter("incidentDetails");
         String newRelatedScenario = req.getParameter("relatedScenario");
+        String newPublished = req.getParameter("published");
 
         System.out.println("newIncidentDetails=" + newIncidentDetails);
         System.out.println("newRelatedScenario=" + newRelatedScenario);
         System.out.println("id=" + reportId);
 
         try {
-            UpdateReportDTO updateReportDTO = new UpdateReportDTO(reportId, newIncidentDetails, newRelatedScenario);
+            UpdateReportDTO updateReportDTO = new UpdateReportDTO(reportId, newIncidentDetails, newRelatedScenario, newPublished);
             this.service.update(updateReportDTO);
             resp.sendRedirect("/report/index/");
             System.out.println("Tecnicamente deu tudo certo");
@@ -149,6 +170,9 @@ public class ReportController extends HttpServlet {
 
         req.setAttribute("environment", newEnvironment);
         req.setAttribute("incidentDetails", newIncidentDetails);
+        req.setAttribute("published", newPublished);
+
+        resp.sendRedirect("/public/reportList/");
     }
 
     @LoginRequired
@@ -177,6 +201,18 @@ public class ReportController extends HttpServlet {
         }
     }
 
+    @Route(value = "", method = HttpMethod.GET)
+    public void renderPublicList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/public/reportList.jsp");
+        req.setAttribute("barrierTypeOptions", BarrierType.values());
+        req.setAttribute("scenarios", barrierScenario.listAll());
+
+        List<Report> reportList = this.service.listAll();
+
+        req.setAttribute("reportList", reportList);
+
+        dispatcher.forward(req, resp);
+    }
 
     public void setReportFields(HttpServletRequest req, String reportId) {
         Report report = service.findById(Integer.valueOf(reportId));

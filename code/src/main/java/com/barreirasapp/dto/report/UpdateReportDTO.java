@@ -16,19 +16,22 @@ public class UpdateReportDTO {
     private Integer relatedScenarioId;
     private User reporter;
     private Integer id;
+    private Boolean published;
 
     Map<String, String> errors = new HashMap<>();
 
-    public UpdateReportDTO(String environment, String incidentDetails, String relatedScenarioId) throws ValidationError {
+    public UpdateReportDTO(String environment, String incidentDetails, String relatedScenarioId, String published) throws ValidationError {
         Map<String, String> requiredFields = new HashMap<>();
         requiredFields.put("environment", environment);
         requiredFields.put("incidentDetails", incidentDetails);
         requiredFields.put("relatedScenarioId", relatedScenarioId);
+        requiredFields.put("published", published);
         Validator.checkRequiredFields(requiredFields);
 
         this.setEnvironment(environment);
         this.setIncidentDetails(incidentDetails);
         this.setRelatedScenarioId(relatedScenarioId);
+        this.setPublished(published);
     }
 
 
@@ -96,6 +99,23 @@ public class UpdateReportDTO {
             this.id = Integer.valueOf(id);
         } catch (NumberFormatException e) {
             errors.put("id", "Valor inválido");
+        }
+    }
+
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void setPublished(String published) {
+        if(published == null || published.isEmpty()){
+            this.published = null;
+            return;
+        }
+
+        try {
+            this.published = Boolean.valueOf(published);
+        } catch (NumberFormatException e) {
+            errors.put("published", "Valor inválido");
         }
     }
 

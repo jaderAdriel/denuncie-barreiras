@@ -19,6 +19,7 @@ public class Report {
     private User reporter;
     private BarrierScenario barrierScenario;
     private LocalDateTime creationDate;
+    private Boolean published;
 
     public Report() {
     }
@@ -107,6 +108,21 @@ public class Report {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Integer getBarrierScenarioId() {
+        if(barrierScenario == null){
+            return null;
+        }
+        return barrierScenario.getId();
+    }
+
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void isPublished(Boolean published) {
+        this.published = published;
     }
 
     public void save() {

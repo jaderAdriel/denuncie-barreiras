@@ -28,14 +28,22 @@
 
         <div class="flex gap-4 mb-4">
             <div class="w-full">
-                <label for="environment" class="block text-md font-medium text-gray-900">Ambiente</label>
+                <label for="title" class="block text-md font-medium text-gray-900">Ambiente</label>
                 <div class="mt-2">
-                    <input class="block  border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md"
-                           type="text"
-                           name="environment"
-                           id="environment"
-                           required
-                    <c:if test="${not empty environment}"> value="${environment}" </c:if>
+                    <select name="environment"
+                            class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
+                        <c:if test="${not empty environmentOptions}">
+                            <c:forEach items="${environmentOptions}" var="environmentOption">
+                                <option value="${environmentOption.toString()}"
+                                        <c:if test="${not empty environment}">
+                                            <c:if test="${environment eq environmentOption}">selected</c:if>
+                                        </c:if>
+                                >
+                                        ${environmentOption.getTranslation()}
+                                </option>
+                            </c:forEach>
+                        </c:if>
+                    </select>
                     >
                     <c:if test="${not empty environmentError}"><p class="text-red-500 text-sm mt-2">${environmentError}</p></c:if>
                 </div>
@@ -65,28 +73,25 @@
 
         </div>
 
-        <div class="w-full mb-8">
-            <label for="barrierScenario" class="block text-md font-medium text-gray-900">Cenário Assoociado</label>
-            <div class="mt-2 relative">
+        <div class="w-full">
+            <label for="scenario" class="block text-md font-medium text-gray-900">Cenários de Barreira</label>
+            <div class="mt-2">
                 <select name="barrierScenario"
                         class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
-                    <option></option>
                     <c:if test="${not empty barrierScenarioOptions}">
-                        <c:forEach items="${barrierScenarioOptions}" var="barrierScenario">
-                            <option value="${barrierScenario.id}"
-                                    <c:forEach items="${selectedBarrierScenario}" var="selected">
-                                        <c:if test="${selected.id eq barrierScenario.id}">selected</c:if>
-                                    </c:forEach>
+                        <c:forEach items="${barrierScenarioOptions}" var="barrierScenarioOptions">
+                            <option value="${barrierScenarioOptions.toString()}"
+                                    <c:if test="${not empty barrierScenarioOptions}">
+                                        <c:if test="${barrierScenario eq barrierScenarioOptions}">selected</c:if>
+                                    </c:if>
                             >
-                                    ${barrierScenario.id} - ${barrierScenario.title}
+                                    ${barrierScenario.title()}
                             </option>
                         </c:forEach>
                     </c:if>
                 </select>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="currentColor" class="h-5 w-5 ml-1 absolute top-2.5 right-2.5 text-slate-700">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                </svg>
-                <c:if test="${not empty barrierScenarioError}"><p class="text-red-500 text-sm mt-2">${BarrierScenarioError}</p></c:if>
+                >
+                <c:if test="${not empty barrierScenarioError}"><p class="text-red-500 text-sm mt-2">${barrierScenarioError}</p></c:if>
             </div>
         </div>
 
@@ -96,8 +101,8 @@
                 <div class="flex items-center">
                     <input id="anonymous" name="anonymous" type="checkbox" value="true"
                            class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    <c:if test="${not empty anonymous and anonymous == 'true'}"> checked </c:if>
-                    <c:if test="${not empty anonymous and anonymous == 'false'}"> report.reporter.name </c:if>
+                    <c:if test="${anonymous == 'true'}"> checked </c:if>
+                    <c:if test="${anonymous == 'false'}"> report.reporter.name </c:if>
                     >
                 </div>
             </div>
@@ -134,7 +139,8 @@
             </c:if>
         </div>
 
-
+        <br>
+        <br>
         <button type="submit"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-md transition duration-200 text-md">
             Salvar
