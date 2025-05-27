@@ -5,7 +5,9 @@ import com.barreirasapp.infra.exceptions.DatabaseException;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.ReportDao;
 import com.barreirasapp.model.dao.UserDao;
+import com.barreirasapp.model.entities.Moderator;
 import com.barreirasapp.model.entities.Report;
+import com.barreirasapp.model.entities.ReportReview;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
 import com.barreirasapp.model.enums.EnvironmentType;
@@ -202,6 +204,38 @@ public class ReportDaoJDBC implements ReportDao {
         }
     }
 
+    public ReportReview findReviewByReportId(Integer id) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        ReportReview review = new ReportReview();
+
+        try {
+            st = conn.prepareStatement(
+                    """
+                            SELECT review_comment, review_author_fk, review_createAt, review_published, review_is_valid
+                            FROM Report
+                            WHERE id = ?;
+                      """
+            );
+
+            st.setInt(1, id);
+
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                return instantiateReport(rs).getReview();
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(st);
+        }
+
+        return null;
+    }
+
     private Report instantiateReport(ResultSet rs) throws SQLException {
         Report report = new Report();
         report.setId(rs.getInt("id"));
@@ -222,6 +256,15 @@ public class ReportDaoJDBC implements ReportDao {
 
         LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
         report.setCreationDate(creationDate);
+
+        Integer reviewAuthorFk = rs.getInt("review_author_fk");
+        if (reviewAuthorFk != null) {
+            Moderator author = (Moderator) userDao.findById(reviewAuthorFk);
+            LocalDateTime createAt = rs.getTimestamp("review_create_at").toLocalDateTime();
+            Boolean isValid = rs.getBoolean("review_is_valid");
+            String comment = rs.getString("review_comment");
+            report.setReportReview(author, createAt, isValid, comment);
+        }
 
         return report;
     }

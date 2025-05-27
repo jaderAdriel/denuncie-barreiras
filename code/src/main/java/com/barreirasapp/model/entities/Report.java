@@ -19,6 +19,7 @@ public class Report {
     private User reporter;
     private BarrierScenario barrierScenario;
     private LocalDateTime creationDate;
+    private ReportReview review;
     private Boolean published;
 
     public Report() {
@@ -40,6 +41,16 @@ public class Report {
         this.reporter = reporter;
         this.barrierScenario = barrierScenario;
         this.creationDate = creationDate;
+    }
+
+    public void setReportReview(Moderator author,
+     LocalDateTime createAt,
+     Boolean isValid,
+     String comment) {
+        this.review = new ReportReview(author,
+        createAt,
+        isValid,
+        comment);
     }
 
     public BarrierType getType() {
@@ -123,6 +134,14 @@ public class Report {
 
     public void isPublished(Boolean published) {
         this.published = published;
+    }
+
+    public ReportReview getReview() {
+        return review;
+    }
+
+    public void setReview(ReportReview review) {
+        this.review = review;
     }
 
     public void save() {
