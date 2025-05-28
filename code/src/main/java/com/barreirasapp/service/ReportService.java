@@ -76,6 +76,10 @@ public class ReportService {
         return reportRepository.findAll();
     }
 
+    public List<Report> listAllValid() {
+        return reportRepository.findAllValid();
+    }
+
     public Report findById(Integer id) {
         return reportRepository.findById(id);
     }

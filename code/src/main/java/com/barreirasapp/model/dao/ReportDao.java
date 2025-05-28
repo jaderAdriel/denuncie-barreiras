@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ReportDao extends GenericDao<Report, Integer> {
     List<Report> findAllByReporterId(Integer id);
+    List<Report> findAllValid();
 }

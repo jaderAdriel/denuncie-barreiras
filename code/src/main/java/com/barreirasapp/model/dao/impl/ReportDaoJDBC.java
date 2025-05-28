@@ -239,6 +239,31 @@ public class ReportDaoJDBC implements ReportDao {
         return null;
     }
 
+    public List<Report> findAllValid() {
+        List<Report> list = new ArrayList<>();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("SELECT * FROM Report WHERE review_is_valid = TRUE");
+
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Report report = instantiateReport(rs);
+                list.add(report);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(st);
+        }
+
+        return list;
+    }
+
+
     private Report instantiateReport(ResultSet rs) throws SQLException {
         Report report = new Report();
         report.setId(rs.getInt("id"));

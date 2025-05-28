@@ -205,7 +205,7 @@ public class ReportController extends HttpServlet {
         req.setAttribute("barrierTypeOptions", BarrierType.values());
         req.setAttribute("scenarios", barrierScenario.listAll());
 
-        List<Report> reportList = this.service.listAll();
+        List<Report> reportList = this.service.listAllValid();
 
         req.setAttribute("reportList", reportList);
 
