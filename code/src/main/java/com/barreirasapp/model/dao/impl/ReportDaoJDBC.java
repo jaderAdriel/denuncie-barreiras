@@ -2,10 +2,13 @@ package com.barreirasapp.model.dao.impl;
 
 import com.barreirasapp.infra.db.DatabaseConnection;
 import com.barreirasapp.infra.exceptions.DatabaseException;
+import com.barreirasapp.infra.security.UserContext;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.ReportDao;
 import com.barreirasapp.model.dao.UserDao;
+import com.barreirasapp.model.entities.Moderator;
 import com.barreirasapp.model.entities.Report;
+import com.barreirasapp.model.entities.ReportReview;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
 import com.barreirasapp.model.enums.EnvironmentType;
@@ -87,14 +90,16 @@ public class ReportDaoJDBC implements ReportDao {
             st = conn.prepareStatement(
                     """
                           UPDATE Report
-                          SET type = ?, ambient = ?, event_detailing = ?
+                          SET review_author_fk = ?, review_comment = ?, review_is_valid = ?, review_create_at = ?
                           WHERE id = ?;
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
-            st.setString(1, String.valueOf(report.getType()));
-            st.setString(2, String.valueOf(report.getAmbient()));
-            st.setString(3, report.getEventDetailing());
+            st.setInt(1, report.getReviewAuthorId());
+            st.setString(2, report.getReviewComment());
+            st.setBoolean(3, report.getReviewIsValid());
+            st.setTimestamp(4, Timestamp.valueOf(report.getReviewCreationDate()));
+            st.setInt(5, report.getId());
             st.executeUpdate();
 
         } catch (SQLException e) {
@@ -126,7 +131,7 @@ public class ReportDaoJDBC implements ReportDao {
         try {
             st = conn.prepareStatement(
                     """
-                            SELECT id, type, ambient, anonymous_report, event_detailing, reporter_fk, creation_date
+                            SELECT *
                             FROM Report
                             WHERE id = ?;
                       """
@@ -159,7 +164,7 @@ public class ReportDaoJDBC implements ReportDao {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, reporter_fk, type, ambient, anonymous_report, event_detailing, related_scenario_fk, creation_date
+                            SELECT *
                             FROM Report
                             WHERE reporter_fk = ?;
                       """
@@ -185,7 +190,7 @@ public class ReportDaoJDBC implements ReportDao {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, reporter_fk, type, ambient, anonymous_report, event_detailing, related_scenario_fk, creation_date
+                            SELECT *
                             FROM Report;
                       """
             );
@@ -200,6 +205,38 @@ public class ReportDaoJDBC implements ReportDao {
             DatabaseConnection.closeResultSet(rs);
             DatabaseConnection.closeStatement(st);
         }
+    }
+
+    public ReportReview findReviewByReportId(Integer id) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        ReportReview review = new ReportReview();
+
+        try {
+            st = conn.prepareStatement(
+                    """
+                            SELECT review_comment, review_author_fk, review_createAt, review_published, review_is_valid
+                            FROM Report
+                            WHERE id = ?;
+                      """
+            );
+
+            st.setInt(1, id);
+
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                return instantiateReport(rs).getReview();
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeResultSet(rs);
+            DatabaseConnection.closeStatement(st);
+        }
+
+        return null;
     }
 
     private Report instantiateReport(ResultSet rs) throws SQLException {
@@ -222,6 +259,35 @@ public class ReportDaoJDBC implements ReportDao {
 
         LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
         report.setCreationDate(creationDate);
+
+        Integer reviewAuthorFk = rs.getInt("review_author_fk");
+        System.out.println(reviewAuthorFk);
+        if (reviewAuthorFk != 0) {
+            User user = userDao.findById(reviewAuthorFk);
+            Moderator reviewer = new Moderator(
+                    user.getPassword(),
+                    user.getGender(),
+                    user.getBirthDate(),
+                    user.getEmail(),
+                    user.getName(),
+                    "77777");
+
+            try {
+                reviewer.setId(reviewAuthorFk);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            Timestamp createAtTimeStamp = rs.getTimestamp("review_create_at");
+            LocalDateTime createAt = null;
+            if (createAtTimeStamp != null) {
+                createAt = createAtTimeStamp.toLocalDateTime();
+            }
+
+            Boolean isValid = rs.getBoolean("review_is_valid");
+            String comment = rs.getString("review_comment");
+            report.setReportReview(reviewer, createAt, isValid, comment);
+        }
 
         return report;
     }

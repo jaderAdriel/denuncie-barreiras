@@ -44,6 +44,7 @@ public class UserContext {
         if (session.isEmpty()) {
             return Optional.empty();
         }
+
         UserDao userRepository = DaoFactory.createUserDao();
         Integer userId = session.get().getUserId();
 
