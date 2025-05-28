@@ -1,29 +1,36 @@
 package com.barreirasapp.model.dao.impl;
 
 import com.barreirasapp.infra.db.DatabaseConnection;
+import com.barreirasapp.infra.db.QueryExecutor;
 import com.barreirasapp.infra.exceptions.DatabaseException;
-import com.barreirasapp.model.dao.BarrierScenarioDao;
-import com.barreirasapp.model.dao.DaoFactory;
-import com.barreirasapp.model.dao.LawDao;
-import com.barreirasapp.model.dao.UserDao;
+import com.barreirasapp.model.dao.*;
 import com.barreirasapp.model.entities.BarrierScenario;
+import com.barreirasapp.model.entities.Comment;
 import com.barreirasapp.model.entities.Law;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
-import com.barreirasapp.service.LawService;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
 
     private final Connection conn;
+    private final CommentDao commentDao;
+    private final LawBarrierScenarioAssociationDao associationLawDao;
+    private final BarrierScenarioLikeDao barrierScenarioLikeDao;
+    private final UserDao userDao;
 
-    public BarrierScenarioDaoJDBC(Connection conn) {
+    public BarrierScenarioDaoJDBC(Connection conn, CommentDao dao, LawBarrierScenarioAssociationDao associationLawDao, BarrierScenarioLikeDao barrierScenarioLikeDao, UserDao userDao) {
         this.conn = conn;
+        this.commentDao = dao;
+        this.associationLawDao = associationLawDao;
+        this.barrierScenarioLikeDao = barrierScenarioLikeDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -33,10 +40,11 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
 
         try {
             conn.setAutoCommit(false);
+
             st = conn.prepareStatement(
                     """
-                              INSERT INTO BarrierScenario (type, author_fk, content, title)
-                              VALUES (?, ?, ?, ?);
+                              INSERT INTO BarrierScenario (type, author_fk, content, title, image_file_name)
+                              VALUES (?, ?, ?, ?, ?);
                       """, Statement.RETURN_GENERATED_KEYS
             );
 
@@ -47,25 +55,20 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
             st.setString (3, scenario.getContent());
             st.setString(4, scenario.getTitle());
 
+            if (scenario.getImageCoverPath().isEmpty() || scenario.getImageCoverPath() == null)
+                st.setNull(5, Types.VARCHAR);
+            else
+                st.setString(5, scenario.getImageCoverPath());
+
+            int id = QueryExecutor.executeUpdateWithGeneratedKey(st, conn);
+
+            scenario.setId(id);
+
             for (Law law : scenario.getAssociatedLaws()) {
-                associateToLaw(scenario, law);
+                associationLawDao.associate(law, scenario);
             }
 
-            int rowsAffected =  st.executeUpdate();
-
-            if (rowsAffected > 0) {
-                rs = st.getGeneratedKeys();
-                if (rs.next()) {
-                    int id = rs.getInt(1);
-                    scenario.setId(id);
-                }
-                conn.commit();
-            } else {
-                conn.rollback();
-                throw new DatabaseException("Unexpect error: No rows affected");
-            }
-
-
+            conn.commit();
         } catch (SQLException e) {
             try {
                 conn.rollback();
@@ -79,65 +82,8 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         }
     }
 
-    public void associateToLaw(BarrierScenario scenario, Law law) throws SQLException {
-        PreparedStatement st = null;
-        try {
-            st = conn.prepareStatement(
-                    """
-                              INSERT INTO BarrierScenario_Law (barrierScenario_fk, law_fk)
-                              VALUES (?, ?);
-                      """, Statement.RETURN_GENERATED_KEYS
-            );
-
-            st.setInt( 1, scenario.getId());
-            st.setString( 2 , law.getCode());
-
-            st.execute();
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        } finally {
-            DatabaseConnection.closeStatement(st);
-        }
-    }
-
-    public void dissociateFromLaw(BarrierScenario scenario, Law law) {
-        PreparedStatement st = null;
-        try {
-            st = conn.prepareStatement(
-                    """
-                              DELETE FROM BarrierScenario_Law
-                              WHERE law_fk = ? AND barrierScenario_fk = ?
-                      """, Statement.RETURN_GENERATED_KEYS
-            );
-            st.setString( 1 , law.getCode());
-            st.setInt( 2 , scenario.getId());
-
-            st.execute();
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        } finally {
-            DatabaseConnection.closeStatement(st);
-        }
-
-    }
-
-    public void updateAssociationToLaw(BarrierScenario scenario) throws SQLException {
-        LawDao lawDao = DaoFactory.createLawDao();
-
-        List<Law> associatedLaws = lawDao.findByBarrierScenario(scenario.getId());
-
-        List<Law> associatedLawsToUpdate = scenario.getAssociatedLaws();
-
-
-        for (Law law : associatedLawsToUpdate) {
-            if (associatedLaws.contains(law)) continue;
-            associateToLaw(scenario, law);
-        }
-
-        for (Law law : associatedLaws) {
-            if (associatedLawsToUpdate.contains(law)) continue;
-            dissociateFromLaw(scenario, law);
-        }
+    public void insertComment(Comment comment, BarrierScenario barrierScenario) {
+        commentDao.insert(comment, barrierScenario);
     }
 
     @Override
@@ -145,10 +91,13 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         PreparedStatement st = null;
 
         try {
+
+            conn.setAutoCommit(false);
+
             st = conn.prepareStatement(
                     """
                           UPDATE BarrierScenario
-                          SET type = ?, content = ?, title = ?
+                          SET type = ?, content = ?, title = ?, image_file_name = ?
                           WHERE id = ?;
                       """, Statement.RETURN_GENERATED_KEYS
             );
@@ -158,17 +107,31 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
             st.setString(1, barrierType);
             st.setString(2, scenario.getContent());
             st.setString(3, scenario.getTitle());
-            st.setInt(4, scenario.getId());
+            st.setInt(5, scenario.getId());
+
+            if (scenario.getImageCoverPath().isEmpty() || scenario.getImageCoverPath() == null)
+                st.setNull(4, Types.VARCHAR);
+            else
+                st.setString(4, scenario.getImageCoverPath());
+
             st.executeUpdate();
 
-            updateAssociationToLaw(scenario);
+            this.associationLawDao.update(scenario);
+
+            conn.commit();
 
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            try {
+                conn.rollback();
+                throw new DatabaseException(e.getMessage());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         } finally {
             DatabaseConnection.closeStatement(st);
         }
     }
+
 
     @Override
     public void deleteById(Integer id) {
@@ -192,7 +155,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         try {
             st = conn.prepareStatement(
                     """
-                            SELECT id, author_fk, type, content, title, creation_date, likes
+                            SELECT id, author_fk, type, content, title, creation_date, likes, image_file_name
                             FROM BarrierScenario
                             WHERE id = ?;
                       """
@@ -225,7 +188,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, author_fk, type, content, title, creation_date, likes
+                            SELECT id, author_fk, type, content, title, creation_date, likes, image_file_name
                             FROM BarrierScenario
                             WHERE author_fk = ?;
                       """
@@ -251,7 +214,7 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
             st = conn.createStatement();
             rs = st.executeQuery(
                     """
-                            SELECT id, author_fk, type, content, title, creation_date, likes
+                            SELECT id, author_fk, type, content, title, creation_date, likes, image_file_name
                             FROM BarrierScenario;
                       """
             );
@@ -269,8 +232,6 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
     }
 
     private BarrierScenario instantiateScenario(ResultSet rs) throws SQLException {
-        UserDao userDao = DaoFactory.createUserDao();
-
         int authorId = rs.getInt("author_fk");
         User author = userDao.findById(authorId);
 
@@ -289,9 +250,27 @@ public class BarrierScenarioDaoJDBC implements BarrierScenarioDao {
         String scenarioContent = rs.getString("content");
         String scenarioTitle = rs.getString("title");
 
-        List<Law> associatedLaws = DaoFactory.createLawDao().findByBarrierScenario(scenarioId);
+        List<Law> associatedLaws = associationLawDao.findByBarrierScenarioId(scenarioId);
 
-        return new BarrierScenario(scenarioId, barrierType, author, scenarioContent, scenarioTitle, creationDate, associatedLaws );
+        List<Comment> comments = commentDao.findByBarrierScenarioId(scenarioId);
+
+        Set<User> likes = barrierScenarioLikeDao.findByBarrierScenarioId(scenarioId);
+
+        BarrierScenario barrierScenario = new BarrierScenario(
+                scenarioId,
+                barrierType,
+                author,
+                scenarioContent,
+                scenarioTitle,
+                creationDate,
+                associatedLaws,
+                comments,
+                likes
+        );
+
+        barrierScenario.setImageCoverPath(rs.getString("image_file_name"));
+
+        return barrierScenario;
     }
 
 }

@@ -11,7 +11,11 @@
             <li class="nav-item"><a href=".">Home</a></li>
             <li class="nav-item"><a href="/report/">Denúncias</a></li>
             <li class="nav-item"><a href="/scenario/">Cenários educativos</a></li>
-            <li class="nav-button"><a href="${pageContext.request.contextPath}/accounts/login/" class="btn-primary">Login</a></li>
+
+            <c:if test="${ cookie.sessionId == null}">
+                <li class="nav-button"><a href="${pageContext.request.contextPath}/accounts/login/" class="btn-primary">Login</a></li>
+            </c:if>
+
         </ul>
     </nav>
 

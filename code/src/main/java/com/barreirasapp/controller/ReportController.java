@@ -62,7 +62,7 @@ public class ReportController extends HttpServlet {
     @Route(value = "create/", method = HttpMethod.GET_POST)
     public void createReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.setAttribute("action", "/report/create/");
-        req.setAttribute("method", "PUT");
+        req.setAttribute("method", "POST");
         req.setAttribute("barrierScenarioOptions", barrierScenario.listAll());
         req.setAttribute("barrierTypeOptions", BarrierType.values());
         req.setAttribute("environmentOptions", EnvironmentType.values());
@@ -96,7 +96,7 @@ public class ReportController extends HttpServlet {
         req.setAttribute("anonymous", anonymous);
         req.setAttribute("barrierScenarioIds", barrierScenarioIds);
 
-        System.out.println(anonymous);
+        System.out.println("ENTOU 1");
 
         try {
             RegisterReportDTO reportDTO = new RegisterReportDTO(
@@ -106,6 +106,8 @@ public class ReportController extends HttpServlet {
                     anonymous,
                     type
             );
+
+            System.out.println("ENTOU 2");
 
             if (!reportDTO.getAnonymous()) {
                 Optional<User> reporter = UserContext.getUserFromSession(req);
@@ -121,6 +123,8 @@ public class ReportController extends HttpServlet {
             resp.sendRedirect("/report/index/");
         } catch (ValidationError e) {
             req.setAttribute("anonymous", isAnonymous ? "true" : "false");
+            System.out.println("tentei lançar execeção");
+
             ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);
         }

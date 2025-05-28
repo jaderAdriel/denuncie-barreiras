@@ -26,7 +26,7 @@ public class ReportService {
     public void insert(RegisterReportDTO reportDTO) throws ValidationError {
 
         BarrierScenario barrierScenario = null;
-
+        System.out.println("entrou no controller");
         if(reportDTO.getRelatedScenarioId() != null){
             barrierScenario = barrierScenarioRepository.findById(reportDTO.getRelatedScenarioId());
         }

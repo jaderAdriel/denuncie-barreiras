@@ -44,6 +44,9 @@ services:
       DB_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
+      FILES_DIR: /app/uploads
+    volumes:
+      - ./uploads:/app/uploads
 
 volumes:
   mysql_data:

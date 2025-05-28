@@ -1,0 +1,74 @@
+.dragzone {
+    position: relative;
+    width: 100%;
+    padding: 2em;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    outline: 2px dashed #f4f4f4;
+    max-width: 30em;
+    background-color: #FFF;
+
+    .dragzone__icon {
+        padding: 0.5rem;
+        i {
+            color: var(--primary);
+            font-size: 2em;
+        }
+
+    }
+
+    .dragzone__title {
+        font-size: 1.1em;
+        line-height: 1.5;
+    }
+
+    .dragzone__info {
+        font-size: 0.8em;
+        font-weight: 300;
+    }
+
+    .dragzone__button {
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    &.active {
+        outline: none;
+        --border-size: 2px;
+        --border-angle: 0turn;
+        background-color: #FFF;
+        background-image:
+                conic-gradient(
+                        from var(--border-angle),
+                        #FFF,
+                        #FFF 50%,
+                        #FFF
+                ),
+                conic-gradient(
+                from var(--border-angle),
+                #FFF ,var(--primary), var(--primary));
+
+        background-size:
+                calc(100% - (var(--border-size) * 2))
+                calc(100% - (var(--border-size) * 2)),
+                cover;
+
+        background-position: center center;
+        background-repeat: no-repeat;
+
+        animation: bg-spin 3s linear infinite;
+        @keyframes bg-spin {
+            to {
+                --border-angle: 1turn;
+            }
+        }
+        animation-play-state: running;
+    }
+
+    &.inactive {
+        animation-play-state: paused;
+    }
+}

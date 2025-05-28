@@ -5,6 +5,7 @@ import com.barreirasapp.model.entities.Law;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
 import com.barreirasapp.utils.Validator;
+import jakarta.servlet.http.Part;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,15 +17,25 @@ public class UpdateBarrierScenarioDTO {
     private String content;
     private BarrierType barrierType;
     private String[] associatedLawsIds;
-//    private ArrayList<File> files;
+    private Part filePart;
+
     Map<String, String> errors = new HashMap<>();
 
-    public UpdateBarrierScenarioDTO(int id, String title, String content, String barrierType, String[] associatedLawsIds) throws ValidationError {
+    public UpdateBarrierScenarioDTO(int id, String title, String content, String barrierType, String[] associatedLawsIds, Part filePart) throws ValidationError {
         this.setContent(content);
         this.setBarrierType(barrierType);
         this.setTitle(title);
         this.setAssociatedLawsIds(associatedLawsIds);
         this.setId(id);
+        this.filePart = filePart;
+    }
+
+    public Part getFilePart() {
+        return filePart;
+    }
+
+    private void setFilePart(Part filePart) {
+        this.filePart = filePart;
     }
 
     public String getTitle() {

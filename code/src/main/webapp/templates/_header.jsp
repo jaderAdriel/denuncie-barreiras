@@ -9,7 +9,7 @@
         <div class="account-wrapper">
             <img src="static/images/profile-placeholder.png" alt="">
             <div class="account-info">
-                <span class="account-name">Jader Adriel</span>
+                <span class="account-name">${ cookie.username.value }</span>
                 <span class="account-role">Admin</span>
             </div>
         </div>

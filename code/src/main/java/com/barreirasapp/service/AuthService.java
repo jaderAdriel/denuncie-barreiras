@@ -8,6 +8,7 @@ import com.barreirasapp.model.Session;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.dao.UserDao;
 import com.barreirasapp.model.entities.User;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -38,7 +39,15 @@ public class AuthService {
 
         UserContext.removeSession(sessionId);
 
-        resp.setHeader("Set-Cookie", createCookie(null));
+        Cookie sessionCookie = new Cookie("sessionId", "");
+        sessionCookie.setMaxAge(0);
+        sessionCookie.setPath("/");
+        resp.addCookie(sessionCookie);
+
+        Cookie userCookie = new Cookie("userId", "");
+        userCookie.setMaxAge(0);
+        userCookie.setPath("/");
+        resp.addCookie(userCookie);
     }
 
     public void login(LoginDTO loginDTO, HttpServletRequest req, HttpServletResponse resp) throws ValidationError {
@@ -56,10 +65,20 @@ public class AuthService {
 
         Session session = UserContext.createSession(foundedUser);
 
-        resp.setHeader("Set-Cookie", createCookie(session.getSessionId()));
-    }
+        Cookie sessionCookie = new Cookie("sessionId", session.getSessionId());
+        sessionCookie.setPath("/");
+        sessionCookie.setHttpOnly(true);
+        resp.addCookie(sessionCookie);
 
-    public String createCookie(String sessionId) {
-        return "sessionId=" + sessionId + "; Path=/; HttpOnly";
+        Cookie userName = new Cookie("username", foundedUser.getName());
+        sessionCookie.setPath("/");
+        sessionCookie.setHttpOnly(true);
+        resp.addCookie(sessionCookie);
+
+        Cookie userCookie = new Cookie("userId", String.valueOf(foundedUser.getId()));
+        userCookie.setPath("/");
+        userCookie.setHttpOnly(true);
+        resp.addCookie(userCookie);
+
     }
 }

@@ -73,28 +73,6 @@
 
         </div>
 
-        <div class="w-full">
-            <label for="scenario" class="block text-md font-medium text-gray-900">Cenários de Barreira</label>
-            <div class="mt-2">
-                <select name="barrierScenario"
-                        class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
-                    <c:if test="${not empty barrierScenarioOptions}">
-                        <c:forEach items="${barrierScenarioOptions}" var="barrierScenarioOptions">
-                            <option value="${barrierScenarioOptions.toString()}"
-                                    <c:if test="${not empty barrierScenarioOptions}">
-                                        <c:if test="${barrierScenario eq barrierScenarioOptions}">selected</c:if>
-                                    </c:if>
-                            >
-                                    ${barrierScenario.title()}
-                            </option>
-                        </c:forEach>
-                    </c:if>
-                </select>
-                >
-                <c:if test="${not empty barrierScenarioError}"><p class="text-red-500 text-sm mt-2">${barrierScenarioError}</p></c:if>
-            </div>
-        </div>
-
         <div>
             <label class="block text-md font-medium text-gray-900">Denúncia Anônima</label>
             <div class="mt-2 space-y-2">

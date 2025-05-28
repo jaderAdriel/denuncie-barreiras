@@ -10,6 +10,7 @@ import com.barreirasapp.model.enums.Gender;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -167,12 +168,21 @@ public class UserDaoJDBC implements UserDao {
         }
     }
 
-    private User instantiateUser(ResultSet rs) throws SQLException {
+    public User instantiateUser(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
         String name = rs.getString("name");
         String password = rs.getString("password");
         Email email = new Email(rs.getString("email"));
-        Gender gender = Gender.valueOf(rs.getString("gender"));
+
+        String genderRs = rs.getString("gender");
+
+
+        Gender gender = Gender.OTHER;
+
+        if (Arrays.stream(Gender.values()).anyMatch(gender1 -> gender1.toString().equals(genderRs))) {
+            gender = Gender.valueOf(genderRs);
+        }
+
         LocalDate birthDate = LocalDate.parse(rs.getString("birth_date"));
 
         return new User(id, password, gender, birthDate, email, name);

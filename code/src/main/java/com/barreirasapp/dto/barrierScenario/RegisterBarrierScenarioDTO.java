@@ -1,13 +1,12 @@
 package com.barreirasapp.dto.barrierScenario;
 
 import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.Law;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
 import com.barreirasapp.utils.Validator;
+import jakarta.servlet.http.Part;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RegisterBarrierScenarioDTO {
@@ -16,10 +15,10 @@ public class RegisterBarrierScenarioDTO {
     private BarrierType barrierType;
     private User author;
     private String[] associatedLawsIds;
-//    private ArrayList<File> files;
+    private Part filePart;
     Map<String, String> errors = new HashMap<>();
 
-    public RegisterBarrierScenarioDTO(String title, String content, String barrierType, User author, String[] associatedLawsIds) throws ValidationError {
+    public RegisterBarrierScenarioDTO(String title, String content, String barrierType, User author, String[] associatedLawsIds, Part filePart) throws ValidationError {
         Map<String, String> requiredFields = new HashMap<>();
         requiredFields.put("content" , content);
         requiredFields.put("title", title);
@@ -32,10 +31,19 @@ public class RegisterBarrierScenarioDTO {
         this.setTitle(title);
         this.setAuthor(author);
         this.setAssociatedLawsIds(associatedLawsIds);
+        this.filePart = filePart;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public Part getFilePart() {
+        return filePart;
+    }
+
+    private void setFilePart(Part filePart) {
+        this.filePart = filePart;
     }
 
     private void setTitle(String title) {
@@ -58,7 +66,7 @@ public class RegisterBarrierScenarioDTO {
         try {
             this.barrierType = BarrierType.valueOf(barrierType.toUpperCase());
         } catch (Exception ignored) {
-            errors.put("barrierType", "Valor inválido");
+            errors.put("barrierTypeError", "Valor inválido");
         }
     }
 

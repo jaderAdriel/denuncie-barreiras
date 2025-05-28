@@ -16,7 +16,30 @@ public class DaoFactory {
     public static LawDao createLawDao() {
         return new LawDaoJDBC(DatabaseConnection.getConnection());
     }
+    public static CommentDao createCommentDao() {
+        return new CommentDaoJBDC(DatabaseConnection.getConnection());
+    }
+    public static BarrierScenarioLikeDao createBarrierScenarioLikeDao() {
+        return new BarrierScenarioLikeDaoJBDC(
+                DatabaseConnection.getConnection(),
+                DaoFactory.createUserDao()
+        );
+    }
+
+    public static FileDao createFileDao() {
+        return new FileDaoLocal();
+    }
+
+    public static LawBarrierScenarioAssociationDao createLawBarrierScenarioAssociationDao() {
+        return new LawBarrierScenarioAssociationJDBC(DatabaseConnection.getConnection());
+    }
     public static BarrierScenarioDao createBarrierScenario() {
-        return new BarrierScenarioDaoJDBC(DatabaseConnection.getConnection());
+        return new BarrierScenarioDaoJDBC(
+                DatabaseConnection.getConnection(),
+                DaoFactory.createCommentDao(),
+                DaoFactory.createLawBarrierScenarioAssociationDao(),
+                DaoFactory.createBarrierScenarioLikeDao(),
+                DaoFactory.createUserDao()
+        );
     }
 }

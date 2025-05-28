@@ -9,36 +9,22 @@ import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.service.AuthService;
 
 import com.barreirasapp.utils.ControllerDispatcher;
-import com.barreirasapp.utils.Middleware;
-import com.barreirasapp.utils.routes.RouteInfo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Logger;
 
 
 @WebServlet("/accounts/*")
-public class AuthController extends HttpServlet {
-    private Map<String, RouteInfo> routes;
-    private static final Logger LOGGER = Logger.getLogger(AuthController.class.getName());
-
+public class AuthController extends Controller {
     private AuthService service;
 
     @Override
     public void init() throws ServletException {
-        this.service = new AuthService();
-        System.out.println("configuração de rotas");
-        this.routes = Middleware.setupRoutes(this.getClass());
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Middleware.callRoute(this, routes, req, resp);
+        super.init();
+        service = new AuthService();
     }
 
     @Route(value = "login/", method = HttpMethod.GET_POST)
@@ -59,7 +45,15 @@ public class AuthController extends HttpServlet {
         try {
             LoginDTO loginDTO = new LoginDTO(email, password);
             service.login(loginDTO, req, resp);
-            resp.sendRedirect("/accounts/protegido/");
+
+            String nextLocation = req.getParameter("next");
+
+            if (nextLocation != null) {
+                resp.sendRedirect(nextLocation);
+                return;
+            }
+
+            resp.sendRedirect("/");
         } catch (ValidationError e) {
             ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);

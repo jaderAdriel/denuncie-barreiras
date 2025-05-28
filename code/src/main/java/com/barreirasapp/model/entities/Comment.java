@@ -4,10 +4,9 @@ import java.time.LocalDateTime;
 
 public class Comment {
     private int id;
-    private LocalDateTime creationDateTime;
-    private String content;
-    private Comment responseTo;
-    private User author;
+    private final LocalDateTime creationDateTime;
+    private final String content;
+    private final User author;
 
     public Comment(String content, User author, LocalDateTime creationDateTime) {
         this.content = content;
@@ -22,20 +21,20 @@ public class Comment {
         this.creationDateTime = creationDateTime;
     }
 
-    public void setResponseTo(Comment responseTo) {
-        this.responseTo = responseTo;
+    public String getAuthorName()  {
+        return this.author.getName();
     }
 
     public LocalDateTime getCreationDateTime() {
         return creationDateTime;
     }
 
-    public String getContent() {
-        return content;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Comment getResponseTo() {
-        return responseTo;
+    public String getContent() {
+        return content;
     }
 
     public User getAuthor() {

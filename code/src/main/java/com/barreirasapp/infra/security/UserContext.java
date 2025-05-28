@@ -13,14 +13,17 @@ import java.util.Optional;
 public class UserContext {
 
     public static String getSessionId(Cookie[] cookies) {
+        return getCookieValue(cookies, "sessionId");
+    }
+
+    public static String getCookieValue(Cookie[] cookies, String cookieName) {
         if (cookies == null) return null;
 
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("sessionId")) {
+            if (cookie.getName().equals(cookieName)) {
                 return cookie.getValue();
             }
         }
-
         return null;
     }
 
@@ -44,7 +47,7 @@ public class UserContext {
         UserDao userRepository = DaoFactory.createUserDao();
         Integer userId = session.get().getUserId();
 
-        return Optional.of(userRepository.findById(userId));
+        return Optional.ofNullable(userRepository.findById(userId));
     }
 
     public static Optional<User> getUserFromSession(HttpServletRequest req) {

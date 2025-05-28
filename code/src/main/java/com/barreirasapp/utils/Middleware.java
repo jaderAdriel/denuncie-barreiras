@@ -1,16 +1,20 @@
 package com.barreirasapp.utils;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 
 import com.barreirasapp.annotation.HttpMethod;
 import com.barreirasapp.annotation.Route;
+import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.infra.proxy.AuthProxy;
 import com.barreirasapp.utils.routes.RouteInfo;
 import com.barreirasapp.utils.routes.RouteMatchResult;
 import com.barreirasapp.utils.routes.RouteParser;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -21,9 +25,8 @@ import java.util.logging.Logger;
 public class Middleware {
 
     private static final Logger LOGGER = Logger.getLogger(Middleware.class.getName());
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Middleware.class);
 
-    //    /law/index/:GET -> Method
-    //    /law/create/:POST -> Method
     public static Map<String, RouteInfo> setupRoutes (Class<?> controllerClass) {
         Map<String, RouteInfo> routes = new HashMap<>();
         if (!controllerClass.isAnnotationPresent(WebServlet.class)) {
@@ -63,13 +66,32 @@ public class Middleware {
         return routes;
     }
 
-    public static void invokeRoute(Object controllerInstance, Method method, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public static void invokeRoute(Object controllerInstance, Method method, HttpServletRequest req, HttpServletResponse resp)  throws IOException, ServletException {
+        
         try {
             AuthProxy.invoke(controllerInstance, method, req, resp);
-        } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro interno no servidor");
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+
+            e.printStackTrace();
+
+            if (cause instanceof ValidationError validationError) {
+                sendErrors(validationError.getErrors(), req);
+                resp.sendRedirect(req.getRequestURI());
+                return;
+            }
+            if (cause instanceof NoSuchElementException) {
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/404.jsp");
+                dispatcher.forward(req, resp);
+                return;
+            }
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, cause.getMessage());
+
+        } catch (IOException | IllegalAccessException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
 
     public static void callRoute(Object controllerInstance, Map<String, RouteInfo> routes, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -97,10 +119,7 @@ public class Middleware {
             req.setAttribute(key, finalValue);
         });
 
-
-
         invokeRoute(controllerInstance, routeInfo.handlerMethod(), req, resp);
-
     }
 
     public static Optional<RouteMatchResult> findRoute(HttpServletRequest req, Map<String, RouteInfo> routes) {
@@ -136,6 +155,13 @@ public class Middleware {
             return path.substring(0, path.length() - 1);
         }
         return path;
+    }
+
+    public static void sendErrors(Map<String, String> errors, HttpServletRequest req) {
+        for (String errorName : errors.keySet()) {
+            System.out.println(errorName + "Error" + " : " + errors.get(errorName));
+            req.setAttribute(errorName+"Error", errors.get(errorName));
+        }
     }
 
 }

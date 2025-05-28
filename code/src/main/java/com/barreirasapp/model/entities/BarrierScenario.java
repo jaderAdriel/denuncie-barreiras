@@ -2,34 +2,36 @@ package com.barreirasapp.model.entities;
 
 import com.barreirasapp.dto.barrierScenario.UpdateBarrierScenarioDTO;
 import com.barreirasapp.exceptions.ValidationError;
+import com.barreirasapp.model.dao.BarrierScenarioDao;
 import com.barreirasapp.model.dao.DaoFactory;
 import com.barreirasapp.model.enums.BarrierType;
 
+import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.util.*;
 
 public class BarrierScenario {
-    int id;
-    BarrierType barrierType;
-    User author; //Mudar para tipo moderator
-    String content;
-    String title;
-    LocalDateTime creationDate;
-    List<User> likes;
-    List<Law> associatedLaws;
+    private Integer id;
+    private BarrierType barrierType;
+    private User author; //Mudar para tipo moderator
+    private String content;
+    private String title;
+    private LocalDateTime creationDate;
+    private Set<User> likes = new HashSet<>();
+    private List<Law> associatedLaws = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+    private String imageCoverPath;
 
     public BarrierScenario(String title, String content, BarrierType barrierType, User author) {
         this.title = title;
         this.content = content;
         this.barrierType = barrierType;
         this.author = author;
-        this.associatedLaws = new ArrayList<>();
     }
 
-    public BarrierScenario(int id, BarrierType barrierType, User author, String content, String title, LocalDateTime creationDate, List<Law> associatedLaws ) {
+    public BarrierScenario(int id, BarrierType barrierType, User author, String content, String title, LocalDateTime creationDate,
+                           List<Law> associatedLaws, List<Comment> comments, Set<User> likes) {
         this.id = id;
         this.barrierType = barrierType ;
         this.author = author;
@@ -37,6 +39,16 @@ public class BarrierScenario {
         this.title = title;
         this.creationDate = creationDate;
         this.associatedLaws = associatedLaws;
+        this.comments = comments;
+        this.likes = likes;
+    }
+
+    public String getImageCoverPath() {
+        return imageCoverPath;
+    }
+
+    public void setImageCoverPath(String imageCoverPath) {
+        this.imageCoverPath = imageCoverPath;
     }
 
     public BarrierScenario() {
@@ -44,10 +56,6 @@ public class BarrierScenario {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public BarrierType getBarrierType() {
@@ -60,10 +68,6 @@ public class BarrierScenario {
 
     public User getAuthor() {
         return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
     }
 
     public String getContent() {
@@ -86,7 +90,7 @@ public class BarrierScenario {
     }
 
     public void setTitle(String title) throws ValidationError {
-        if (content.isEmpty()) {
+        if (title == null || title.isEmpty()) {
             throw new ValidationError("Titúlo não pode ser vazio", new HashMap<>());
         };
         this.title = title;
@@ -104,31 +108,73 @@ public class BarrierScenario {
         this.associatedLaws = associatedLaws;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
     public List<User> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<User> likes) {
-        this.likes = likes;
+        return likes.stream().toList();
     }
 
     public void save() {
+
+        if (this.id != null) {
+            this.update();
+            return;
+        }
+
         DaoFactory.createBarrierScenario().insert(this);
+    }
+
+    public void update() {
+        DaoFactory.createBarrierScenario().update(this);
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void update(UpdateBarrierScenarioDTO dto) throws ValidationError {
 
         this.setBarrierType(dto.getBarrierType());
-
         this.setContent(dto.getContent());
-
         this.setTitle(dto.getTitle());
 
         DaoFactory.createBarrierScenario().update(this);
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment(String content, User user, LocalDateTime creationDate) {
+        Comment comment = new Comment(content, user, creationDate);
+        this.comments.add(comment);
+        DaoFactory.createBarrierScenario().insertComment(comment, this);
+    }
+
+    public void removeComment(Integer commentId) {
+        Comment comment = this.comments.stream()
+                .filter(cm -> cm.getId() == commentId)
+                .findFirst()
+                .orElseThrow();
+
+        this.comments.remove(comment);
+        DaoFactory.createCommentDao().deleteById(commentId);
+    }
+
+    public void addLiker(User user) {
+        this.likes.add(user);
+        DaoFactory.createBarrierScenarioLikeDao().insert(user, this);
+    }
+
+    public void removeLiker(User user) {
+        this.likes.add(user);
+        DaoFactory.createBarrierScenarioLikeDao().deleteById(user, this);
+    }
+
+    public boolean isLikedByUser(int id) {
+        Optional<User> user = this.likes.stream()
+                .filter(cm -> cm.getId() == id)
+                .findFirst();
+
+        return user.isPresent();
     }
 
     public static Optional<BarrierScenario> find(Integer id) {

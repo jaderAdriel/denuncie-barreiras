@@ -13,7 +13,10 @@
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-  <link rel='stylesheet' type='text/css' media='screen' href="/static/css/editor.css">
+
+  <link rel='stylesheet' type='text/css' media='screen' href="${pageContext.request.contextPath}/static/css/editor.css">
+  <link rel='stylesheet' type='text/css' media='screen' href="${pageContext.request.contextPath}/static/css/image-dragzone.css">
+  <script src="${pageContext.request.contextPath}/static/js/image-dragzone.js" defer></script>
   <style>
     .CodeMirror {
       min-height: 500px;
@@ -42,7 +45,7 @@
     </div>
   </div>
 
-  <form action="${action}" method="post" class="bg-white p-8">
+  <form action="${pageContext.request.contextPath}${action}" method="${method}" class="bg-white p-8" enctype="multipart/form-data">
 
     <div class="flex gap-4 mb-4">
       <div class="w-full">
@@ -59,7 +62,9 @@
         </div>
       </div>
 
-      <div class="w-full">
+
+
+      <div class="w-full ">
         <label for="title" class="block text-md font-medium text-gray-900">Tipo de barreira</label>
         <div class="mt-2">
           <select name="barrierType"
@@ -76,7 +81,6 @@
               </c:forEach>
             </c:if>
           </select>
-          >
           <c:if test="${not empty barrierTypeError}"><p class="text-red-500 text-sm mt-2">${barrierTypeError}</p></c:if>
         </div>
       </div>
@@ -104,6 +108,28 @@
       </div>
     </div>
 
+    <div id="image-upload-section" class="w-full  flex flex-col items-center gap-6 p-4">
+      <div class="dragzone relative w-full max-w-md p-8 flex flex-col justify-center items-center rounded-lg outline-2 outline-dashed outline-gray-300 bg-white text-center transition-all duration-300 ease-in-out" id="dragzone">
+        <div class="dragzone__icon">
+          <i class="fas fa-images"></i>
+        </div>
+
+        <span class="dragzone__title">Drop file here</span>
+        <span class="dragzone__title">Or <span class="btn dragzone__button">browse</span></span>
+        <span class="dragzone__info">supports : JPEG, JPG, PNG & SVG</span>
+
+        <input type="file" name="file" hidden accept="image/*" id="fileInput">
+      </div>
+
+        <div id="imagePreview" class="preview">
+          <div class="button" id="closePreview">  </div>
+          <div class="file w-full h-64 flex justify-center items-center overflow-hidden rounded-md bg-gray-200">
+            <c:if test="${not empty image}" >
+              <img src="${image}" alt="" class="preview-media w-full h-full object-contain"></img>
+            </c:if>
+          </div>
+        </div>
+    </div>
     <!-- Editor Markdown -->
     <div class="mb-6">
       <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo</label>
