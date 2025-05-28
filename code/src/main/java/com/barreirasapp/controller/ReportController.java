@@ -8,6 +8,7 @@ import com.barreirasapp.dto.report.UpdateReportDTO;
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.infra.security.UserContext;
 import com.barreirasapp.model.entities.BarrierScenario;
+import com.barreirasapp.model.entities.Moderator;
 import com.barreirasapp.model.entities.Report;
 import com.barreirasapp.model.entities.User;
 import com.barreirasapp.model.enums.BarrierType;
@@ -133,12 +134,10 @@ public class ReportController extends HttpServlet {
 
     @LoginRequired
     @Route(value = "update/{id}", method = HttpMethod.GET_POST)
-    public void updateReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public void updateReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, IllegalAccessException {
         String reportId = req.getAttribute("id").toString();
         req.setAttribute("action", "/report/update/" + reportId);
-        req.setAttribute("method", "PUT");
-        req.setAttribute("barrierTypeOptions", BarrierType.values());
-        req.setAttribute("environmentOptions", EnvironmentType.values());
+        req.setAttribute("method", "POST");
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/update.jsp");
         if (req.getMethod().equalsIgnoreCase("GET")) {
@@ -147,32 +146,34 @@ public class ReportController extends HttpServlet {
             return;
         }
 
-        String newEnvironment = req.getParameter("environment");
-        String newIncidentDetails = req.getParameter("incidentDetails");
-        String newRelatedScenario = req.getParameter("relatedScenario");
-        String newPublished = req.getParameter("published");
+        User user = UserContext.getUserFromSession(req).orElseThrow();
 
-        System.out.println("newIncidentDetails=" + newIncidentDetails);
-        System.out.println("newRelatedScenario=" + newRelatedScenario);
-        System.out.println("id=" + reportId);
+        Moderator reviewer = new Moderator(
+                user.getPassword(),
+                user.getGender(),
+                user.getBirthDate(),
+                user.getEmail(),
+                user.getName(),
+                "77777");
 
+        reviewer.setId(user.getId());
+
+        String comment = req.getParameter("reviewer_comment");
+        String isValid = req.getParameter("reviewer_isValid");
+        
         try {
-            UpdateReportDTO updateReportDTO = new UpdateReportDTO(reportId, newIncidentDetails, newRelatedScenario, newPublished);
+            UpdateReportDTO updateReportDTO = new UpdateReportDTO(reportId, isValid, comment, reviewer);
             this.service.update(updateReportDTO);
             resp.sendRedirect("/report/index/");
-            System.out.println("Tecnicamente deu tudo certo");
         } catch (ValidationError e) {
             System.out.println(e.getMessage());
-            setReportFields(req, reportId);
             ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);
         }
 
-        req.setAttribute("environment", newEnvironment);
-        req.setAttribute("incidentDetails", newIncidentDetails);
-        req.setAttribute("published", newPublished);
-
-        resp.sendRedirect("/public/reportList/");
+        req.setAttribute("reviewer_comment", comment);
+        req.setAttribute("reviewer_isValid", isValid);
+        
     }
 
     @LoginRequired
@@ -180,24 +181,17 @@ public class ReportController extends HttpServlet {
     public void deleteReport(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String reportId = req.getAttribute("Id").toString();
 
-        req.setAttribute("method", "DELETE");
+        req.setAttribute("method", "POST");
         req.setAttribute("action", "/report/delete/" + reportId);
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/form.jsp");
-        if (req.getMethod().equalsIgnoreCase("GET")) {
-            setReportFields(req, reportId);
-            dispatcher.forward(req, resp);
-            return;
-        }
 
         try {
             this.service.deleteById(Integer.valueOf(reportId));
         } catch (ValidationError e) {
-            resp.sendRedirect("/report/index/");
-            dispatcher.forward(req, resp);
+            System.out.println("deu erro");
+
         } finally {
             resp.sendRedirect("/report/index/");
-            dispatcher.forward(req, resp);
         }
     }
 

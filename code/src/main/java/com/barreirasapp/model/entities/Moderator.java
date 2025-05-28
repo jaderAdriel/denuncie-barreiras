@@ -47,6 +47,7 @@ public class Moderator extends User {
 
     }
 
+
     public void setAddressPostalCode(String PostalCode) {
         this.address.setPostalCode(PostalCode);
     }

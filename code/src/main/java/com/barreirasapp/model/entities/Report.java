@@ -53,6 +53,22 @@ public class Report {
         comment);
     }
 
+    public int getReviewAuthorId() {
+        return this.review.getAuthor().getId();
+    }
+
+    public String getReviewComment() {
+        return this.review.getComment();
+    }
+
+    public Boolean getReviewIsValid() {
+        return this.review.getValid();
+    }
+
+    public LocalDateTime getReviewCreationDate() {
+        return this.review.getCreateAt();
+    }
+
     public BarrierType getType() {
         return type;
     }

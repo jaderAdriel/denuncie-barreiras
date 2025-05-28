@@ -59,8 +59,6 @@ public class UserDaoJDBC implements UserDao {
 
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         } finally {
             DatabaseConnection.closeResultSet(rs);
             DatabaseConnection.closeStatement(st);

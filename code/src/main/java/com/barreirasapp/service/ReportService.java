@@ -53,14 +53,12 @@ public class ReportService {
             throw new ValidationError("Erro de integridade", Map.of("error", "Denúncia com este Id não existe"));
         }
 
-        EnvironmentType environment = updateReportDTO.getEnvironment();
-        String incidentDetails = updateReportDTO.getIncidentDetails();
-
-        if (environment != null)
-            reportToUpdate.setAmbient(environment);
-
-        if (incidentDetails != null)
-            reportToUpdate.setEventDetailing(incidentDetails);
+        reportToUpdate.setReportReview(
+                updateReportDTO.getReviewAuthor(),
+                LocalDateTime.now(),
+                updateReportDTO.getReviewIsValid(),
+                updateReportDTO.getReviewComment()
+        );
 
         this.reportRepository.update(reportToUpdate);
     }
