@@ -1,14 +1,10 @@
 package com.barreirasapp.dto.barrierScenario;
 
 import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.Law;
-import com.barreirasapp.model.entities.User;
-import com.barreirasapp.model.enums.BarrierType;
-import com.barreirasapp.utils.Validator;
+import com.barreirasapp.entities.enums.BarrierType;
 import jakarta.servlet.http.Part;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UpdateBarrierScenarioDTO {

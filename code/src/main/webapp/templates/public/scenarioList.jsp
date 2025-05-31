@@ -118,7 +118,7 @@
         </div>
 
         <!-- Lista de Cenários Educativos -->
-        <div class="space-y-6 flex flex-wrap gap-4">
+        <div class="space-y-6 flex flex-wrap ">
           <c:choose>
             <c:when test="${not empty scenarioList}">
               <c:forEach items="${scenarioList}" var="post">
@@ -126,7 +126,7 @@
                     <%-- Imagem do cenário (placeholder) - Aumentada a altura para h-56 ou h-64 --%>
 
                       <c:if test="${not empty post.imageCoverPath}">
-                        <img src="/uploads/report/${post.imageCoverPath}/" alt="Imagem do Cenário Educativo ${post.title}" class="w-full  h-64 object-cover object-center rounded-t-xl">
+                        <img src="${pageContext.request.contextPath}/uploads/report/${post.imageCoverPath}/" alt="Imagem do Cenário Educativo ${post.title}" class="w-full  h-64 object-cover object-center rounded-t-xl">
                       </c:if>
 
                       <c:if test="${empty post.imageCoverPath}">

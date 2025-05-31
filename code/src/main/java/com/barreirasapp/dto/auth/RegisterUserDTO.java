@@ -1,8 +1,8 @@
 package com.barreirasapp.dto.auth;
 
 import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.valueobjects.Email;
-import com.barreirasapp.model.enums.Gender;
+import com.barreirasapp.entities.valueobjects.Email;
+import com.barreirasapp.entities.enums.Gender;
 import com.barreirasapp.utils.Validator;
 
 import java.time.LocalDate;

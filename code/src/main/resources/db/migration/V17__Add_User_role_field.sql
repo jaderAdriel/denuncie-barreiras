@@ -1,0 +1,2 @@
+ALTER TABLE User
+    ADD COLUMN role VARCHAR(20) default 'COMMON';

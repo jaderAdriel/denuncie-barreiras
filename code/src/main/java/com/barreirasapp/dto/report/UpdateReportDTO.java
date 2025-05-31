@@ -1,14 +1,7 @@
 package com.barreirasapp.dto.report;
 
-import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.Moderator;
-import com.barreirasapp.model.entities.User;
-import com.barreirasapp.model.enums.EnvironmentType;
-import com.barreirasapp.utils.Validator;
+import com.barreirasapp.entities.Moderator;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 

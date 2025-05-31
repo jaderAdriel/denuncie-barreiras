@@ -1,14 +1,12 @@
 package com.barreirasapp.dto.law;
 
 import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.User;
 import com.barreirasapp.utils.Validator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class RegisterLawDTO {
     private String code;

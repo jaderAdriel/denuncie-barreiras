@@ -1,8 +1,8 @@
 package com.barreirasapp.dto.barrierScenario;
 
 import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.User;
-import com.barreirasapp.model.enums.BarrierType;
+import com.barreirasapp.entities.User;
+import com.barreirasapp.entities.enums.BarrierType;
 import com.barreirasapp.utils.Validator;
 import jakarta.servlet.http.Part;
 

@@ -3,7 +3,7 @@ package com.barreirasapp.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValidationError extends Exception {
+public class ValidationError extends RuntimeException {
     Map<String, String> errors = new HashMap<>();
     public ValidationError(String message, Map<String, String> errors) {
         super(message);

@@ -1,7 +1,7 @@
 package com.barreirasapp.dto.auth;
 
 import com.barreirasapp.exceptions.ValidationError;
-import com.barreirasapp.model.entities.valueobjects.Email;
+import com.barreirasapp.entities.valueobjects.Email;
 import com.barreirasapp.utils.Validator;
 
 import java.util.HashMap;

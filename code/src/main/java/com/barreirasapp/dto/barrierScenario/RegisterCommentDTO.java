@@ -1,7 +1,6 @@
 package com.barreirasapp.dto.barrierScenario;
 
-import com.barreirasapp.model.entities.BarrierScenario;
-import com.barreirasapp.model.entities.User;
+import com.barreirasapp.entities.User;
 
 public class RegisterCommentDTO {
     private final String content;

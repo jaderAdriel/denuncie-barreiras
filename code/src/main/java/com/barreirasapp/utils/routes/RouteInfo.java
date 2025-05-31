@@ -1,6 +1,6 @@
 package com.barreirasapp.utils.routes;
 
-import com.barreirasapp.annotation.HttpMethod;
+import com.barreirasapp.infra.annotation.HttpMethod;
 
 import java.lang.reflect.Method;
 import java.util.List;

@@ -61,7 +61,7 @@
 
         <c:if test="${ not empty post.imageCoverPath}">
           <div class="w-full flex justify-center  py-8 ">
-            <img class="h-auto max-w-lg rounded-lg  py-8 "  src="/uploads/report/${post.imageCoverPath}" alt="image description">
+            <img class="h-auto max-w-lg rounded-lg  py-8 "  src="${pageContext.request.contextPath}/uploads/report/${post.imageCoverPath}" alt="image description">
           </div>
         </c:if>
         <!-- Metainformações -->
