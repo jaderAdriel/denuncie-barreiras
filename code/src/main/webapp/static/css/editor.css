@@ -197,8 +197,7 @@ html.markdown-content, #post-content {
 .CodeMirror {
     font-size: 16px;
     line-height: 1.6;
-    max-height: 400px !important;
-    overflow-y: auto;
+    overflow-y: hidden !important;
     font-family: monospace;
 }
 
