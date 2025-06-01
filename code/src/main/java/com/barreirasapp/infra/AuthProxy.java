@@ -43,20 +43,17 @@ public class AuthProxy {
             return;
         }
 
-        System.out.println("usuário está autenticado ? " + isUserAuthenticated);
         Optional<User> userOptional = authService.getUserFromSession(sessionId);
 
         req.setAttribute("isAuthenticated", userOptional.isPresent());
         userOptional.ifPresent((user) -> req.setAttribute("user", user));
-
-        userOptional.ifPresent((user -> System.out.println("Usuário está autenticado")));
 
         HasRole roleAnnotation = method.getAnnotation(HasRole.class);
         if (method.isAnnotationPresent(HasRole.class) && roleAnnotation != null) {
             UserRole roleNeeded = roleAnnotation.value();
             User user = userOptional.orElseThrow();
 
-            if (roleNeeded != user.getUserRole()) {
+            if (roleNeeded != user.getRole()) {
                 resp.sendRedirect("/accounts/login/?next=" + req.getRequestURI());
                 return;
             }

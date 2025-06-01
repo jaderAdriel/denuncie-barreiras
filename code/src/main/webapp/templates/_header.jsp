@@ -9,8 +9,8 @@
         <div class="account-wrapper">
             <img src="static/images/profile-placeholder.png" alt="">
             <div class="account-info">
-                <span class="account-name">${ cookie.username.value }</span>
-                <span class="account-role">Admin</span>
+                <span class="account-name">${ user.name }</span>
+                <span class="account-role">${ user.role} </span>
             </div>
         </div>
     </header>

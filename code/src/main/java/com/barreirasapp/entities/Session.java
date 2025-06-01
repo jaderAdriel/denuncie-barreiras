@@ -19,7 +19,7 @@ public class Session {
     }
 
     private UserRole getUserRole() {
-        return user.getUserRole();
+        return user.getRole();
     }
 
     public User getUser() {

@@ -13,7 +13,7 @@ public class User {
     private LocalDate birthDate;
     private Gender gender;
     private String password;
-    private UserRole userRole;
+    private UserRole role;
 
     public User(String name, Email email, LocalDate birthDate, Gender gender, String password) {
         this.name = name;
@@ -36,14 +36,14 @@ public class User {
 
     }
 
-    public User(Integer id, String name, Email email, LocalDate birthDate, Gender gender, String password, UserRole userRole) {
+    public User(Integer id, String name, Email email, LocalDate birthDate, Gender gender, String password, UserRole role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.birthDate = birthDate;
         this.gender = gender;
         this.password = password;
-        this.userRole = userRole;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -82,7 +82,7 @@ public class User {
         return this.password.equals(password);
     }
 
-    public UserRole getUserRole() {
-        return userRole;
+    public UserRole getRole() {
+        return role;
     }
 }

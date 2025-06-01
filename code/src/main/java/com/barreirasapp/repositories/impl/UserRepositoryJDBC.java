@@ -35,7 +35,7 @@ public class UserRepositoryJDBC implements UserRepository {
 
             LocalDate birthDate = user.getBirthDate();
             java.sql.Date sqlDate = java.sql.Date.valueOf(birthDate);
-            UserRole userRole = user.getUserRole() != null ? user.getUserRole() : UserRole.COMMON;
+            UserRole userRole = user.getRole() != null ? user.getRole() : UserRole.COMMON;
 
             st.setString(1, user.getName());
             st.setString(2, user.getEmail().value());
