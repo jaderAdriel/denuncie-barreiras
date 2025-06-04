@@ -1,7 +1,5 @@
 @startuml
-' https://plantuml.com/class-diagram
-
-skinparam Dpi 150
+skinparam Dpi 70
 skinparam shadowing true
 skinparam Nodesep 100
 skinparam Ranksep 100
@@ -11,30 +9,42 @@ skinparam classArrowColor #555555
 skinparam noteBackgroundColor #FFF9C4
 skinparam noteBorderColor #E0E0E0
 skinparam groupInheritance 1
-
 skinparam defaultFontName "Arial"
 skinparam defaultFontSize 14
-'skinparam linetype ortho
 
 left to right direction
 
-package "Users"  <<Rectangle>> {
-
+package "Users" <<Rectangle>> {
     class User {
-        - id : Long
+        - id : Integer
         - name : String
         - email : String
         - birthDate : LocalDate
         - gender : GenderEnum
         - password : String
-        - username : String
+
         + authenticate()
         + changePassword()
         + reportIncident()
+
+        + getId() : Integer
+        + setName() : String
+        + getName() : String
+        + getEmail() : String
+        + getBirthDate() : LocalDate
+        + setBirthDate(birthDate : LocalDate) : void
+        + getGender() : GenderEnum
+        + setGender(gender : GenderEnum) : void
+        + getPassword() : String
+        + getUsername() : String
     }
 
     class Moderator {
         - phone : String
+
+        + changePassword()
+        + getPhone() : String
+        + setPhone(phone : String) : void
     }
 
     class Address {
@@ -42,6 +52,15 @@ package "Users"  <<Rectangle>> {
         - state : String
         - street : String
         - zipCode : String
+
+        + getCity() : String
+        + setCity(city : String) : void
+        + getState() : String
+        + setState(state : String) : void
+        + getStreet() : String
+        + setStreet(street : String) : void
+        + getZipCode() : String
+        + setZipCode(zipCode : String) : void
     }
 
     note right of User
@@ -49,27 +68,49 @@ package "Users"  <<Rectangle>> {
         authenticate, report incidents,
         and participate in discussions.
     end note
-
-
 }
 
-package "Social"  <<Rectangle>> {
+package "Social" <<Rectangle>> {
     class BarrierScenario {
+        - id : Integer
         - type : AttitudinalBarrierType
         - author : Moderator
-        - content: Text
-        - title: String
-        - creationDate: LocalDate
+        - content : Text
+        - title : String
+        - creationDate : LocalDate
         - likes : List<User>
         - comments : List<Comment>
-        + addComment
+
+        + addComment()
+        + addLiker(User : user)
+        + getId() : Integer
+        + setId(id : Integer) : void
+        + getType() : AttitudinalBarrierType
+        + setType(type : AttitudinalBarrierType) : void
+        + getAuthor() : Moderator
+        + setAuthor(author : Moderator) : void
+        + getContent() : Text
+        + setContent(content : Text) : void
+        + getTitle() : String
+        + setTitle(title : String) : void
+        + getCreationDate() : LocalDate
+        + setCreationDate(date : LocalDate) : void
     }
 
     class Comment {
+        - id : Integer
         - dateTime : DateTime
         - content : Text
-        - parentComment : Comment
         - author : User
+
+        + getId() : Integer
+        + setId(id : Integer) : void
+        + getDateTime() : DateTime
+        + setDateTime(dateTime : DateTime) : void
+        + getContent() : Text
+        + setContent(content : Text) : void
+        + getAuthor() : User
+        + setAuthor(author : User) : void
     }
 
     note right of BarrierScenario
@@ -86,9 +127,20 @@ package "Social"  <<Rectangle>> {
 class Law {
     - code : String
     - date: String
-    - link : URL
+    - link : String
     - title: String
     - description: Text
+
+    + getCode() : String
+    + setCode(code : String) : void
+    + getDate() : String
+    + setDate(date : String) : void
+    + getLink() : String
+    + setLink(link : String) : void
+    + getTitle() : String
+    + setTitle(title : String) : void
+    + getDescription() : Text
+    + setDescription(description : Text) : void
 }
 
 note right of Law
@@ -96,8 +148,9 @@ note right of Law
     attitudinal barriers and rights.
 end note
 
-package "Reports"  <<Rectangle>> {
+package "Reports" <<Rectangle>> {
     class Report {
+        - id : Integer
         - type : AttitudinalBarrierType
         - environment: EnvironmentTypeEnum
         - incidentLocation : Address
@@ -105,21 +158,39 @@ package "Reports"  <<Rectangle>> {
         - anonymous : Boolean
         - incidentDetails: Text
         - relatedScenario : BarrierScenario
-        - reporter : User
+        - reporter : Optional<User>
+
+        + getId() : Integer
+        + getType() : AttitudinalBarrierType
+        + setType(type : AttitudinalBarrierType) : void
+        + getEnvironment() : EnvironmentTypeEnum
+        + setEnvironment(env : EnvironmentTypeEnum) : void
+        + getIncidentLocation() : Address
+        + setIncidentLocation(loc : Address) : void
+        + isAnonymous() : Boolean
+        + setAnonymous(anonymous : Boolean) : void
+        + getIncidentDetails() : Text
+        + setIncidentDetails(details : Text) : void
+        + getRelatedScenario() : BarrierScenario
+        + setRelatedScenario(scenario : BarrierScenario) : void
+        + getReporter() : User
     }
 
-    class Attachment {
-        - fileName : String
-        - fileType : String
-        - filePath : String
-        - uploadDate : LocalDateTime
-    }
+
+
 
     class ReportReview {
         - description : String
         - date : LocalDate
         - finalStatus : ReportStatus
         - author : Moderator
+
+        + getDescription() : String
+        + setDescription(desc : String) : void
+        + getDate() : LocalDate
+        + getFinalStatus() : ReportStatus
+        + setFinalStatus(status : ReportStatus) : void
+        + getAuthor() : Moderator
     }
 
     note right of Report
@@ -127,10 +198,7 @@ package "Reports"  <<Rectangle>> {
         about a specific barrier incident.
     end note
 
-    note right of Attachment
-        Files (e.g. images, documents) related
-        to reports or scenarios for evidence.
-    end note
+
 
     note left of ReportReview
         Moderator's evaluation and
@@ -146,7 +214,6 @@ User "1" -- "n" Report : "submits"
 ReportReview "n" -- "1" Moderator : "written by"
 ReportReview "n" -* "1" Report : "analyzes"
 
-Comment "1" <-- "n" Comment : "replies to"
 Comment "n" -- "1" User : "authored by"
 
 Moderator *- Address : "has address"
@@ -155,8 +222,5 @@ Moderator "1" -- "0..*" BarrierScenario : "creates"
 Report "*" -- "1" BarrierScenario : "describes"
 BarrierScenario "1" *-- "0..*" Comment : "has comments"
 Law "0..*" -- "0..*" BarrierScenario : "related to"
-
-Report *-- "0..*" Attachment : "includes"
-BarrierScenario *-- "0..*" Attachment : "includes"
 
 @enduml

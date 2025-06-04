@@ -21,6 +21,9 @@ public class ReportReview {
     public Moderator getAuthor() {
         return author;
     }
+    public Integer getAuthorId() {
+        return author.getId();
+    }
 
     public void setAuthor(Moderator author) {
         this.author = author;
@@ -34,7 +37,7 @@ public class ReportReview {
         this.createAt = createAt;
     }
 
-    public Boolean getValid() {
+    public Boolean getIsValid() {
         return isValid;
     }
 
@@ -50,6 +53,9 @@ public class ReportReview {
         this.comment = comment;
     }
 
+    public String getCreatAtFormated() {
+        return this.createAt.toString();
+    }
 }
 
 

@@ -9,8 +9,8 @@ public class Moderator extends User {
     private Address address;
     private String cellphone;
 
-    public Moderator(String password, Gender gender, LocalDate birthDate, Email email, String name, String cellphone) {
-        super(password, email, birthDate, gender, name);
+    public Moderator(Integer id, String password, Gender gender, LocalDate birthDate, Email email, String name, String cellphone) {
+        super(id, password, gender, birthDate, email, name);
         this.cellphone = cellphone;
     }
 

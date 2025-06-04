@@ -32,7 +32,7 @@ public class ReportRepositoryJDBC implements ReportRepository {
                           VALUES (?, ?, ?, ?, ?, ?);
                       """;
         try (Connection conn = DataSource.getConnection();
-            PreparedStatement st = conn.prepareStatement(sql);
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
             String barrierType = report.getType() == null ? null : report.getType().toString();
             String ambient = report.getAmbient() == null ? null : report.getAmbient().toString();
@@ -53,26 +53,7 @@ public class ReportRepositoryJDBC implements ReportRepository {
 
     @Override
     public void update(Report report) {
-        String sql = """
-                          UPDATE Report
-                          SET review_author_fk = ?, review_comment = ?, review_is_valid = ?, review_create_at = ?
-                          WHERE id = ?;
-                     """;
 
-        try (Connection conn = DataSource.getConnection();
-            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-        ) {
-
-            st.setInt(1, report.getReviewAuthorId());
-            st.setString(2, report.getReviewComment());
-            st.setBoolean(3, report.getReviewIsValid());
-            st.setTimestamp(4, Timestamp.valueOf(report.getReviewCreationDate()));
-            st.setInt(5, report.getId());
-            st.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        }
     }
 
     @Override
@@ -94,7 +75,14 @@ public class ReportRepositoryJDBC implements ReportRepository {
     @Override
     public Optional<Report> findById(Integer id) {
         String sql = """
-                        SELECT * FROM Report WHERE id = ?;
+                        SELECT Report.*,
+                               Review.author_fk as review_author_fk,
+                               Review.comment as review_comment,
+                               Review.is_valid as review_is_valid,
+                               Review.create_at as review_create_at
+                        FROM Report
+                        LEFT JOIN Review on Report.id = Review.report_fk
+                         WHERE id = ?;
                      """;
 
         try (Connection conn = DataSource.getConnection();
@@ -115,9 +103,36 @@ public class ReportRepositoryJDBC implements ReportRepository {
     }
 
     @Override
+    public void insertReview(Report report) {
+        String sql = """
+                          INSERT INTO Review(author_fk, comment, is_valid, report_fk)
+                          VALUES (?, ?, ?, ?);
+                      """;
+        try (Connection conn = DataSource.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql);
+        ) {
+            st.setInt(1, report.getReviewAuthorId());
+            QueryExecutor.setStringOrNull(st, 2, report.getReviewComment());
+            st.setBoolean(3, report.getReviewIsValid());
+            st.setInt(4, report.getId());
+
+            QueryExecutor.executeUpdate(st, conn);
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    @Override
     public List<Report> findAllByReporterId(Integer reporterFk) {
         String sql = """
-                        SELECT * FROM Report WHERE reporter_fk = ?;
+                        SELECT Report.*,
+                               Review.author_fk as review_author_fk,
+                               Review.comment as review_comment,
+                               Review.is_valid as review_is_valid,
+                               Review.create_at as review_create_at
+                        FROM Report
+                        LEFT JOIN Review on Report.id = Review.report_fk
+                        WHERE reporter_fk = ?
                      """;
 
         try (Connection conn = DataSource.getConnection();
@@ -138,21 +153,88 @@ public class ReportRepositoryJDBC implements ReportRepository {
     }
 
     @Override
+    public List<Report> findAllByBarrierScenario(Integer barrierScenario) {
+        String sql = """
+                        SELECT Report.*,
+                               Review.author_fk as review_author_fk,
+                               Review.comment as review_comment,
+                               Review.is_valid as review_is_valid,
+                               Review.create_at as review_create_at
+                        FROM Report
+                        LEFT JOIN Review on Report.id = Review.report_fk
+                        WHERE related_scenario_fk = ?
+                     """;
+
+        try (Connection conn = DataSource.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setInt(1, barrierScenario);
+            try (ResultSet rs = st.executeQuery()) {
+                List<Report> reportList = new ArrayList<>();
+                while (rs.next()) {
+                    reportList.add(instantiateReport(rs));
+                }
+                return reportList;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    @Override
     public List<Report> findAll() {
-        return getReports("");
+        return getReports(" ORDER BY Review.is_valid ASC");
     }
 
     @Override
     public List<Report> findAllValid() {
-        String condition = "WHERE review_is_valid = TRUE";
+        String condition = " WHERE Review.is_valid = 1 ORDER BY Report.creation_date ASC";
         return getReports(condition);
     }
 
+    @Override
+    public List<Report> findFromParams(String[] barrierTypes, String word) {
+        String wordQuery = (word != null && !word.isEmpty()) ? "Report.event_detailing LIKE '%" + word + "%'" : "";
+        String query = " WHERE Review.is_valid = 1 " + wordQuery;
+
+
+        if (barrierTypes.length == 0) {
+            System.out.println(query);
+            return getReports(query + " ORDER BY Report.creation_date ASC");
+        }
+
+
+        StringBuilder types = new StringBuilder();
+
+        types.append("Report.type in [ ");
+
+        for (int i = 0; i < barrierTypes.length - 1; i++) {
+            types.append(barrierTypes[i]).append(", ");
+        }
+
+        types.append(barrierTypes[barrierTypes.length-1]).append(" ]");
+
+        query += types + " ORDER BY Report.creation_date ASC";
+
+        System.out.println(query);
+
+        return getReports(query);
+    }
+
     private List<Report> getReports(String condition) {
-        String sql = "SELECT * FROM Report ";
+        String sql = """
+                        SELECT Report.*,
+                               Review.author_fk as review_author_fk,
+                               Review.comment as review_comment,
+                               Review.is_valid as review_is_valid,
+                               Review.create_at as review_create_at
+                        FROM Report
+                        LEFT JOIN Review on Report.id = Review.report_fk
+                     """;
 
         if (!condition.isEmpty())
-            sql += "WHERE " + condition;
+            sql += condition;
 
         try (Connection conn = DataSource.getConnection();
              PreparedStatement st = conn.prepareStatement(sql)
@@ -171,12 +253,25 @@ public class ReportRepositoryJDBC implements ReportRepository {
 
     private Report instantiateReport(ResultSet rs) throws SQLException {
         Report report = new Report();
+
         report.setId(rs.getInt("id"));
 
         String typeValue = rs.getString("type");
         if(!(typeValue.isEmpty() || typeValue.equals("null"))) {
             report.setType(BarrierType.valueOf(typeValue));
         }
+
+        String hasReview = rs.getString("review_create_at");
+
+        if (hasReview != null && !hasReview.isEmpty()) {
+            Boolean reportIsValid = rs.getBoolean("review_is_valid");
+            String reviewComment = rs.getString("review_comment");
+            Optional<Moderator> reviewer = userRepository.findModeratorById(rs.getInt("review_author_fk")) ;
+            LocalDateTime reviewCreatAt = rs.getTimestamp("review_create_at").toLocalDateTime();
+
+            reviewer.ifPresent((user) -> report.setReportReview(user, reviewCreatAt, reportIsValid, reviewComment));
+        }
+
 
         report.setAmbient(EnvironmentType.valueOf(rs.getString("ambient")));
         report.setAnonymousReport(rs.getBoolean("anonymous_report"));

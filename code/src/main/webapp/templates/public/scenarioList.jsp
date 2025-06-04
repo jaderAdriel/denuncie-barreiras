@@ -118,7 +118,7 @@
         </div>
 
         <!-- Lista de Cenários Educativos -->
-        <div class="space-y-6 flex flex-wrap ">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <c:choose>
             <c:when test="${not empty scenarioList}">
               <c:forEach items="${scenarioList}" var="post">
@@ -137,7 +137,7 @@
                   <div class="p-5 flex flex-col flex-grow">
                     <div class="flex justify-between items-start mb-2">
                       <h3 class="text-lg font-semibold text-gray-800">
-                        <a href="${pageContext.request.contextPath}/scenario/${post.id}/" class="hover:text-blue-600 transition duration-200 ease-in-out">${post.title}</a>
+                        <a href="${pageContext.request.contextPath}/public/scenario/${post.id}/" class="hover:text-blue-600 transition duration-200 ease-in-out">${post.title}</a>
                       </h3>
                       <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">${post.barrierType.getTranslation()}</span>
                     </div>
@@ -150,7 +150,7 @@
 
                       <%-- O link "Ler mais" agora está fixado na parte inferior do card --%>
                     <div class="mt-auto"> <%-- Adiciona flex-grow ao container acima para empurrar este para baixo --%>
-                      <a href="${pageContext.request.contextPath}/scenario/${post.id}/" class="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center transition duration-200 ease-in-out">
+                      <a href="${pageContext.request.contextPath}/public/scenario/${post.id}/" class="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center transition duration-200 ease-in-out">
                         Ler mais
                         <span class="material-symbols-outlined ml-1 text-base">arrow_forward</span>
                       </a>

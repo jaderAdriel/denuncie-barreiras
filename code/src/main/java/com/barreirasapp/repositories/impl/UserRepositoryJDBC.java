@@ -229,6 +229,7 @@ public class UserRepositoryJDBC implements UserRepository {
         String cellphone = rs.getString("cellphone");
 
         return new Moderator(
+                user.getId(),
                 user.getPassword(),
                 user.getGender(),
                 user.getBirthDate(),

@@ -4,10 +4,12 @@
     <div class="sidebar-wrapper">
         <aside class="sidebar">
             <div class="header">
-                <div class="logo">
-                    <img src="static/images/logo-barreiras 2.png" alt="">
-                    <img src="static/images/logo.png" alt="">
-                </div>
+                <a href="${pageContext.request.contextPath}/">
+                    <div class="logo">
+                        <img src="static/images/logo-barreiras 2.png" alt="">
+                        <img src="static/images/logo.png" alt="">
+                    </div>
+                </a>
                 <button class="menu-button" aria-label="Abrir menu de navegação">
                     <span class="material-symbols-outlined icon" aria-hidden="true">menu</span>
                 </button>

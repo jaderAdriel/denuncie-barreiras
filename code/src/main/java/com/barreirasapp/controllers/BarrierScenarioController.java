@@ -1,5 +1,7 @@
 package com.barreirasapp.controllers;
 
+import com.barreirasapp.entities.enums.UserRole;
+import com.barreirasapp.infra.annotation.HasRole;
 import com.barreirasapp.infra.annotation.HttpMethod;
 import com.barreirasapp.infra.annotation.LoginRequired;
 import com.barreirasapp.infra.annotation.Route;
@@ -38,83 +40,8 @@ public class BarrierScenarioController extends Controller {
         this.lawService = super.getServiceFactory().getLawService();
     }
 
-    @Route(value = "", method = HttpMethod.GET)
-    public void renderPublicList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/public/scenarioList.jsp");
-        req.setAttribute("barrierTypeOptions", BarrierType.values());
-        req.setAttribute("laws", lawService.listAll());
-
-        String[] barrierTypeParams = req.getParameterValues("barrierType");
-        String[] lawParams = req.getParameterValues("law");
-        String searchTerm = req.getParameter("searchTerm");
-
-        List<BarrierScenario> scenarioList = service.filterAndSearch(barrierTypeParams, lawParams, searchTerm);
-
-        req.setAttribute("barrierTypeOptions", BarrierType.values());
-        req.setAttribute("laws", lawService.listAll());
-        req.setAttribute("scenarioList", scenarioList);
-
-        dispatcher.forward(req, resp);
-    }
-
     @LoginRequired
-    @Route(value = "{barrierScenarioId}/comments/delete/{commentId}", method = HttpMethod.POST)
-    public void removeComment(HttpServletRequest req, HttpServletResponse resp) throws NoSuchElementException, ValidationError, IOException {
-        Integer barrierScenarioId = ParamsParser.parseInteger(req.getAttribute("barrierScenarioId").toString());
-        Integer id = ParamsParser.parseInteger(req.getAttribute("commentId").toString());
-
-        User user = (User) req.getAttribute("user");;
-
-        service.removeComment(user, barrierScenarioId, id);
-
-        resp.sendRedirect("/scenario/"+ barrierScenarioId + "/");
-    }
-
-    @LoginRequired
-    @Route(value = "{barrierScenarioId}/like/", method = HttpMethod.POST)
-    public void likeScenario(HttpServletRequest req, HttpServletResponse resp) throws NoSuchElementException, ValidationError, IOException {
-        Integer barrierScenarioId = ParamsParser.parseInteger(req.getAttribute("barrierScenarioId").toString());
-
-        User user = (User) req.getAttribute("user");;
-
-        service.toogleLike(user, barrierScenarioId);
-        resp.sendRedirect("/scenario/"+ barrierScenarioId + "/");
-    }
-
-    @LoginRequired
-    @Route(value = "{barrierScenarioId}/comments/create/", method = HttpMethod.POST)
-    public void addComment(HttpServletRequest req, HttpServletResponse resp) throws NoSuchElementException, ValidationError, IOException {
-        Integer id = ParamsParser.parseInteger(req.getAttribute("barrierScenarioId").toString());
-
-        String content = req.getParameter("comment-content");
-        User author = (User) req.getAttribute("user");;
-
-        RegisterCommentDTO commentDTO = new RegisterCommentDTO(content, author, id);
-
-        service.addComment(commentDTO);
-        resp.sendRedirect("/scenario/"+ id + "/");
-    }
-
-
-    @Route(value = "{id}/", method = HttpMethod.GET)
-    public void renderScenario(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/public/scenario.jsp");
-
-        Integer barrierScenarioId = ParamsParser.parseInteger(req.getAttribute("id").toString());
-        BarrierScenario post = service.findById(barrierScenarioId).orElseThrow();
-
-        User user = (User) req.getAttribute("user");
-        if (user != null) {
-            req.setAttribute("isLikedByUser", post.isLikedByUser(user.getId()));
-        }
-
-        req.setAttribute("post", post);
-        req.setAttribute("laws", lawService.listAll());
-
-        dispatcher.forward(req, resp);
-    }
-
-    @LoginRequired
+    @HasRole(UserRole.MODERATOR)
     @Route(value = "index/", method = HttpMethod.GET)
     public void renderList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/barrierScenario/index.jsp");
@@ -128,6 +55,7 @@ public class BarrierScenarioController extends Controller {
     }
 
     @LoginRequired
+    @HasRole(UserRole.MODERATOR)
     @Route(value = "create/", method = HttpMethod.GET_POST)
     public void createBarrierScenario(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ValidationError {
         req.setAttribute("action", "/scenario/create/");
@@ -175,10 +103,10 @@ public class BarrierScenarioController extends Controller {
     }
 
     @LoginRequired
+    @HasRole(UserRole.MODERATOR)
     @Route(value = "update/{barrierScenarioId}/", method = HttpMethod.GET_POST)
     public void updateBarrierScenario(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ValidationError {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/barrierScenario/form.jsp");
-        System.out.println("Entrou aqui controller update");
 
         int barrierScenarioId = ParamsParser.parseInteger((String) req.getAttribute("barrierScenarioId"));
 
@@ -219,6 +147,7 @@ public class BarrierScenarioController extends Controller {
     }
 
     @LoginRequired
+    @HasRole(UserRole.MODERATOR)
     @Route(value = "delete/{barrierScenarioId}/", method = HttpMethod.GET_POST)
     public void deleteBarrierScenario(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ValidationError {
         Integer barrierScenarioId = ParamsParser.parseInteger((String) req.getAttribute("barrierScenarioId"));

@@ -158,3 +158,88 @@ section#hero-section {
     }
     
 }
+
+
+.cta-container {
+    background-color: #ffffff; /* Fundo branco para o CTA */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    transition: transform 0.3s ease-in-out;
+}
+
+.cta-container:hover {
+    transform: translateY(-5px); /* Efeito suave ao passar o mouse */
+}
+
+/* Estilo para os números de estatísticas */
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+    gap: 20px; /* Espaço entre os itens */
+}
+
+.stat-item {
+    flex: 1; /* Permite que os itens cresçam e ocupem o espaço disponível */
+
+}
+
+.stat-number {
+    font-size: 3.8em; /* Tamanho grande para o número */
+    font-weight: 700; /* Negrito */
+    color: #007bff; /* Cor primária azul */
+    display: block; /* Garante que o número fique em sua própria linha */
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 1.2em;
+    color: #555;
+    display: block;
+    text-transform: uppercase; /* Texto da label em maiúsculas */
+    letter-spacing: 1px;
+}
+
+/* Estilo do botão de Chamada para Ação (CTA) */
+.cta-button {
+    display: inline-block; /* Para permitir padding e margem */
+    background-color: #28a745; /* Verde vibrante para o botão */
+    color: #ffffff;
+    padding: 15px 30px;
+    border-radius: 50px; /* Botão mais arredondado */
+    text-decoration: none; /* Remove sublinhado do link */
+    font-weight: 600;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2); /* Sombra para o botão */
+}
+
+.cta-button:hover {
+    background-color: #218838; /* Escurece o verde ao passar o mouse */
+    transform: translateY(-2px); /* Pequeno efeito de elevação */
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* Responsividade básica para telas menores */
+@media (max-width: 500px) {
+    .stat-number {
+        font-size: 3em; /* Reduz o tamanho do número em telas menores */
+    }
+
+
+
+    .cta-container {
+        padding: 30px 20px; /* Ajusta padding */
+    }
+
+    .cta-button {
+        font-size: 1em; /* Reduz tamanho da fonte do botão */
+        padding: 12px 25px;
+    }
+}

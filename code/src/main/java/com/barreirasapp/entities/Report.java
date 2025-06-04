@@ -16,7 +16,6 @@ public class Report {
     private BarrierScenario barrierScenario;
     private LocalDateTime creationDate;
     private ReportReview review;
-    private Boolean published;
 
     public Report() {
     }
@@ -39,18 +38,12 @@ public class Report {
         this.creationDate = creationDate;
     }
 
-    public void setReportReview(Moderator author,
-     LocalDateTime createAt,
-     Boolean isValid,
-     String comment) {
-        this.review = new ReportReview(author,
-        createAt,
-        isValid,
-        comment);
+    public void setReportReview(Moderator author, LocalDateTime createAt, Boolean isValid, String comment) {
+        this.review = new ReportReview(author, createAt, isValid, comment);
     }
 
     public int getReviewAuthorId() {
-        return this.review.getAuthor().getId();
+        return review.getAuthorId();
     }
 
     public String getReviewComment() {
@@ -58,7 +51,12 @@ public class Report {
     }
 
     public Boolean getReviewIsValid() {
-        return this.review.getValid();
+        return this.review.getIsValid();
+    }
+
+    public String getReviewStatus() {
+        if (review == null) return "Pendente";
+        return (review.getIsValid()) ? "Válido" : "Não válido";
     }
 
     public LocalDateTime getReviewCreationDate() {
@@ -139,14 +137,6 @@ public class Report {
             return null;
         }
         return barrierScenario.getId();
-    }
-
-    public Boolean getPublished() {
-        return published;
-    }
-
-    public void isPublished(Boolean published) {
-        this.published = published;
     }
 
     public ReportReview getReview() {

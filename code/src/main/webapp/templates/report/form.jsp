@@ -32,6 +32,7 @@
                 <div class="mt-2">
                     <select name="environment"
                             class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
+                       <option>Selecione uma opção</option>
                         <c:if test="${not empty environmentOptions}">
                             <c:forEach items="${environmentOptions}" var="environmentOption">
                                 <option value="${environmentOption.toString()}"
@@ -44,7 +45,7 @@
                             </c:forEach>
                         </c:if>
                     </select>
-                    >
+
                     <c:if test="${not empty environmentError}"><p class="text-red-500 text-sm mt-2">${environmentError}</p></c:if>
                 </div>
             </div>
@@ -54,6 +55,7 @@
                 <div class="mt-2">
                     <select name="barrierType"
                             class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
+                        <option>Selecione uma opção</option>
                         <c:if test="${not empty barrierTypeOptions}">
                             <c:forEach items="${barrierTypeOptions}" var="typeOption">
                                 <option value="${typeOption.toString()}"
@@ -66,7 +68,7 @@
                             </c:forEach>
                         </c:if>
                     </select>
-                    >
+
                     <c:if test="${not empty barrierTypeError}"><p class="text-red-500 text-sm mt-2">${barrierTypeError}</p></c:if>
                 </div>
             </div>

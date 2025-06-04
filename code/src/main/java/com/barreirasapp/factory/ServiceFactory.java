@@ -29,6 +29,6 @@ public class ServiceFactory {
     }
 
     public ReportService getReportService() {
-        return new ReportService(daoFactory.createReportDao(), this.getBarrierScenarioService());
+        return new ReportService(daoFactory.createReportDao(), this.getBarrierScenarioService(), daoFactory.createUserDao());
     }
 }

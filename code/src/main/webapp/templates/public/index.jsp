@@ -39,6 +39,22 @@
                     <p class="hero-description">
                         Denuncie comportamentos discriminatórios, explore cenários educativos e engaje-se por uma sociedade mais justa.
                     </p>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <a href="${pageContext.request.contextPath}/public/report/">
+                                <span class="stat-number">+ ${reports.size() - 1}</span> <!-- DENÚNCIAS - NÚMERO ESTATICO -->
+                                <span class="stat-label">Denúncias Feitas</span>
+                            </a>
+                        </div>
+                        <div class="stat-item">
+                            <a href="${pageContext.request.contextPath}/public/scenario/">
+                                <span class="stat-number">+ ${barrierScenarios.size() - 1}</span> <!-- CENÁRIOS EDUCATIVOS - NÚMERO ESTATICO -->
+                                <span class="stat-label">Cenários Educativos</span>
+                            </a>
+                        </div>
+                    </div>
+
                     <a href="report/create/" class="btn btn-primary">Faça uma denúncia</a>
                 </div>
 
@@ -48,6 +64,9 @@
                 </div>
         
             </section>
+
+
+
             <section class="section info">
                 <header class="section-header">
                     <h2 class="section-title">Conscientize-se com cenários educativos</h2>
