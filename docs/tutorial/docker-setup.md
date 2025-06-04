@@ -41,9 +41,6 @@ O `docker-compose.yml` define três serviços principais:
 - Exposta na porta `8000` do host (acessível via http://localhost:8000).
 - Recebe as variáveis de ambiente para se conectar ao banco de dados.
 
----
-
-Se quiser, posso também gerar um diagrama simples com esses serviços e como eles se conectam! Deseja isso?
 
 ## Pré-requisitos
 
