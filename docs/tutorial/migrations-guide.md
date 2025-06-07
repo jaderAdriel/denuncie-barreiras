@@ -59,7 +59,7 @@ Elas permitem que **o banco de dados evolua junto com a aplicação**, garantind
 
 ---
 
-Se quiser, posso complementar com **exemplos de boas práticas** ou um **modelo inicial de migration com criação de tabela e inserção de dados**. Deseja?
+
 
 Este projeto utiliza o [Flyway](https://flywaydb.org/) como ferramenta de versionamento de banco de dados. O Flyway aplica migrations automaticamente ao iniciar o ambiente via Docker Compose.
 
