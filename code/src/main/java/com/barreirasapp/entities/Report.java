@@ -16,6 +16,7 @@ public class Report {
     private BarrierScenario barrierScenario;
     private LocalDateTime creationDate;
     private ReportReview review;
+    private Entity entity;
 
     public Report() {
     }

@@ -33,7 +33,7 @@
             <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full">${reportList.size()} denúncias</span>
         </div>
 
-        <a href="/scenario/create/" class="flex items-center justify-center px-5 py-2 text-sm text-white transition-colors duration-200 bg-blue-500 rounded-lg gap-x-2 hover:bg-blue-600 w-full md:w-auto">
+        <a href="/report/create/" class="flex items-center justify-center px-5 py-2 text-sm text-white transition-colors duration-200 bg-blue-500 rounded-lg gap-x-2 hover:bg-blue-600 w-full md:w-auto">
             <span class="material-symbols-outlined">add</span>
             <span>Denunciar</span>
         </a>
