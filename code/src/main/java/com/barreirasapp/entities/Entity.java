@@ -21,6 +21,14 @@ public class Entity {
         this.type = type;
     }
 
+    public Entity(String name, String cnpj,EntityType type, String phone) {
+        this.cnpj = cnpj;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.type = type;
+    }
+
     public Entity() {
     }
 

@@ -17,6 +17,10 @@ public class DaoFactory {
         return new ReportRepositoryJDBC(this.createUserDao());
     }
 
+    public EntityRepository createEntityDao() {
+        return new EntityRepositoryJDBC(this.createUserDao());
+    }
+
     public SessionRepository createSessionDao() {
         return new SessionRepositoryJDBC(this.createUserDao());
     }

@@ -21,7 +21,6 @@ public class EntityRepositoryJDBC implements EntityRepository {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public Integer insert(Entity entity) {
         String sql = """
@@ -101,6 +100,30 @@ public class EntityRepositoryJDBC implements EntityRepository {
         return Optional.empty();
     }
 
+    public Optional<Entity> findByType(EntityType type) {
+        String sql = """
+                        SELECT Entity.*,
+                        FROM Entity
+                         WHERE type = ?;
+                     """;
+
+        try (Connection conn = DataSource.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setString(1, type.toString());
+
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(instantiateReport(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
     @Override
     public List<Entity> findAll() {
         return getEntities(" ORDER BY cnpj ASC");
@@ -145,8 +168,6 @@ public class EntityRepositoryJDBC implements EntityRepository {
                 rs.getString("state"),
                 rs.getString("postal_code")
         );
-
-
 
         return entity;
     }

@@ -1,9 +1,6 @@
 package com.barreirasapp.factory;
 
-import com.barreirasapp.services.AuthService;
-import com.barreirasapp.services.BarrierScenarioService;
-import com.barreirasapp.services.LawService;
-import com.barreirasapp.services.ReportService;
+import com.barreirasapp.services.*;
 
 public class ServiceFactory {
     private final DaoFactory daoFactory;
@@ -30,5 +27,9 @@ public class ServiceFactory {
 
     public ReportService getReportService() {
         return new ReportService(daoFactory.createReportDao(), this.getBarrierScenarioService(), daoFactory.createUserDao());
+    }
+
+    public EntityService getEntityService() {
+        return new EntityService(daoFactory.createEntityDao());
     }
 }
