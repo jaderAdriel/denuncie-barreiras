@@ -167,11 +167,9 @@ body > div:first-child{
 /* Conteúdo principal */
 main {
     flex: 1;
-    padding: 1rem;
     min-height: fit-content;
     height: fit-content;
     background-color: #F5F5F5;
-
 
     @media screen and (max-width: 1000px) {
         &.overlay{

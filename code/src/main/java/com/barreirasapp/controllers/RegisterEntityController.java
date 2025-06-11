@@ -29,11 +29,13 @@ import java.util.List;
 @WebServlet("/entity/*")
 public class RegisterEntityController extends Controller {
     private EntityService service;
+    private ReportService reportService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         this.service = this.getServiceFactory().getEntityService();
+        this.reportService = this.getServiceFactory().getReportService();
     }
 
     @LoginRequired
@@ -87,13 +89,29 @@ public class RegisterEntityController extends Controller {
     @LoginRequired
     @Route(value = "index/", method = HttpMethod.GET)
     public void renderList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/entity/index.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/entity/index.jsp");
 
         List<Entity> entityList = new ArrayList<>();
 
         entityList = this.service.listAll();
 
-        req.setAttribute("reportList", entityList);
+        req.setAttribute("entities", entityList);
+
+        dispatcher.forward(req, resp);
+    }
+
+
+    @LoginRequired
+    @Route(value = "{cnpj}", method = HttpMethod.GET)
+    public void renderDetail(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/public/entity.jsp");
+        String cnpj = req.getAttribute("cnpj").toString();
+        Entity entity = this.service.findByCnpj(cnpj).orElseThrow();
+
+        List<Report> reports = this.reportService.findAllByEntity(cnpj);
+
+        req.setAttribute("entity", entity);
+        req.setAttribute("reports", reports);
 
         dispatcher.forward(req, resp);
     }

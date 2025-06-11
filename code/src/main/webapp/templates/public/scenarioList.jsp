@@ -43,51 +43,51 @@
 
       <!-- Sidebar de Filtros -->
       <aside class="w-full md:w-64 flex-shrink-0">
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-          <h2 class="text-lg font-semibold mb-4 text-gray-800">Filtrar por</h2>
+<%--        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">--%>
+<%--          <h2 class="text-lg font-semibold mb-4 text-gray-800">Filtrar por</h2>--%>
 
-          <!-- Filtro por Tipo de Barreira -->
-          <div class="mb-5">
-            <h3 class="text-sm font-medium mb-2 text-gray-600">Tipo de Barreira</h3>
-            <ul class="space-y-2">
-              <c:forEach items="${barrierTypeOptions}" var="type">
-                <li>
-                  <label class="flex items-center text-sm text-gray-700 hover:text-blue-700 cursor-pointer transition">
-                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 mr-2" name="barrierType" value="${type}"
-                    <c:if test="${paramValues.barrierType != null}">
-                    <c:forEach items="${paramValues.barrierType}" var="selectedType">
-                           <c:if test="${selectedType == type.toString()}">checked</c:if>
-                    </c:forEach>
-                    </c:if>
-                    >
-                    <span>${type.getTranslation()}</span>
-                  </label>
-                </li>
-              </c:forEach>
-            </ul>
-          </div>
+<%--          <!-- Filtro por Tipo de Barreira -->--%>
+<%--          <div class="mb-5">--%>
+<%--            <h3 class="text-sm font-medium mb-2 text-gray-600">Tipo de Barreira</h3>--%>
+<%--            <ul class="space-y-2">--%>
+<%--              <c:forEach items="${barrierTypeOptions}" var="type">--%>
+<%--                <li>--%>
+<%--                  <label class="flex items-center text-sm text-gray-700 hover:text-blue-700 cursor-pointer transition">--%>
+<%--                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 mr-2" name="barrierType" value="${type}"--%>
+<%--                    <c:if test="${paramValues.barrierType != null}">--%>
+<%--                    <c:forEach items="${paramValues.barrierType}" var="selectedType">--%>
+<%--                           <c:if test="${selectedType == type.toString()}">checked</c:if>--%>
+<%--                    </c:forEach>--%>
+<%--                    </c:if>--%>
+<%--                    >--%>
+<%--                    <span>${type.getTranslation()}</span>--%>
+<%--                  </label>--%>
+<%--                </li>--%>
+<%--              </c:forEach>--%>
+<%--            </ul>--%>
+<%--          </div>--%>
 
-          <!-- Filtro por Legislação Relacionada -->
-          <div>
-            <h3 class="text-sm font-medium mb-2 text-gray-600">Legislação Relacionada</h3>
-            <ul class="space-y-2">
-              <c:forEach items="${laws}" var="law">
-                <li>
-                  <label class="flex items-center text-sm text-gray-700 hover:text-blue-700 cursor-pointer transition">
-                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 mr-2" name="law" value="${law.code}"
-                    <c:if test="${paramValues.law != null}">
-                    <c:forEach items="${paramValues.law}" var="selectedLawCode">
-                           <c:if test="${selectedLawCode == law.code}">checked</c:if>
-                    </c:forEach>
-                    </c:if>
-                    >
-                    <span>${law.code}</span>
-                  </label>
-                </li>
-              </c:forEach>
-            </ul>
-          </div>
-        </div>
+<%--          <!-- Filtro por Legislação Relacionada -->--%>
+<%--          <div>--%>
+<%--            <h3 class="text-sm font-medium mb-2 text-gray-600">Legislação Relacionada</h3>--%>
+<%--            <ul class="space-y-2">--%>
+<%--              <c:forEach items="${laws}" var="law">--%>
+<%--                <li>--%>
+<%--                  <label class="flex items-center text-sm text-gray-700 hover:text-blue-700 cursor-pointer transition">--%>
+<%--                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 mr-2" name="law" value="${law.code}"--%>
+<%--                    <c:if test="${paramValues.law != null}">--%>
+<%--                    <c:forEach items="${paramValues.law}" var="selectedLawCode">--%>
+<%--                           <c:if test="${selectedLawCode == law.code}">checked</c:if>--%>
+<%--                    </c:forEach>--%>
+<%--                    </c:if>--%>
+<%--                    >--%>
+<%--                    <span>${law.code}</span>--%>
+<%--                  </label>--%>
+<%--                </li>--%>
+<%--              </c:forEach>--%>
+<%--            </ul>--%>
+<%--          </div>--%>
+<%--        </div>--%>
 
         <div class="mt-5 space-y-3">
           <button type="submit" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 ease-in-out flex items-center justify-center">

@@ -78,8 +78,8 @@ public class EntityRepositoryJDBC implements EntityRepository {
 
     public Optional<Entity> findByCnpj(String cnpj) {
         String sql = """
-                        SELECT Entity.*,
-                        FROM Entity
+                         SELECT Entity.*
+                         FROM Entity
                          WHERE cnpj = ?;
                      """;
 
@@ -102,8 +102,8 @@ public class EntityRepositoryJDBC implements EntityRepository {
 
     public Optional<Entity> findByType(EntityType type) {
         String sql = """
-                        SELECT Entity.*,
-                        FROM Entity
+                         SELECT Entity.*
+                         FROM Entity
                          WHERE type = ?;
                      """;
 
@@ -162,7 +162,7 @@ public class EntityRepositoryJDBC implements EntityRepository {
         LocalDateTime creationDate = rs.getTimestamp("create_at").toLocalDateTime();
         entity.setCreateAt(creationDate);
 
-        entity.setType(EntityType.valueOf(rs.getString("type")));
+        entity.setType(EntityType.fromValue(rs.getString("type")));
         entity.setAddress(rs.getString("street"),
                 rs.getString( "city"),
                 rs.getString("state"),

@@ -109,7 +109,7 @@
     </div>
 
     <div id="image-upload-section" class="w-full  flex flex-col items-center gap-6 p-4">
-      <div class="dragzone relative w-full max-w-md p-8 flex flex-col justify-center items-center rounded-lg outline-2 outline-dashed outline-gray-300 bg-white text-center transition-all duration-300 ease-in-out" id="dragzone">
+      <div class="dragzone relative w-full p-8 flex flex-col justify-center items-center rounded-lg outline-2 outline-dashed outline-gray-300 bg-white text-center transition-all duration-300 ease-in-out" id="dragzone">
         <div class="dragzone__icon">
           <i class="fas fa-images"></i>
         </div>
@@ -125,7 +125,7 @@
           <div class="button" id="closePreview">  </div>
           <div class="file w-full h-64 flex justify-center items-center overflow-hidden rounded-md bg-gray-200">
             <c:if test="${not empty image}" >
-              <img src="${image}" alt="" class="preview-media w-full h-full object-contain"></img>
+              <img src="${image}" alt="" class="preview-media w-full h-full object-contain">
             </c:if>
           </div>
         </div>

@@ -39,7 +39,7 @@ public class ReportReviewController extends Controller {
         req.setAttribute("action", "/report/review/" + reportId + "/");
         req.setAttribute("method", "POST");
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/form-review.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/report/review.jsp");
 
         if (req.getMethod().equalsIgnoreCase("GET")) {
             setReportFields(req, reportId);

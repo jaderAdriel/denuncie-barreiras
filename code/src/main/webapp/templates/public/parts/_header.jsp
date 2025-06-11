@@ -10,9 +10,10 @@
 
     <nav id="nav-menu">
         <ul>
-            <li class="nav-item"><a href=".">Home</a></li>
+            <li class="nav-item"><a href="/home/">Home</a></li>
             <li class="nav-item"><a href="${pageContext.request.contextPath}/public/report/">Denúncias</a></li>
             <li class="nav-item"><a href="${pageContext.request.contextPath}/public/scenario/">Cenários educativos</a></li>
+            <li class="nav-item"><a href="${pageContext.request.contextPath}/sobre/">Sobre nós</a></li>
 
             <c:if test="${ user == null}">
                 <li class="nav-button"><a href="${pageContext.request.contextPath}/accounts/login/" class="btn-primary">Login</a></li>

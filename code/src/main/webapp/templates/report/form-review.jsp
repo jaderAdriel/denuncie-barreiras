@@ -96,6 +96,16 @@
                         </c:choose>
                     </div>
                 </div>
+
+                <div>
+                    <p class="info-label">Entidade</p>
+                    <div class="info-value readonly-field">
+                        <c:choose>
+                            <c:when test="${not empty report.entity}">${report.entity.type.getTranslation()} ${report.entity.name} - ${report.entity.cnpj}</c:when>
+                            <c:otherwise><c:out value="${report.reporter.name}"/>Não informado</c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-4">

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@WebServlet("")
+@WebServlet("/home")
 public class HomeController extends Controller {
     private BarrierScenarioService barrierService;
     private ReportService reportService;

@@ -62,7 +62,7 @@ public class RegisterEntityDTO {
 
     public void setType(String type) {
         try {
-            this.type = EntityType.valueOf(type);
+            this.type = EntityType.fromValue(type);
         } catch (NumberFormatException e) {
             errors.put("type", "Valor inválido");
         }

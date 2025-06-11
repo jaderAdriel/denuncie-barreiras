@@ -82,7 +82,7 @@
         <!-- Barra de Interação do Post (Curtir e Denunciar) -->
         <div class="mt-6 border-t pt-4 flex justify-between items-center">
           <div class="flex items-center gap-4">
-            <form action="/scenario/${post.id}/interactions/like/" method="POST" id="like-form">
+            <form action="/scenario/interactions/${post.id}/like/" method="POST" id="like-form">
               <button type="submit" class="like-btn flex items-center gap-1 ${isLikedByUser ? 'active' : ''}"
                       data-post-id="${post.id}" data-type="post">
                 <span class="material-symbols-outlined">thumb_up</span>
@@ -119,7 +119,7 @@
 
         <!-- Formulário de comentário -->
 
-        <form action="/scenario/${post.id}/interactions/comments/create/" method="POST" id="form-comment" class="mb-6">
+        <form action="/scenario/interactions/${post.id}/comments/create/" method="POST" id="form-comment" class="mb-6">
           <div class="py-2 px-4 mb-4 bg-white rounded-lg border border-gray-200">
             <label for="comment-content" class="sr-only">Seu comentário</label>
             <textarea id="comment-content" rows="6" name="comment-content"

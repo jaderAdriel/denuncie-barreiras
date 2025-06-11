@@ -12,7 +12,7 @@ public enum BarrierType {
     UNEQUAL_TREATMENT("Tratamento desigual"),
     OTHER("Outro");
 
-    private final String translation;
+    private String translation;
 
     BarrierType(String translation) {
         this.translation = translation;
@@ -20,5 +20,15 @@ public enum BarrierType {
 
     public String getTranslation() {
         return translation;
+    }
+
+    public static BarrierType fromValue(String typeValue) {
+        try {
+            return BarrierType.valueOf(typeValue);
+        } catch (IllegalArgumentException e) {
+            BarrierType other = BarrierType.OTHER;
+            other.translation = typeValue; // muda a tradução dinamicamente
+            return other;
+        }
     }
 }

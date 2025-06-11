@@ -15,10 +15,11 @@ public class RegisterReportDTO {
     private Boolean anonymous;
     private User reporter;
     private BarrierType type;
+    private String entityCnpj;
 
     Map<String, String> errors = new HashMap<>();
 
-    public RegisterReportDTO(String environment, String incidentDetails, String relatedScenarioId, String anonymous, String type) throws ValidationError {
+    public RegisterReportDTO(String environment, String incidentDetails, String relatedScenarioId, String anonymous, String type, String entity_cnpj) throws ValidationError {
         Map<String, String> requiredFields = new HashMap<>();
         requiredFields.put("environment", environment);
         requiredFields.put("incidentDetails", incidentDetails);
@@ -30,10 +31,15 @@ public class RegisterReportDTO {
         this.setRelatedScenarioId(relatedScenarioId);
         this.setAnonymous(anonymous);
         this.setType(type);
+        this.entityCnpj = entity_cnpj;
 
         if (!errors.isEmpty()) {
             throw new ValidationError("Campos inválidos", this.getErrors());
         }
+    }
+
+    public String getEntityCnpj() {
+        return entityCnpj;
     }
 
     public EnvironmentType getEnvironment() {

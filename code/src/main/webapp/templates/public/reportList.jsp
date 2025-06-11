@@ -109,8 +109,8 @@
       <div class="flex-grow">
         <!-- Search Bar -->
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
-          <form class="flex">
-            <input type="text" placeholder="Buscar denúncias..."
+          <form class="flex" action="">
+            <input type="text" placeholder="Buscar denúncias..." name="searchTerm"
                    class="flex-grow px-4 py-3 text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-r-lg transition flex items-center">
               <span class="material-symbols-outlined">search</span>

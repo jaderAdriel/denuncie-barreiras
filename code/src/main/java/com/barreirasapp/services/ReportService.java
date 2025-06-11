@@ -2,12 +2,9 @@ package com.barreirasapp.services;
 
 import com.barreirasapp.dto.RegisterReportReviewDTO;
 import com.barreirasapp.dto.report.RegisterReportDTO;
-import com.barreirasapp.entities.Moderator;
-import com.barreirasapp.entities.User;
+import com.barreirasapp.entities.*;
 import com.barreirasapp.exceptions.ValidationError;
 import com.barreirasapp.repositories.ReportRepository;
-import com.barreirasapp.entities.BarrierScenario;
-import com.barreirasapp.entities.Report;
 import com.barreirasapp.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +19,13 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final BarrierScenarioService barrierScenarioService;
     private final UserRepository userRepository;
+    private final EntityService entityService;
 
-    public ReportService(ReportRepository reportRepository, BarrierScenarioService barrierScenarioService, UserRepository userRepository) {
+    public ReportService(ReportRepository reportRepository, BarrierScenarioService barrierScenarioService, UserRepository userRepository, EntityService entityService) {
         this.reportRepository = reportRepository;
         this.barrierScenarioService = barrierScenarioService;
         this.userRepository = userRepository;
+        this.entityService = entityService;
     }
 
     public void insert(RegisterReportDTO reportDTO) throws ValidationError {
@@ -42,6 +41,12 @@ public class ReportService {
                 reportDTO.getAnonymous(),
                 barrierScenario
         );
+
+        String cnpj = reportDTO.getEntityCnpj();
+        if (!cnpj.isEmpty()) {
+            Optional<Entity> entity = entityService.findByCnpj(cnpj);
+            entity.ifPresent(report::setEntity);
+        }
 
         report.setReporter(reportDTO.getReporter());
 
@@ -91,6 +96,10 @@ public class ReportService {
 
     public Optional<Report> findById(Integer id) throws ValidationError {
         return reportRepository.findById(id);
+    }
+
+    public List<Report> findAllByEntity(String cnpj) {
+        return reportRepository.findAllByEntity(cnpj);
     }
 
     public List<Report> filterAndSearch(String[] barrierTypes, String word) {

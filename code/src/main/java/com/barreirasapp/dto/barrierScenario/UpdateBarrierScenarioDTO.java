@@ -56,7 +56,7 @@ public class UpdateBarrierScenarioDTO {
 
     private void setBarrierType(String barrierType) {
         try {
-            this.barrierType = BarrierType.valueOf(barrierType.toUpperCase());
+            this.barrierType = BarrierType.fromValue(barrierType.toUpperCase());
         } catch (Exception ignored) {
             errors.put("barrierType", "Valor inválido");
         }

@@ -12,7 +12,7 @@ public enum EnvironmentType {
     SCHOOL_TRANSPORT("Transporte Escolar"),
     OTHER("Outros");
 
-    private final String translation;
+    private String translation;
 
     EnvironmentType(String translation) {
         this.translation = translation;
@@ -20,6 +20,16 @@ public enum EnvironmentType {
 
     public String getTranslation() {
         return translation;
+    }
+
+    public static EnvironmentType fromValue(String typeValue) {
+        try {
+            return EnvironmentType.valueOf(typeValue);
+        } catch (IllegalArgumentException e) {
+            EnvironmentType other = EnvironmentType.OTHER;
+            other.translation = typeValue; // muda a tradução dinamicamente
+            return other;
+        }
     }
 
 }

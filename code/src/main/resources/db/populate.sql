@@ -1,98 +1,175 @@
--- Inserindo 25 denúncias de barreiras atitudinais
-INSERT INTO Report (reporter_fk, type, ambient, anonymous_report, event_detailing, related_scenario_fk, published) VALUES
--- Denúncias em Sala de Aula
-(2, 'PREJUDICE', 'CLASSROOM', 0, 'O professor frequentemente ignora alunos com deficiência visual, nunca lendo em voz alta os conteúdos escritos no quadro.', NULL, 1),
-(3, 'ABLEISM', 'CLASSROOM', 1, 'Colegas de classe riem e imitam a fala de um aluno com gagueira durante apresentações orais.', 2, 1),
-(4, 'UNEQUAL_TREATMENT', 'CLASSROOM', 0, 'Professora dá menos tempo para alunos com TDAH completarem as provas, mesmo com laudo médico.', NULL, 1),
-(5, 'PEJORATIVE_LANGUAGE', 'CLASSROOM', 1, 'Monitor da turma chama alunos com dificuldade de aprendizado de "burros" e "incapazes".', 6, 0),
-(6, 'EXCLUSION', 'CLASSROOM', 0, 'Grupos de trabalho sistematicamente excluem colegas com autismo das atividades.', NULL, 1),
+INSERT INTO `Report` (`reporter_fk`, `type`, `ambient`, `anonymous_report`, `event_detailing`, `related_scenario_fk`, `creation_date`, `published`, `review_comment`, `review_author_fk`, `review_create_at`, `entity_cnpj`, `review_is_valid`) VALUES
+-- Reports for Escola Inclusiva Futuro (00000000000001) - School
+(3, 'ABLEISM', 'CLASSROOM', 0, 'Professor faz piadas sobre a dificuldade de um aluno com TDAH em se concentrar durante a aula.', NULL, '2025-06-07 08:00:00', 1, 'Professor será advertido e passará por treinamento sobre TDAH e inclusão.', 10, '2025-06-08 08:00:00', '00000000000001', 1),
+(NULL, 'EXCLUSION', 'PATIO', 1, 'Rampa de acesso ao pátio quebrada impede estudante cadeirante de participar do recreio.', 2, '2025-06-07 08:05:00', 1, 'Manutenção da rampa agendada com prioridade. Monitoramento para garantir a inclusão no recreio.', 11, '2025-06-08 08:05:00', '00000000000001', 1),
+(5, 'BULLYING', 'HALLWAY', 0, 'Alunos escondem a bengala de um colega cego e riem enquanto ele tenta encontrá-la.', 6, '2025-06-07 08:10:00', 1, 'Agressores identificados e suspensos. Palestras sobre respeito e acessibilidade serão realizadas.', 12, '2025-06-08 08:10:00', '00000000000001', 1),
+(NULL, 'DISCRIMINATION', 'CAFETERIA', 1, 'Cantineira se recusa a servir a mesma porção de comida para aluno com deficiência intelectual.', 24, '2025-06-07 08:15:00', 1, 'Funcionária será reorientada sobre porções iguais para todos. Ação de conscientização com a equipe.', 13, '2025-06-08 08:15:00', '00000000000001', 1),
+(7, 'VERBAL_VIOLENCE', 'SCHOOL_TRANSPORT', 0, 'Motorista do ônibus grita com aluno autista por ele demorar a sentar.', NULL, '2025-06-07 08:20:00', 1, 'Motorista advertido formalmente e passará por treinamento em comunicação inclusiva.', 14, '2025-06-08 08:20:00', '00000000000001', 1),
 
--- Denúncias na Biblioteca
-(7, 'DISCRIMINATION', 'LIBRARY', 1, 'Bibliotecária impede aluno com síndrome de Down de acessar computadores, dizendo que ele não sabe usar.', NULL, 1),
-(8, 'BULLYING', 'LIBRARY', 0, 'Colegas escondem constantemente os livros em braille do aluno cego na biblioteca.', 2, 1),
-(9, 'VERBAL_VIOLENCE', 'LIBRARY', 1, 'Funcionário grita com aluna com deficiência auditiva por não ouvir seus chamados.', NULL, 0),
+-- Reports for Hospital Cuidado Pleno (00000000000002) - Hospital
+(2, 'EXCLUSION', 'RECEPTION', 0, 'Recepcionista nega atendimento prioritário para idosa cadeirante, alegando que "não há necessidade urgente".', NULL, '2025-06-07 08:25:00', 1, 'Recepcionista foi reorientada sobre atendimento prioritário. Regras de fila serão reforçadas.', 10, '2025-06-08 08:25:00', '00000000000002', 1),
+(NULL, 'ABLEISM', 'CONSULTING_ROOM', 1, 'Médico usa termos pejorativos para se referir à condição de um paciente com deficiência mental.', NULL, '2025-06-07 08:30:00', 1, 'Médico foi advertido. Será obrigatório participar de curso sobre terminologia inclusiva e respeito.', 11, '2025-06-08 08:30:00', '00000000000002', 1),
+(4, 'DISCRIMINATION', 'CORRIDOR', 0, 'Funcionário impede a entrada de um cão-guia na área de exames, mesmo com a identificação legal.', NULL, '2025-06-07 08:35:00', 1, 'Funcionário foi advertido e toda a equipe será treinada sobre a lei de acesso com cães-guia.', 12, '2025-06-08 08:35:00', '00000000000002', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'WAITING_ROOM', 1, 'Pessoas com deficiência são sempre chamadas por último, mesmo chegando antes.', NULL, '2025-06-07 08:40:00', 1, 'Fluxo de atendimento será revisado para garantir a prioridade. Monitoramento implementado.', 13, '2025-06-08 08:40:00', '00000000000002', 1),
+(6, 'PHYSICAL_VIOLENCE', 'BATHROOM', 0, 'Paciente cadeirante encontra o banheiro acessível com objetos bloqueando a passagem.', NULL, '2025-06-07 08:45:00', 1, 'Equipe de limpeza reorientada. Banheiro acessível deve estar sempre livre e desobstruído.', 14, '2025-06-08 08:45:00', '00000000000002', 1),
 
--- Denúncias no Laboratório
-(2, 'ABLEISM', 'LABORATORY', 0, 'Professor de química diz que aluno com deficiência física não deveria estar no curso por não poder fazer todos os experimentos.', NULL, 1),
-(3, 'EXCLUSION', 'LABORATORY', 1, 'Grupo exclui colega com mobilidade reduzida de trabalho prático alegando que "atrapalharia".', 6, 1),
+-- Reports for ONG Mãos Solidárias (00000000000003) - ONG
+(1, 'PREJUDICE', 'RECEPTION', 0, 'Voluntário faz comentários depreciativos sobre a capacidade de pessoas com deficiência física para trabalhar.', NULL, '2025-06-07 08:50:00', 1, 'Voluntário será desligado. Treinamento obrigatório sobre inclusão e direitos humanos para todos os colaboradores.', 10, '2025-06-08 08:50:00', '00000000000003', 1),
+(NULL, 'EXCLUSION', 'ACTIVITY_ROOM', 1, 'Pessoas com deficiência intelectual são excluídas de certas oficinas de artesanato por serem consideradas "muito complexas".', NULL, '2025-06-07 08:55:00', 1, 'As oficinas serão adaptadas para garantir a participação de todos. Inclusão é prioridade.', 11, '2025-06-08 08:55:00', '00000000000003', 1),
+(3, 'VERBAL_VIOLENCE', 'MEETING_ROOM', 0, 'Coordenador grita com assistido autista que expressa frustração durante uma reunião.', NULL, '2025-06-07 09:00:00', 1, 'Coordenador será advertido e passará por treinamento em comunicação não-violenta e manejo de crises em TEA.', 12, '2025-06-08 09:00:00', '00000000000003', 1),
+(NULL, 'PEJORATIVE_LANGUAGE', 'KITCHEN', 1, 'Cozinheiro faz piadas sobre a obesidade de alguns assistidos da ONG.', NULL, '2025-06-07 09:05:00', 1, 'Cozinheiro será advertido formalmente. Ação de conscientização sobre bullying e respeito ao corpo.', 13, '2025-06-08 09:05:00', '00000000000003', 1),
+(5, 'BULLYING', 'GARDEN', 0, 'Um grupo de assistidos zomba de um colega com deficiência auditiva por ele não entender as brincadeiras rapidamente.', NULL, '2025-06-07 09:10:00', 1, 'Intervenção e mediação com o grupo. Oficinas de empatia e comunicação serão oferecidas.', 14, '2025-06-08 09:10:00', '00000000000003', 1),
 
--- Denúncias nos Corredores
-(4, 'BULLYING', 'HALLWAY', 0, 'Alunos imitam e zoam a forma de andar de colega com paralisia cerebral nos corredores.', NULL, 1),
-(5, 'PHYSICAL_VIOLENCE', 'HALLWAY', 1, 'Empurrões deliberados em aluno com deficiência visual que usa bengala.', 2, 1),
+-- Reports for Centro Cultural Arte Viva (00000000000004) - Culture
+(7, 'EXCLUSION', 'EXHIBITION_HALL', 0, 'Exposição de arte não possui audiodescrição ou sinalização em braille para visitantes com deficiência visual.', NULL, '2025-06-07 09:15:00', 1, 'A equipe será orientada a incluir recursos de acessibilidade em futuras exposições.', 10, '2025-06-08 09:15:00', '00000000000004', 1),
+(NULL, 'DISCRIMINATION', 'TICKET_OFFICE', 1, 'Funcionário da bilheteria questiona a veracidade da carteira de passe livre de um visitante com deficiência.', NULL, '2025-06-07 09:20:00', 1, 'Funcionário foi advertido. A bilheteria será instruída a aceitar documentos válidos sem questionamentos.', 11, '2025-06-08 09:20:00', '00000000000004', 1),
+(9, 'ABLEISM', 'THEATER', 0, 'Peça de teatro não oferece intérprete de Libras, excluindo a comunidade surda.', NULL, '2025-06-07 09:25:00', 1, 'O teatro se comprometeu a incluir intérpretes de Libras em todas as futuras apresentações.', 12, '2025-06-08 09:25:00', '00000000000004', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'WORKSHOP_ROOM', 1, 'Oficina de dança impede a participação de pessoa com mobilidade reduzida, alegando falta de adaptação.', NULL, '2025-06-07 09:30:00', 1, 'A oficina será adaptada para incluir todos. Instrutores serão capacitados em dança inclusiva.', 13, '2025-06-08 09:30:00', '00000000000004', 1),
+(2, 'PREJUDICE', 'RECEPTION', 0, 'Guarda de segurança faz comentários preconceituosos sobre a aparência de um grupo de jovens punks na entrada.', NULL, '2025-06-07 09:35:00', 1, 'Guarda foi advertido. A instituição promoverá a diversidade e combaterá qualquer forma de preconceito.', 14, '2025-06-08 09:35:00', '00000000000004', 1),
 
--- Denúncias na Quadra
-(6, 'EXCLUSION', 'COURT', 0, 'Professor de educação física sempre deixa aluno com deficiência física de fora das atividades sem adaptações.', NULL, 1),
-(7, 'PEJORATIVE_LANGUAGE', 'COURT', 1, 'Alunos chamam colega com sobrepeso de "baleia" durante aulas de educação física.', NULL, 0),
+-- Reports for Empresa Tech Soluções (00000000000005) - Empresa
+(4, 'DISCRIMINATION', 'OFFICE', 0, 'Candidato cadeirante foi recusado em vaga de emprego por "dificultar a logística do escritório".', NULL, '2025-06-07 09:40:00', 1, 'A empresa investigará a denúncia. Ações antidiscriminatórias e revisão de processos seletivos serão implementadas.', 10, '2025-06-08 09:40:00', '00000000000005', 1),
+(NULL, 'ABLEISM', 'MEETING_ROOM', 1, 'Gerente faz piadas sobre a dislexia de um funcionário durante uma apresentação.', NULL, '2025-06-07 09:45:00', 1, 'Gerente foi advertido e passará por treinamento sobre respeito e neurodiversidade no ambiente de trabalho.', 11, '2025-06-08 09:45:00', '00000000000005', 1),
+(6, 'EXCLUSION', 'BREAK_ROOM', 0, 'Colegas de trabalho ignoram e excluem funcionária com deficiência auditiva das conversas no horário de almoço.', NULL, '2025-06-07 09:50:00', 1, 'A empresa promoverá campanhas de conscientização sobre inclusão e comunicação. Oficinas de Libras.', 12, '2025-06-08 09:50:00', '00000000000005', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'RECEPTION', 1, 'Cliente com autismo é tratado de forma ríspida pela recepcionista por não fazer contato visual.', NULL, '2025-06-07 09:55:00', 1, 'Recepcionista será reorientada sobre atendimento a pessoas com TEA. Treinamento de toda a equipe de atendimento.', 13, '2025-06-08 09:55:00', '00000000000005', 1),
+(8, 'VERBAL_VIOLENCE', 'CALL_CENTER', 0, 'Supervisor grita com atendente com gagueira por ele demorar a responder clientes.', NULL, '2025-06-07 10:00:00', 1, 'Supervisor foi demitido. A empresa reforçará a política de ambiente de trabalho respeitoso e sem assédio.', 14, '2025-06-08 10:00:00', '00000000000005', 1),
 
--- Denúncias no Pátio
-(8, 'BULLYING', 'PATIO', 0, 'Alunos fingem ser amigos de colega com deficiência intelectual para tirar sarro dele no pátio.', 6, 1),
-(9, 'DISCRIMINATION', 'PATIO', 1, 'Monitor do recreio proíbe aluno com autismo de brincar no balanço por "se balançar diferente".', NULL, 1),
+-- Reports for Creche Arco-Íris (00000000000006) - School
+(9, 'EXCLUSION', 'PLAYGROUND', 0, 'Brinquedos do parquinho não são adaptados para crianças com deficiência física.', NULL, '2025-06-07 10:05:00', 1, 'Serão instalados novos brinquedos adaptados. O parque será planejado para inclusão total.', 10, '2025-06-08 10:05:00', '00000000000006', 1),
+(NULL, 'ABLEISM', 'CLASSROOM', 1, 'Professora infantil diz que criança com autismo \"não aprende como as outras\" para os pais.', 25, '2025-06-07 10:10:00', 1, 'Professora será advertida e passará por treinamento intensivo em educação inclusiva e TEA.', 11, '2025-06-08 10:10:00', '00000000000006', 1),
+(1, 'BULLYING', 'NAP_ROOM', 0, 'Crianças maiores zombam de criança com síndrome de Down por ter dificuldades para se vestir sozinha.', NULL, '2025-06-07 10:15:00', 1, 'Intervenção imediata e atividades educativas sobre respeito às diferenças serão implementadas.', 12, '2025-06-08 10:15:00', '00000000000006', 1),
+(NULL, 'DISCRIMINATION', 'CAFETERIA', 1, 'Funcionária da cozinha se recusa a preparar refeições específicas para criança com alergia grave, alegando \"trabalho extra\".', NULL, '2025-06-07 10:20:00', 1, 'Funcionária será reorientada sobre dietas especiais. A equipe de cozinha receberá treinamento adequado.', 13, '2025-06-08 10:20:00', '00000000000006', 1),
+(3, 'PREJUDICE', 'HALLWAY', 0, 'Pais de crianças ouvidos fazendo comentários preconceituosos sobre a presença de crianças com deficiência na creche.', NULL, '2025-06-07 10:25:00', 1, 'A creche reforçará a cultura de inclusão. Mensagens informativas serão divulgadas aos pais.', 14, '2025-06-08 10:25:00', '00000000000006', 1),
 
--- Denúncias no Banheiro
-(2, 'PHYSICAL_VIOLENCE', 'BATHROOM', 0, 'Aluno com deficiência é trancado repetidamente no banheiro pelos colegas.', NULL, 1),
-(3, 'BULLYING', 'BATHROOM', 1, 'Notas ofensivas sobre a aparência de aluna com vitiligo são deixadas no espelho do banheiro.', 2, 0),
+-- Reports for Clínica Bem Estar (00000000000007) - Saúde
+(5, 'EXCLUSION', 'RECEPTION', 0, 'Acesso à clínica é difícil para cadeirantes devido à falta de rampa na entrada principal.', NULL, '2025-06-07 10:30:00', 1, 'Rampa de acesso será instalada. A clínica se compromete a garantir acessibilidade total.', 10, '2025-06-08 10:30:00', '00000000000007', 1),
+(NULL, 'DISCRIMINATION', 'EXAMINATION_ROOM', 1, 'Enfermeira trata paciente com deficiência intelectual de forma infantilizada durante o exame.', NULL, '2025-06-07 10:35:00', 1, 'Enfermeira será reorientada sobre comunicação respeitosa com adultos com deficiência.', 11, '2025-06-08 10:35:00', '00000000000007', 1),
+(7, 'UNEQUAL_TREATMENT', 'WAITING_ROOM', 0, 'Paciente com deficiência visual não é chamado pelo nome e sim pelo \"rapaz da bengala\".', NULL, '2025-06-07 10:40:00', 1, 'A equipe da recepção será treinada para chamar os pacientes pelo nome e evitar termos descritivos pejorativos.', 12, '2025-06-08 10:40:00', '00000000000007', 1),
+(NULL, 'VERBAL_VIOLENCE', 'PHARMACY', 1, 'Farmacêutico grita com paciente idoso com deficiência auditiva por ele não ouvir as instruções de uso do medicamento.', NULL, '2025-06-07 10:45:00', 1, 'Farmacêutico será advertido. A equipe receberá treinamento para lidar com pacientes com deficiência auditiva.', 13, '2025-06-08 10:45:00', '00000000000007', 1),
+(9, 'ABLEISM', 'CONSULTING_ROOM', 0, 'Fisioterapeuta faz piadas sobre a condição física de um paciente com paralisia cerebral durante a sessão.', NULL, '2025-06-07 10:50:00', 1, 'Fisioterapeuta foi desligado. A clínica reforça seu compromisso com a ética e o respeito profissional.', 14, '2025-06-08 10:50:00', '00000000000007', 1),
 
--- Denúncias no Refeitório
-(4, 'EXCLUSION', 'CAFETERIA', 0, 'Mesas ficam vazias quando aluno com síndrome de Tourette se senta para almoçar.', NULL, 1),
-(5, 'PREJUDICE', 'CAFETERIA', 1, 'Funcionários do refeitório servem porções menores para alunos com deficiência, achando que "comem menos".', 6, 1),
+-- Reports for Associação Inovarte (00000000000008) - ONG
+(2, 'PREJUDICE', 'WORKSHOP_ROOM', 0, 'Coordenador da ONG expressa ceticismo sobre a capacidade de pessoas com deficiência intelectual para aprender novas habilidades.', NULL, '2025-06-07 10:55:00', 1, 'Coordenador será reorientado e passará por treinamento sobre potencialidades de pessoas com deficiência.', 10, '2025-06-08 10:55:00', '00000000000008', 1),
+(NULL, 'EXCLUSION', 'MEETING_ROOM', 1, 'Pessoas com deficiência visual não recebem materiais em Braille ou áudio para participar das reuniões.', NULL, '2025-06-07 11:00:00', 1, 'Todos os materiais de reunião serão disponibilizados em formatos acessíveis. Política de inclusão será reforçada.', 11, '2025-06-08 11:00:00', '00000000000008', 1),
+(4, 'BULLYING', 'COMPUTER_LAB', 0, 'Voluntários jovens zombam de idosos com dificuldades de aprendizado de informática na aula.', NULL, '2025-06-07 11:05:00', 1, 'Os voluntários serão repreendidos e receberão treinamento sobre respeito intergeracional e didática.', 12, '2025-06-08 11:05:00', '00000000000008', 1),
+(NULL, 'DISCRIMINATION', 'OFFICE', 1, 'Secretária se recusa a auxiliar uma mãe solo com filhos pequenos, alegando que \"não é sua função\".', NULL, '2025-06-07 11:10:00', 1, 'Secretária será advertida. A ONG deve acolher e auxiliar todas as pessoas em necessidade, sem discriminação.', 13, '2025-06-08 11:10:00', '00000000000008', 1),
+(6, 'PEJORATIVE_LANGUAGE', 'CAFETERIA', 0, 'Funcionário da cozinha usa termos ofensivos sobre a pobreza de alguns assistidos da ONG.', NULL, '2025-06-07 11:15:00', 1, 'Funcionário foi desligado. A ONG reforça seu compromisso com a dignidade e respeito a todos.', 14, '2025-06-08 11:15:00', '00000000000008', 1),
 
--- Denúncias no Transporte Escolar
-(6, 'ABLEISM', 'SCHOOL_TRANSPORT', 0, 'Motorista do ônibus escolar se recusa a usar a cadeira de rodas adaptada, fazendo aluno ser carregado.', NULL, 1),
-(7, 'VERBAL_VIOLENCE', 'SCHOOL_TRANSPORT', 1, 'Cobrador do ônibus xinga aluno com deficiência auditiva por não ouvir quando deve descer.', 2, 1),
+-- Reports for Museu da Cidade Antiga (00000000000009) - Culture
+(8, 'EXCLUSION', 'EXHIBITION_HALL', 0, 'O elevador para os andares superiores do museu está quebrado há meses, impedindo o acesso de cadeirantes.', NULL, '2025-06-07 11:20:00', 1, 'A manutenção do elevador será priorizada. Medidas temporárias de acessibilidade serão implementadas.', 10, '2025-06-08 11:20:00', '00000000000009', 1),
+(NULL, 'DISCRIMINATION', 'TICKET_OFFICE', 1, 'Funcionário da bilheteria ri de turista estrangeiro com dificuldade de comunicação em português.', NULL, '2025-06-07 11:25:00', 1, 'Funcionário será advertido. A equipe de atendimento ao público receberá treinamento em comunicação intercultural.', 11, '2025-06-08 11:25:00', '00000000000009', 1),
+(1, 'ABLEISM', 'GALLERY', 0, 'Placas de informação de obras de arte não possuem letras grandes ou Braille para deficientes visuais.', NULL, '2025-06-07 11:30:00', 1, 'As placas de informação serão substituídas por versões acessíveis. Audiodescrição será incluída.', 12, '2025-06-08 11:30:00', '00000000000009', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'GIFT_SHOP', 1, 'Segurança segue de perto um visitante com deficiência intelectual na loja de souvenirs, sob suspeita.', NULL, '2025-06-07 11:35:00', 1, 'Segurança será reorientado. Preconceito não será tolerado. Monitoramento equitativo.', 13, '2025-06-08 11:35:00', '00000000000009', 1),
+(3, 'VERBAL_VIOLENCE', 'CORRIDOR', 0, 'Guia do museu faz comentários ofensivos sobre a roupa de um visitante com mobilidade reduzida.', NULL, '2025-06-07 11:40:00', 1, 'Guia foi advertido. A equipe de guias passará por treinamento sobre respeito e vestimenta adequada.', 14, '2025-06-08 11:40:00', '00000000000009', 1),
 
--- Denúncias em Outros Ambientes
-(8, 'DISCRIMINATION', 'OTHER', 0, 'Coordenadora pedagógica diz que escola "não está preparada" para matricular aluno com deficiência múltipla.', NULL, 0),
-(9, 'UNEQUAL_TREATMENT', 'OTHER', 1, 'Eventos escolares nunca têm intérprete de LIBRAS ou materiais acessíveis.', 6, 1);
+-- Reports for Startup Visão Digital (00000000000010) - Empresa
+(5, 'DISCRIMINATION', 'OFFICE', 0, 'Candidato com histórico de depressão foi preterido em entrevista, alegando "risco à produtividade".', NULL, '2025-06-07 11:45:00', 1, 'A empresa revisará seus critérios de seleção. Ações de combate ao preconceito contra saúde mental serão implementadas.', 10, '2025-06-08 11:45:00', '00000000000010', 1),
+(NULL, 'ABLEISM', 'MEETING_ROOM', 1, 'Desenvolvedor faz piadas sobre a lentidão do computador de um colega com deficiência visual.', NULL, '2025-06-07 11:50:00', 1, 'O desenvolvedor será advertido. Treinamento sobre respeito e tecnologia assistiva será oferecido.', 11, '2025-06-08 11:50:00', '00000000000010', 1),
+(7, 'EXCLUSION', 'VIRTUAL_MEETING', 0, 'Reuniões virtuais não possuem legendas automáticas ou intérprete de Libras, excluindo funcionários com deficiência auditiva.', NULL, '2025-06-07 11:55:00', 1, 'Ferramentas de legendagem e intérprete de Libras serão implementados em todas as reuniões virtuais.', 12, '2025-06-08 11:55:00', '00000000000010', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'COWORKING', 1, 'Funcionário cadeirante tem sua mesa realocada para um canto afastado, longe da equipe.', NULL, '2025-06-07 12:00:00', 1, 'A mesa será realocada para um espaço integrado. A empresa promoverá um ambiente de trabalho inclusivo.', 13, '2025-06-08 12:00:00', '00000000000010', 1),
+(9, 'PREJUDICE', 'RECEPTION', 0, 'Recepcionista ri de cliente com síndrome de Tourette por ele ter tiques vocais.', NULL, '2025-06-07 12:05:00', 1, 'Recepcionista será advertida. Treinamento para equipe sobre neurodiversidade e atendimento respeitoso.', 14, '2025-06-08 12:05:00', '00000000000010', 1),
 
--- Inserindo reviews para as denúncias (avaliações dos moderadores)
-INSERT INTO Review (report_fk, author_fk, comment, is_valid) VALUES
--- Reviews para denúncia 1
-(6, 1, 'Denúncia verificada. O professor foi notificado e será oferecida capacitação em educação inclusiva.', 1),
--- Reviews para denúncia 2
-(7, 1, 'Situação grave confirmada. Serão realizadas palestras sobre respeito às diferenças na turma.', 1),
--- Reviews para denúncia 3
-(8, 1, 'Denúncia em análise. Solicitamos cópia do laudo médico para tomar as providências adequadas.', 0),
--- Reviews para denúncia 4
-(9, 1, 'Monitor foi chamado para esclarecimentos e será reavaliada sua permanência na função.', 1),
--- Reviews para denúncia 5
-(10, 1, 'Programa de inclusão será implementado com formação de grupos heterogêneos supervisionados.', 1),
--- Reviews para denúncia 6
-(10, 1, 'Bibliotecária será capacitada. Aluno terá acompanhante para uso dos computadores.', 1),
--- Reviews para denúncia 7
-(11, 1, 'Caso encaminhado para coordenação. Alunos envolvidos serão orientados.', 1),
--- Reviews para denúncia 8
-(12, 1, 'Funcionário receberá treinamento em LIBRAS e atendimento a pessoas com deficiência auditiva.', 1),
--- Reviews para denúncia 9
-(13, 1, 'Denúncia grave. Professor será chamado para reunião disciplinar.', 1),
--- Reviews para denúncia 10
-(14, 1, 'Atividades adaptadas serão implementadas. Aluno não pode ser excluído.', 1),
--- Reviews para denúncia 11
-(15, 1, 'Alunos identificados e pais serão chamados. Medidas disciplinares aplicadas.', 1),
--- Reviews para denúncia 12
-(16, 1, 'Caso encaminhado para diretoria. Pode caracterizar crime de injúria.', 1),
--- Reviews para denúncia 13
-(17, 1, 'Professor será orientado sobre adaptações necessárias na educação física.', 1),
--- Reviews para denúncia 14
-(18, 1, 'Denúncia em análise. Necessário apurar identidade dos alunos.', 0),
--- Reviews para denúncia 15
-(19, 1, 'Programa de conscientização sobre autismo será implementado na escola.', 1),
--- Reviews para denúncia 16
-(20, 1, 'Monitor receberá orientação. Aluno tem direito de brincar como preferir.', 1),
--- Reviews para denúncia 17
-(21, 1, 'Caso grave. Alunos envolvidos suspensos e pais notificados.', 1),
--- Reviews para denúncia 18
-(28, 1, 'Ações educativas sobre vitiligo serão realizadas na escola.', 1),
--- Reviews para denúncia 19
-(23, 1, 'Projeto de inclusão no horário do almoço será desenvolvido.', 1),
--- Reviews para denúncia 20
-(24, 1, 'Funcionários receberão treinamento. Portaria determina porções iguais para todos.', 1),
--- Reviews para denúncia 21
-(25, 1, 'Transporte será adaptado. Motorista receberá advertência formal.', 1),
--- Reviews para denúncia 22
-(26, 1, 'Cobrador será substituído. Empresa de transporte notificada.', 1),
--- Reviews para denúncia 23
-(27, 1, 'Escola tem obrigação legal de se adaptar. Denúncia encaminhada à secretaria de educação.', 1),
--- Reviews para denúncia 24
-(28, 1, 'Solicitada verba para recursos de acessibilidade nos eventos.', 1),
--- Reviews para denúncia 25
-(29, 1, 'Denúncia em análise. Necessário apurar detalhes com a família.', 0);
+-- Reports for Colégio Saber Mais (00000000000011) - School
+(1, 'ABLEISM', 'CLASSROOM', 0, 'Professor diz que o aluno com autismo é \"difícil\" e não se esforça para incluí-lo nas atividades.', 25, '2025-06-07 12:10:00', 1, 'Professor será advertido e passará por treinamento obrigatório sobre inclusão de alunos com TEA.', 10, '2025-06-08 12:10:00', '00000000000011', 1),
+(NULL, 'EXCLUSION', 'PATIO', 1, 'Grupo de alunos sistematicamente exclui colega com deficiência intelectual das brincadeiras.', 6, '2025-06-07 12:15:00', 1, 'Intervenção com os alunos e atividades para promover a empatia e a inclusão social.', 11, '2025-06-08 12:15:00', '00000000000011', 1),
+(3, 'DISCRIMINATION', 'LIBRARY', 0, 'Bibliotecária impede aluno com baixa visão de pegar livros na prateleira superior, alegando que \"é perigoso\".', NULL, '2025-06-07 12:20:00', 1, 'Bibliotecária será reorientada. Todos os alunos devem ter acesso irrestrito ao acervo.', 12, '2025-06-08 12:20:00', '00000000000011', 1),
+(NULL, 'BULLYING', 'HALLWAY', 1, 'Alunos derrubam a cadeira de rodas de um colega de propósito no corredor.', 2, '2025-06-07 12:25:00', 1, 'Agressores identificados e suspensos. Ações de conscientização e reparação de danos.', 13, '2025-06-08 12:25:00', '00000000000011', 1),
+(5, 'VERBAL_VIOLENCE', 'SCHOOL_TRANSPORT', 0, 'Motorista do transporte escolar faz comentários sobre o peso de um aluno para outros pais.', NULL, '2025-06-07 12:30:00', 1, 'Motorista será demitido. Empresa de transporte notificada e orientada sobre conduta ética.', 14, '2025-06-08 12:30:00', '00000000000011', 1),
+
+-- Reports for Laboratório Vida Nova (00000000000012) - Saúde
+(7, 'EXCLUSION', 'RECEPTION', 0, 'Balcão da recepção é muito alto para atender pessoas em cadeira de rodas.', NULL, '2025-06-07 12:35:00', 1, 'Será providenciado um balcão de atendimento com altura acessível ou um ponto de atendimento adaptado.', 10, '2025-06-08 12:35:00', '00000000000012', 1),
+(NULL, 'ABLEISM', 'COLLECTION_ROOM', 1, 'Técnico de coleta de sangue faz piadas sobre o tremor das mãos de um paciente com Parkinson.', NULL, '2025-06-07 12:40:00', 1, 'Técnico foi advertido. Toda a equipe será treinada em atendimento humanizado e respeito a pacientes com Parkinson.', 11, '2025-06-08 12:40:00', '00000000000012', 1),
+(9, 'DISCRIMINATION', 'EXAMINATION_ROOM', 0, 'Médico se recusa a examinar paciente com autismo que não responde a comandos verbais simples.', NULL, '2025-06-07 12:45:00', 1, 'Médico foi advertido. A clínica reforça que todos os pacientes devem ser atendidos, com as adaptações necessárias.', 12, '2025-06-08 12:45:00', '00000000000012', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'WAITING_ROOM', 1, 'Pacientes surdos não recebem avisos visuais de chamadas, perdendo a vez na fila.', NULL, '2025-06-07 12:50:00', 1, 'Sistema de chamada visual será implementado. A equipe receberá treinamento sobre acessibilidade para surdos.', 13, '2025-06-08 12:50:00', '00000000000012', 1),
+(2, 'PHYSICAL_VIOLENCE', 'CORRIDOR', 0, 'Funcionário empurra um paciente com dificuldades de locomoção para "apressá-lo".', NULL, '2025-06-07 12:55:00', 1, 'Funcionário foi demitido. A clínica reafirma seu compromisso com a segurança e o respeito aos pacientes.', 14, '2025-06-08 12:55:00', '00000000000012', 1),
+
+-- Reports for Instituto Conecte (00000000000013) - ONG
+(4, 'PREJUDICE', 'RECEPTION', 0, 'Voluntário expressa desconfiança sobre a capacidade de uma pessoa com deficiência visual para gerenciar um projeto.', NULL, '2025-06-07 13:00:00', 1, 'Voluntário será reorientado. A ONG valoriza a capacidade de todos, independentemente da deficiência.', 10, '2025-06-08 13:00:00', '00000000000013', 1),
+(NULL, 'EXCLUSION', 'WORKSHOP_ROOM', 1, 'Oficinas de tecnologia não são acessíveis para pessoas com deficiência física, sem adaptações nas mesas.', NULL, '2025-06-07 13:05:00', 1, 'As mesas e equipamentos serão adaptados. A inclusão em todas as oficinas é fundamental.', 11, '2025-06-08 13:05:00', '00000000000013', 1),
+(6, 'VERBAL_VIOLENCE', 'MEETING_ROOM', 0, 'Diretor da ONG grita com funcionário com deficiência intelectual por ele ter cometido um erro simples.', NULL, '2025-06-07 13:10:00', 1, 'Diretor será advertido formalmente e passará por treinamento em liderança inclusiva e comunicação não-violenta.', 12, '2025-06-08 13:10:00', '00000000000013', 1),
+(NULL, 'PEJORATIVE_LANGUAGE', 'CAFETERIA', 1, 'Cozinheiro faz piadas sobre o baixo orçamento de alguns assistidos da ONG.', NULL, '2025-06-07 13:15:00', 1, 'Cozinheiro será advertido e passará por treinamento em respeito e dignidade. Tolerância zero para preconceito.', 13, '2025-06-08 13:15:00', '00000000000013', 1),
+(8, 'BULLYING', 'GARDEN', 0, 'Um grupo de voluntários zomba de assistido com autismo por ele ter comportamentos repetitivos (stimming).', 25, '2025-06-07 13:20:00', 1, 'Os voluntários serão repreendidos e receberão treinamento sobre autismo e respeito ao stimming.', 14, '2025-06-08 13:20:00', '00000000000013', 1),
+
+-- Reports for Biblioteca Municipal (00000000000014) - Culture
+(10, 'EXCLUSION', 'READING_ROOM', 0, 'Acesso à sala de leitura está bloqueado por estantes mal posicionadas, impedindo cadeirantes.', NULL, '2025-06-07 13:25:00', 1, 'A sala de leitura será reorganizada para garantir acessibilidade. Equipe de limpeza será reorientada.', 10, '2025-06-08 13:25:00', '00000000000014', 1),
+(NULL, 'DISCRIMINATION', 'RECEPTION', 1, 'Funcionário da recepção se recusa a auxiliar um deficiente visual a encontrar um livro, alegando que \"não é sua função\".', NULL, '2025-06-07 13:30:00', 1, 'Funcionário será advertido e passará por treinamento em atendimento acessível. Todos devem ser auxiliados.', 11, '2025-06-08 13:30:00', '00000000000014', 1),
+(12, 'ABLEISM', 'SHELVES', 0, 'Livros em Braille e com fonte ampliada estão misturados com livros comuns, dificultando a localização.', NULL, '2025-06-07 13:35:00', 1, 'Os livros acessíveis serão organizados em uma seção específica. Sinalização em Braille será adicionada.', 12, '2025-06-08 13:35:00', '00000000000014', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'COMPUTER_LAB', 1, 'Pessoas com deficiência intelectual têm o tempo de uso do computador limitado, sem justificativa.', NULL, '2025-06-07 13:40:00', 1, 'A política de uso do computador será revisada. O tempo de uso será igual para todos, com apoio se necessário.', 13, '2025-06-08 13:40:00', '00000000000014', 1),
+(14, 'VERBAL_VIOLENCE', 'CORRIDOR', 0, 'Segurança grita com um usuário autista que estava agitado no corredor da biblioteca.', NULL, '2025-06-07 13:45:00', 1, 'Segurança será advertido e passará por treinamento em manejo de crises e TEA. Protocolos de segurança serão revisados.', 14, '2025-06-08 13:45:00', '00000000000014', 1),
+
+-- Reports for Comércio Essencial Ltda. (00000000000015) - Empresa
+(1, 'DISCRIMINATION', 'STORE_AISLE', 0, 'Corredores da loja estão cheios de obstáculos, dificultando a passagem de cadeirantes e carrinhos de bebê.', NULL, '2025-06-07 13:50:00', 1, 'A loja será reorganizada para garantir corredores livres e acessíveis. Fiscalização constante.', 10, '2025-06-08 13:50:00', '00000000000015', 1),
+(NULL, 'ABLEISM', 'CHECKOUT', 1, 'Caixa faz piadas sobre a dificuldade de um cliente com deficiência intelectual em contar o dinheiro.', NULL, '2025-06-07 13:55:00', 1, 'Caixa será advertido e passará por treinamento em atendimento inclusivo e respeito.', 11, '2025-06-08 13:55:00', '00000000000015', 1),
+(3, 'EXCLUSION', 'ENTRANCE', 0, 'A porta de entrada da loja é muito pesada e estreita, dificultando o acesso de pessoas com mobilidade reduzida.', NULL, '2025-06-07 14:00:00', 1, 'A porta será substituída por uma mais leve e larga, com sistema de abertura automático se possível.', 12, '2025-06-08 14:00:00', '00000000000015', 1),
+(NULL, 'PREJUDICE', 'CUSTOMER_SERVICE', 1, 'Atendente de serviço ao cliente demonstra desconfiança com cliente cego, tratando-o como "incapaz".', NULL, '2025-06-07 14:05:00', 1, 'Atendente será reorientado sobre atendimento humanizado e sem preconceito. Treinamento para equipe.', 13, '2025-06-08 14:05:00', '00000000000015', 1),
+(5, 'VERBAL_VIOLENCE', 'SALES_FLOOR', 0, 'Vendedor grita com cliente idosa com deficiência auditiva por ela não ouvir as promoções.', NULL, '2025-06-07 14:10:00', 1, 'Vendedor será demitido. A loja reforçará a política de atendimento respeitoso e comunicação clara.', 14, '2025-06-08 14:10:00', '00000000000015', 1),
+
+-- Reports for Centro Educacional Crescer (00000000000016) - School
+(7, 'EXCLUSION', 'CLASSROOM', 0, 'Aluno com deficiência auditiva não tem intérprete de Libras durante as aulas.', NULL, '2025-06-07 14:15:00', 1, 'A escola providenciará intérprete de Libras imediatamente. Adaptações pedagógicas serão feitas.', 10, '2025-06-08 14:15:00', '00000000000016', 1),
+(NULL, 'ABLEISM', 'GYM', 1, 'Professor de educação física diz que aluno com mobilidade reduzida \"atrapalha a aula\".', NULL, '2025-06-07 14:20:00', 1, 'Professor será advertido e passará por treinamento em adaptações e inclusão na educação física.', 11, '2025-06-08 14:20:00', '00000000000016', 1),
+(9, 'BULLYING', 'CAFETERIA', 0, 'Alunos escondem a cadeira de rodas de um colega enquanto ele está na fila da cantina.', 2, '2025-06-07 14:25:00', 1, 'Agressores identificados e suspensos. Monitoramento no refeitório será intensificado.', 12, '2025-06-08 14:25:00', '00000000000016', 1),
+(NULL, 'DISCRIMINATION', 'AUDITORIUM', 1, 'Palco do auditório não tem rampa, impedindo a participação de alunos cadeirantes em eventos.', 2, '2025-06-07 14:30:00', 1, 'Rampa temporária será providenciada para o próximo evento. A escola buscará solução permanente.', 13, '2025-06-08 14:30:00', '00000000000016', 1),
+(2, 'UNEQUAL_TREATMENT', 'LIBRARY', 0, 'Livros em Braille são armazenados em local de difícil acesso na biblioteca.', NULL, '2025-06-07 14:35:00', 1, 'Livros em Braille serão realocados para uma seção de fácil acesso. Sinalização clara será adicionada.', 14, '2025-06-08 14:35:00', '00000000000016', 1),
+
+-- Reports for Unidade de Saúde Familiar (00000000000017) - Saúde
+(4, 'EXCLUSION', 'RECEPTION', 0, 'Agendamento de consultas via telefone é inacessível para pessoas surdas.', NULL, '2025-06-07 14:40:00', 1, 'Será implementado um sistema de agendamento online ou por mensagem para garantir acessibilidade.', 10, '2025-06-08 14:40:00', '00000000000017', 1),
+(NULL, 'ABLEISM', 'CONSULTING_ROOM', 1, 'Médico diz que paciente com TEA \"não consegue se comunicar direito\" e não oferece alternativas.', NULL, '2025-06-07 14:45:00', 1, 'Médico será advertido e passará por treinamento em comunicação alternativa e TEA.', 11, '2025-06-08 14:45:00', '00000000000017', 1),
+(6, 'DISCRIMINATION', 'WAITING_ROOM', 0, 'Funcionário faz comentários sobre a aparência de um paciente com vitiligo.', NULL, '2025-06-07 14:50:00', 1, 'Funcionário será advertido. A unidade reforçará a política de respeito à diversidade e aparência.', 12, '2025-06-08 14:50:00', '00000000000017', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'CORRIDOR', 1, 'Pacientes com deficiência física são sempre os últimos a serem levados para os exames, causando longas esperas.', NULL, '2025-06-07 14:55:00', 1, 'O fluxo de pacientes será revisado para garantir um atendimento equitativo e prioritário.', 13, '2025-06-08 14:55:00', '00000000000017', 1),
+(8, 'VERBAL_VIOLENCE', 'PHARMACY', 0, 'Farmacêutico grita com acompanhante de paciente cego por ele ter feito uma pergunta sobre o medicamento.', NULL, '2025-06-07 15:00:00', 1, 'Farmacêutico será advertido. A equipe receberá treinamento em atendimento e comunicação respeitosa.', 14, '2025-06-08 15:00:00', '00000000000017', 1),
+
+-- Reports for Movimento Acessibilidade Já (00000000000018) - ONG
+(1, 'PREJUDICE', 'MEETING_ROOM', 0, 'Alguns membros da ONG expressam dúvidas sobre a real necessidade de certas adaptações para deficiência.', NULL, '2025-06-07 15:05:00', 1, 'A diretoria da ONG reafirma seu compromisso com a acessibilidade plena. Treinamento será oferecido.', 10, '2025-06-08 15:05:00', '00000000000018', 1),
+(NULL, 'EXCLUSION', 'EVENT_SPACE', 1, 'Evento da ONG não possui rampas de acesso para o palco, excluindo participantes cadeirantes.', NULL, '2025-06-07 15:10:00', 1, 'Todos os eventos futuros terão acessibilidade garantida, incluindo rampas e recursos visuais.', 11, '2025-06-08 15:10:00', '00000000000018', 1),
+(3, 'BULLYING', 'OFFICE', 0, 'Um voluntário idoso é constantemente alvo de piadas sobre sua lentidão por outros voluntários mais jovens.', NULL, '2025-06-07 15:15:00', 1, 'Os voluntários serão repreendidos e passarão por treinamento sobre respeito intergeracional.', 12, '2025-06-08 15:15:00', '00000000000018', 1),
+(NULL, 'DISCRIMINATION', 'TRAINING_ROOM', 1, 'Curso de capacitação da ONG não oferece materiais em formatos acessíveis para pessoas com deficiência visual.', NULL, '2025-06-07 15:20:00', 1, 'Todos os materiais de capacitação serão disponibilizados em múltiplos formatos (Braille, digital, áudio).', 13, '2025-06-08 15:20:00', '00000000000018', 1),
+(5, 'PEJORATIVE_LANGUAGE', 'RECEPTION', 0, 'Recepcionista da ONG chama assistidos com deficiência intelectual de \"os especiais\" em tom pejorativo.', NULL, '2025-06-07 15:25:00', 1, 'Recepcionista será advertida formalmente e passará por treinamento sobre linguagem inclusiva.', 14, '2025-06-08 15:25:00', '00000000000018', 1),
+
+-- Reports for Teatro Municipal (00000000000019) - Culture
+(7, 'EXCLUSION', 'AUDITORIUM', 0, 'Assentos para cadeirantes no teatro estão sempre ocupados por pessoas sem deficiência, sem fiscalização.', NULL, '2025-06-07 15:30:00', 1, 'A fiscalização será intensificada. A equipe de apoio será treinada para direcionar o uso dos assentos prioritários.', 10, '2025-06-08 15:30:00', '00000000000019', 1),
+(NULL, 'DISCRIMINATION', 'TICKET_OFFICE', 1, 'Funcionário da bilheteria se recusa a vender ingresso de meia-entrada para estudante com deficiência, exigindo laudo específico.', NULL, '2025-06-07 15:35:00', 1, 'Funcionário será advertido. As leis de meia-entrada para Pessoas com Deficiência serão seguidas rigorosamente.', 11, '2025-06-08 15:35:00', '00000000000019', 1),
+(9, 'ABLEISM', 'STAGE', 0, 'Atores fazem piadas sobre estereótipos de pessoas com deficiência em peça de comédia.', NULL, '2025-06-07 15:40:00', 1, 'A produção do teatro será advertida. Peças com conteúdo capacitista não serão permitidas no palco municipal.', 12, '2025-06-08 15:40:00', '00000000000019', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'LOBBY', 1, 'Pessoas com deficiência visual não conseguem navegar no lobby devido à falta de piso tátil e sinalização sonora.', NULL, '2025-06-07 15:45:00', 1, 'Piso tátil será instalado. Sinalização sonora e equipe de apoio para deficientes visuais serão providenciadas.', 13, '2025-06-08 15:45:00', '00000000000019', 1),
+(2, 'VERBAL_VIOLENCE', 'BACKSTAGE', 0, 'Diretor de teatro grita com ator autista por ele ter dificuldades em seguir o roteiro rigidamente.', NULL, '2025-06-07 15:50:00', 1, 'Diretor será advertido. A produção se compromete a adaptar roteiros e oferecer apoio a artistas com TEA.', 14, '2025-06-08 15:50:00', '00000000000019', 1),
+
+-- Reports for Consultoria Global (00000000000020) - Empresa
+(4, 'DISCRIMINATION', 'OFFICE', 0, 'Funcionário com deficiência auditiva não é promovido, alegando que \"a comunicação seria um problema\".', NULL, '2025-06-07 15:55:00', 1, 'A empresa revisará a decisão. Políticas de promoção serão baseadas em mérito, com adaptações se necessário.', 10, '2025-06-08 15:55:00', '00000000000020', 1),
+(NULL, 'ABLEISM', 'MEETING_ROOM', 1, 'Consultor externo faz comentários sobre a \"baixa capacidade\" de alguns funcionários com deficiência.', NULL, '2025-06-07 16:00:00', 1, 'O consultor não será mais contratado. A empresa reafirma seu compromisso com a inclusão e combate ao capacitismo.', 11, '2025-06-08 16:00:00', '00000000000020', 1),
+(6, 'EXCLUSION', 'COFFEE_BREAK', 0, 'Funcionários com deficiência são excluídos de atividades de integração e happy hours.', NULL, '2025-06-07 16:05:00', 1, 'A empresa promoverá atividades de integração inclusivas para todos os funcionários, sem exceção.', 12, '2025-06-08 16:05:00', '00000000000020', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'RECEPTION', 1, 'Estagiário cadeirante é obrigado a usar uma entrada de serviço, longe da principal.', NULL, '2025-06-07 16:10:00', 1, 'Todas as entradas devem ser acessíveis. A entrada principal será adaptada para garantir o acesso de todos.', 13, '2025-06-08 16:10:00', '00000000000020', 1),
+(8, 'PREJUDICE', 'BREAK_ROOM', 0, 'Funcionários fazem comentários depreciativos sobre a origem de colegas migrantes.', NULL, '2025-06-07 16:15:00', 1, 'A empresa reforçará a política de diversidade cultural e combate à xenofobia. Advertências serão aplicadas.', 14, '2025-06-08 16:15:00', '00000000000020', 1),
+
+-- Reports for Escola de Artes Visuais (00000000000021) - School
+(1, 'EXCLUSION', 'ART_STUDIO', 0, 'Aluno com deficiência visual é impedido de participar de aulas de pintura por \"não enxergar as cores\".', NULL, '2025-06-07 16:20:00', 1, 'Professor será reorientado. As aulas de arte devem ser adaptadas para todos os alunos, com foco em outras percepções.', 10, '2025-06-08 16:20:00', '00000000000021', 1),
+(NULL, 'ABLEISM', 'CLASSROOM', 1, 'Professor de arte usa termos como \"desengonçado\" para descrever trabalhos de alunos com deficiência motora.', NULL, '2025-06-07 16:25:00', 1, 'Professor será advertido e passará por treinamento em linguagem inclusiva e valorização da diversidade de expressões artísticas.', 11, '2025-06-08 16:25:00', '00000000000021', 1),
+(3, 'DISCRIMINATION', 'EXHIBITION_HALL', 0, 'Trabalhos de alunos com deficiência são expostos em uma seção separada e menos visível da galeria da escola.', NULL, '2025-06-07 16:30:00', 1, 'As exposições serão reorganizadas para que todos os trabalhos sejam integrados e igualmente valorizados.', 12, '2025-06-08 16:30:00', '00000000000021', 1),
+(NULL, 'BULLYING', 'HALLWAY', 1, 'Alunos vandalizam esculturas de um colega com autismo, alegando que \"são estranhas\".', 25, '2025-06-07 16:35:00', 1, 'Agressores identificados e suspensos. Reparação dos danos e ações de conscientização sobre autismo na arte.', 13, '2025-06-08 16:35:00', '00000000000021', 1),
+(5, 'VERBAL_VIOLENCE', 'OFFICE', 0, 'Coordenador da escola de artes grita com pai de aluno com deficiência auditiva por ele \"não colaborar\".', NULL, '2025-06-07 16:40:00', 1, 'Coordenador será advertido e passará por treinamento em comunicação respeitosa e direitos dos pais.', 14, '2025-06-08 16:40:00', '00000000000021', 1),
+
+-- Reports for Posto de Atendimento Rápido (00000000000022) - Público
+(7, 'EXCLUSION', 'RECEPTION', 0, 'Atendente se recusa a ajudar pessoa idosa com dificuldade de preencher formulário, alegando que \"não é sua função\".', NULL, '2025-06-07 16:45:00', 1, 'Atendente será advertido e passará por treinamento em atendimento prioritário e apoio a idosos.', 10, '2025-06-08 16:45:00', '00000000000022', 1),
+(NULL, 'DISCRIMINATION', 'WAITING_AREA', 1, 'Pessoa com deficiência visual é impedida de entrar com seu cão-guia na área de atendimento, alegando \"higiene\".', NULL, '2025-06-07 16:50:00', 1, 'Funcionário será demitido. O posto reforçará a lei de acesso com cães-guia em locais públicos.', 11, '2025-06-08 16:50:00', '00000000000022', 1),
+(9, 'ABLEISM', 'COUNTER', 0, 'Funcionário faz piadas sobre a forma de falar de um cliente com gagueira.', NULL, '2025-06-07 16:55:00', 1, 'Funcionário será advertido e passará por treinamento em comunicação respeitosa e combate ao capacitismo.', 12, '2025-06-08 16:55:00', '00000000000022', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'GENERAL_AREA', 1, 'Pessoas com deficiência são sempre atendidas por último, sem respeitar a fila preferencial.', NULL, '2025-06-07 17:00:00', 1, 'O sistema de filas será revisado e a fiscalização do atendimento prioritário será intensificada.', 13, '2025-06-08 17:00:00', '00000000000022', 1),
+(2, 'VERBAL_VIOLENCE', 'INFO_DESK', 0, 'Atendente grita com cliente com deficiência auditiva por ele não entender as instruções de um serviço.', NULL, '2025-06-07 17:05:00', 1, 'Atendente será advertido e passará por treinamento em comunicação com pessoas com deficiência auditiva.', 14, '2025-06-08 17:05:00', '00000000000022', 1),
+
+-- Reports for Casa do Idoso Feliz (00000000000023) - ONG
+(4, 'EXCLUSION', 'COMMON_AREA', 0, 'Idosos com deficiência física não conseguem acessar todas as áreas de lazer da casa devido à falta de rampas.', NULL, '2025-06-07 17:10:00', 1, 'As rampas serão instaladas para garantir acesso universal a todas as áreas de lazer. Manutenção será regular.', 10, '2025-06-08 17:10:00', '00000000000023', 1),
+(NULL, 'ABLEISM', 'DINING_HALL', 1, 'Cuidadores fazem piadas sobre a dificuldade de alguns idosos com deficiência intelectual em comer sozinhos.', NULL, '2025-06-07 17:15:00', 1, 'Cuidadores serão advertidos e passará por treinamento em atendimento humanizado e respeito.', 11, '2025-06-08 17:15:00', '00000000000023', 1),
+(6, 'DISCRIMINATION', 'ACTIVITY_ROOM', 0, 'Idosos com demência são impedidos de participar de certas atividades, alegando que \"não compreenderão\".', NULL, '2025-06-07 17:20:00', 1, 'As atividades serão adaptadas para incluir todos os idosos, independentemente de sua condição cognitiva.', 12, '2025-06-08 17:20:00', '00000000000023', 1),
+(NULL, 'PREJUDICE', 'RECEPTION', 1, 'Funcionários fazem comentários depreciativos sobre a capacidade de idosos em tomar decisões sobre sua própria vida.', NULL, '2025-06-07 17:25:00', 1, 'Funcionários serão advertidos e passará por treinamento sobre direitos dos idosos e combate ao ageísmo.', 13, '2025-06-08 17:25:00', '00000000000023', 1),
+(8, 'VERBAL_VIOLENCE', 'BEDROOM', 0, 'Cuidador grita com idosa com deficiência auditiva por ela não ouvir seus comandos rapidamente.', NULL, '2025-06-07 17:30:00', 1, 'Cuidador será demitido. A casa reforçará a política de tratamento respeitoso e comunicação adaptada.', 14, '2025-06-08 17:30:00', '00000000000023', 1),
+
+-- Reports for Galeria de Arte Moderna (00000000000024) - Culture
+(1, 'EXCLUSION', 'GALLERY', 0, 'Exposição não possui descrições em Braille ou audiodescrição para deficientes visuais.', NULL, '2025-06-07 17:35:00', 1, 'A galeria se compromete a incluir recursos de acessibilidade em todas as futuras exposições.', 10, '2025-06-08 17:35:00', '00000000000024', 1),
+(NULL, 'DISCRIMINATION', 'TICKET_OFFICE', 1, 'Funcionário da bilheteria ri de turista com dificuldade de comunicação em português, imitando-o.', NULL, '2025-06-07 17:40:00', 1, 'Funcionário será advertido e passará por treinamento em atendimento intercultural.', 11, '2025-06-08 17:40:00', '00000000000024', 1),
+(3, 'ABLEISM', 'CORRIDOR', 0, 'Visitantes com mobilidade reduzida encontram dificuldade para navegar na galeria devido a corredores estreitos.', NULL, '2025-06-07 17:45:00', 1, 'A galeria será reorganizada para garantir corredores mais amplos e acessíveis. Sinalização será melhorada.', 12, '2025-06-08 17:45:00', '00000000000024', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'GIFT_SHOP', 1, 'Segurança acompanha de perto uma pessoa com deficiência intelectual na loja da galeria.', NULL, '2025-06-07 17:50:00', 1, 'Segurança será reorientado sobre vigilância equitativa. A galeria não tolera preconceito.', 13, '2025-06-08 17:50:00', '00000000000024', 1),
+(5, 'VERBAL_VIOLENCE', 'CAFETERIA', 0, 'Atendente da cafeteria grita com cliente autista que derrubou café acidentalmente.', NULL, '2025-06-07 17:55:00', 1, 'Atendente será demitido. A equipe da cafeteria receberá treinamento em atendimento humanizado e TEA.', 14, '2025-06-08 17:55:00', '00000000000024', 1),
+
+-- Reports for Agência de Publicidade Criativa (00000000000025) - Empresa
+(7, 'DISCRIMINATION', 'OFFICE', 0, 'Candidato com gagueira foi recusado em vaga de atendimento ao público por \"dificuldade de comunicação\".', NULL, '2025-06-07 18:00:00', 1, 'A agência revisará o processo seletivo. Ações contra discriminação baseada na fala serão implementadas.', 10, '2025-06-08 18:00:00', '00000000000025', 1),
+(NULL, 'ABLEISM', 'MEETING_ROOM', 1, 'Diretor de criação faz piadas sobre o TDAH de um funcionário durante uma reunião de brainstorming.', NULL, '2025-06-07 18:05:00', 1, 'Diretor será advertido e passará por treinamento sobre respeito e neurodiversidade no ambiente de trabalho.', 11, '2025-06-08 18:05:00', '00000000000025', 1),
+(9, 'EXCLUSION', 'WORKSHOP_AREA', 0, 'Funcionário cadeirante é impedido de participar de workshops por \"falta de espaço\" nas mesas.', NULL, '2025-06-07 18:10:00', 1, 'As mesas e o layout da área de workshop serão adaptados para garantir acessibilidade universal.', 12, '2025-06-08 18:10:00', '00000000000025', 1),
+(NULL, 'UNEQUAL_TREATMENT', 'RECEPTION', 1, 'Cliente com deficiência visual não tem acesso a materiais impressos em formatos acessíveis na recepção.', NULL, '2025-06-07 18:15:00', 1, 'Todos os materiais serão disponibilizados em formatos acessíveis (Braille, digital, áudio).', 13, '2025-06-08 18:15:00', '00000000000025', 1),
+(2, 'PREJUDICE', 'BREAK_ROOM', 0, 'Funcionários fazem comentários sobre o desempenho \"lento\" de colega com deficiência intelectual.', 6, '2025-06-07 18:20:00', 1, 'A agência promoverá campanhas de conscientização sobre a valorização das diferentes formas de trabalho.', 14, '2025-06-08 18:20:00', '00000000000025', 1);

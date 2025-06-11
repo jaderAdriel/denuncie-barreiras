@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class Moderator extends User {
     private Address address;
     private String cellphone;
+    private Entity representativeOf;
 
     public Moderator(Integer id, String password, Gender gender, LocalDate birthDate, Email email, String name, String cellphone) {
         super(id, password, gender, birthDate, email, name);
@@ -16,6 +17,14 @@ public class Moderator extends User {
 
     public void setAddress(String street, String city, String state, String postalCode) {
         this.address = new Address(street, city, state, postalCode);
+    }
+
+    public Entity getRepresentativeOf() {
+        return representativeOf;
+    }
+
+    public void setRepresentativeOf(Entity representativeOf) {
+        this.representativeOf = representativeOf;
     }
 
     public String getCellphone() {

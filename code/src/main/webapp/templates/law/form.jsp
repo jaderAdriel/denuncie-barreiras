@@ -4,7 +4,7 @@
 <html>
 <head>
     <%@ include file="../_head.jsp"%>
-    <title>Cenários</title>
+    <title>Leis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- EasyMDE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">

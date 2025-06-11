@@ -79,8 +79,8 @@ public class BarrierScenarioLikeRepositoryJBDC implements BarrierScenarioLikeRep
 
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    User user = userRepository.findById(rs.getInt("user_fk")).orElseThrow();
-                    userList.add(user);
+
+                    userRepository.findById(rs.getInt("user_fk")).ifPresent(userList::add);
                 }
             }
 

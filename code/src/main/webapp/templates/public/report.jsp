@@ -31,7 +31,15 @@
   <section class="p-4 w-full">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
       <div class="flex items-center gap-x-3">
-        <h2 class="text-2xl font-semibold text-gray-800">Denúncia</h2>
+        <h2 class="text-2xl font-semibold text-gray-800">Denúncia
+          <c:if test="${not empty report.entity}">
+            para
+            <a href="/entity/${report.entity.cnpj}" class="text-info-dark underline text-blue-600">
+                ${report.entity.type.getTranslation()} ${report.entity.name}
+            </a>
+          </c:if>
+
+       </h2>
         <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded">#<c:out value="${report.id}"/></span>
       </div>
       <div class="text-sm text-gray-500">
@@ -70,7 +78,36 @@
               </c:choose>
             </div>
           </div>
+
+          <div>
+            <p class="info-label">Local</p>
+            <div class="info-value readonly-field font-semibold font-medium">
+              <c:choose>
+                <c:when test="${empty report.entity}">Não informado</c:when>
+                <c:otherwise><c:out value="${report.entity.address}"/></c:otherwise>
+              </c:choose>
+            </div>
+          </div>
         </div>
+        <c:if test="${not empty report.entity}">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+              <p class="info-label">${report.entity.type.getTranslation()}</p>
+              <div class="info-value readonly-field font-semibold font-medium">
+                ${report.entity.name}
+              </div>
+            </div>
+
+            <div>
+              <p class="info-label">CNPJ</p>
+              <div class="info-value readonly-field font-semibold font-medium">
+                  ${report.entity.cnpj}
+
+              </div>
+            </div>
+          </div>
+        </c:if>
+
 
         <div class="mb-4">
           <p class="info-label">Detalhamento do Ocorrido</p>
@@ -103,7 +140,7 @@
             </div>
 
             <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-md mb-6">
-              <p class="info-label">Comentário do Moderador</p>
+              <p class="info-label">Comentário da entidade</p>
               <div class="mt-2">
                 <div class="readonly-field min-h-[120px]">
                   <c:out value="${not empty report.review.comment ? report.review.comment : 'Nenhum comentário foi adicionado.'}"/>

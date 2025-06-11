@@ -60,6 +60,11 @@ public class Report {
         return (review.getIsValid()) ? "Válido" : "Não válido";
     }
 
+    public String getEntityCnpj() {
+        if (entity == null) return null;
+        return this.entity.getCnpj();
+    }
+
     public LocalDateTime getReviewCreationDate() {
         return this.review.getCreateAt();
     }
@@ -112,6 +117,14 @@ public class Report {
         return id;
     }
 
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
+
     public Integer getReporterId(){
         if (anonymousReport) return null;
         return this.reporter.getId();
@@ -139,6 +152,8 @@ public class Report {
         }
         return barrierScenario.getId();
     }
+
+
 
     public ReportReview getReview() {
         return review;

@@ -64,7 +64,7 @@ public class BarrierScenarioController extends Controller {
         req.setAttribute("barrierTypeOptions", BarrierType.values());
 
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/barrierScenario/form.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/scenario/form.jsp");
 
         if (req.getMethod().equalsIgnoreCase("GET")) {
             dispatcher.forward(req, resp);
@@ -106,7 +106,7 @@ public class BarrierScenarioController extends Controller {
     @HasRole(UserRole.MODERATOR)
     @Route(value = "update/{barrierScenarioId}/", method = HttpMethod.GET_POST)
     public void updateBarrierScenario(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ValidationError {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/barrierScenario/form.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/scenario/form.jsp");
 
         int barrierScenarioId = ParamsParser.parseInteger((String) req.getAttribute("barrierScenarioId"));
 

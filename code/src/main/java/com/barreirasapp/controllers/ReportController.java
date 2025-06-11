@@ -13,6 +13,7 @@ import com.barreirasapp.entities.Report;
 import com.barreirasapp.entities.User;
 import com.barreirasapp.entities.enums.BarrierType;
 import com.barreirasapp.entities.enums.EnvironmentType;
+import com.barreirasapp.services.EntityService;
 import com.barreirasapp.services.ReportService;
 import com.barreirasapp.utils.ControllerDispatcher;
 import jakarta.servlet.RequestDispatcher;
@@ -29,17 +30,19 @@ import java.util.List;
 @WebServlet("/report/*")
 public class ReportController extends Controller {
     private ReportService service;
+    private EntityService entityService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         this.service = this.getServiceFactory().getReportService();
+        this.entityService = this.getServiceFactory().getEntityService();
     }
 
     @LoginRequired
     @Route(value = "index/", method = HttpMethod.GET)
     public void renderList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/report/index.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/report/index.jsp");
 
         List<Report> reportList = new ArrayList<>();
 
@@ -60,6 +63,8 @@ public class ReportController extends Controller {
         req.setAttribute("action", "/report/create/");
         req.setAttribute("barrierTypeOptions", BarrierType.values());
         req.setAttribute("environmentOptions", EnvironmentType.values());
+        req.setAttribute("entityOptions", entityService.listAll());
+
         User reporter = (User) req.getAttribute("user");
 
         String barrierScenario = req.getParameter("barrierScenario");
@@ -77,6 +82,7 @@ public class ReportController extends Controller {
         }
 
         String type = req.getParameter("barrierType");
+        String entityCnpj = req.getParameter("entity_cnpj");
         String environment = req.getParameter("environment");
         String incidentDetails = req.getParameter("incidentDetails");
         String anonymous = req.getParameter("anonymous");
@@ -87,9 +93,10 @@ public class ReportController extends Controller {
         req.setAttribute("incidentDetails", incidentDetails);
         req.setAttribute("barrierScenario", barrierScenario);
         req.setAttribute("anonymous", anonymous);
+        req.setAttribute("entity_cnpj", entityCnpj);
 
         try {
-            RegisterReportDTO reportDTO = new RegisterReportDTO( environment, incidentDetails, barrierScenario, anonymous, type );
+            RegisterReportDTO reportDTO = new RegisterReportDTO( environment, incidentDetails, barrierScenario, anonymous, type, entityCnpj );
             if (!isAnonymous && reporter != null ) {
 
                 reportDTO.setReporter(reporter);

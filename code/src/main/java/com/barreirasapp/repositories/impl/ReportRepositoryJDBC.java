@@ -1,8 +1,10 @@
 package com.barreirasapp.repositories.impl;
 
+import com.barreirasapp.entities.Entity;
 import com.barreirasapp.infra.db.DataSource;
 import com.barreirasapp.infra.db.QueryExecutor;
 import com.barreirasapp.infra.exceptions.DatabaseException;
+import com.barreirasapp.repositories.EntityRepository;
 import com.barreirasapp.repositories.ReportRepository;
 import com.barreirasapp.repositories.UserRepository;
 import com.barreirasapp.entities.Moderator;
@@ -19,17 +21,19 @@ import java.util.Optional;
 
 public class ReportRepositoryJDBC implements ReportRepository {
     private final UserRepository userRepository;
+    private final EntityRepository entityRepository;
 
-    public ReportRepositoryJDBC(UserRepository userRepository) {
+    public ReportRepositoryJDBC(UserRepository userRepository, EntityRepository entityDao) {
         this.userRepository = userRepository;
+        this.entityRepository = entityDao;
     }
 
 
     @Override
     public Integer insert(Report report) {
         String sql = """
-                          INSERT INTO Report (type, ambient, anonymous_report, event_detailing, related_scenario_fk, reporter_fk)
-                          VALUES (?, ?, ?, ?, ?, ?);
+                          INSERT INTO Report (type, ambient, anonymous_report, event_detailing, related_scenario_fk, reporter_fk, entity_cnpj)
+                          VALUES (?, ?, ?, ?, ?, ?, ?);
                       """;
         try (Connection conn = DataSource.getConnection();
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -44,6 +48,7 @@ public class ReportRepositoryJDBC implements ReportRepository {
 
             QueryExecutor.setIntOrNull(st, 5, report.getBarrierScenarioId());
             QueryExecutor.setIntOrNull(st, 6, report.getReporterId());
+            QueryExecutor.setStringOrNull(st, 7, report.getEntityCnpj());
 
             return QueryExecutor.executeUpdateWithGeneratedKey(st, conn);
         } catch (SQLException e) {
@@ -139,6 +144,36 @@ public class ReportRepositoryJDBC implements ReportRepository {
              PreparedStatement st = conn.prepareStatement(sql)
         ){
             st.setInt(1, reporterFk);
+            try (ResultSet rs = st.executeQuery()) {
+                List<Report> reportList = new ArrayList<>();
+                while (rs.next()) {
+                    reportList.add(instantiateReport(rs));
+                }
+                return reportList;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Report> findAllByEntity(String cnpj) {
+        String sql = """
+                        SELECT Report.*,
+                               Review.author_fk as review_author_fk,
+                               Review.comment as review_comment,
+                               Review.is_valid as review_is_valid,
+                               Review.create_at as review_create_at
+                        FROM Report
+                        LEFT JOIN Review on Report.id = Review.report_fk
+                        WHERE entity_cnpj = ?
+                     """;
+
+        try (Connection conn = DataSource.getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setString(1, cnpj);
             try (ResultSet rs = st.executeQuery()) {
                 List<Report> reportList = new ArrayList<>();
                 while (rs.next()) {
@@ -258,7 +293,9 @@ public class ReportRepositoryJDBC implements ReportRepository {
 
         String typeValue = rs.getString("type");
         if(!(typeValue.isEmpty() || typeValue.equals("null"))) {
-            report.setType(BarrierType.valueOf(typeValue));
+            report.setType(
+                    BarrierType.fromValue(typeValue)
+            );
         }
 
         String hasReview = rs.getString("review_create_at");
@@ -273,13 +310,18 @@ public class ReportRepositoryJDBC implements ReportRepository {
         }
 
 
-        report.setAmbient(EnvironmentType.valueOf(rs.getString("ambient")));
+        report.setAmbient(EnvironmentType.fromValue(rs.getString("ambient")));
         report.setAnonymousReport(rs.getBoolean("anonymous_report"));
         report.setEventDetailing(rs.getString("event_detailing"));
         Optional<User> reporter = userRepository.findById(rs.getInt("reporter_fk"));
+        String entityCnpj = rs.getString("entity_cnpj");
 
         if (!report.getAnonymousReport() && reporter.isPresent()) {
             report.setReporter(reporter.get());
+        }
+
+        if (!entityCnpj.isEmpty()) {
+            entityRepository.findByCnpj(entityCnpj).ifPresent(report::setEntity);
         }
 
         LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
