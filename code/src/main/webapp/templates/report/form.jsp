@@ -51,6 +51,30 @@
             </div>
 
             <div class="w-full">
+                <label for="title" class="block text-md font-medium text-gray-900">Entidade denunciada</label>
+                <div class="mt-2">
+                    <select name="entity_cnpj"
+                            class="block  bg-none appearance-none border border-gray-300 w-full rounded-md bg-white px-5 py-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-md">
+                        <option>Selecione uma opção</option>
+                        <option>Nenhuma das opções</option>
+                        <c:if test="${not empty entityOptions}">
+                            <c:forEach items="${entityOptions}" var="entity">
+                                <option value="${entity.cnpj}"
+                                        <c:if test="${not empty entity}">
+                                            <c:if test="${entity eq entity}">selected</c:if>
+                                        </c:if>
+                                >
+                                        ${entity.name} | ${entity.address}
+                                </option>
+                            </c:forEach>
+                        </c:if>
+                    </select>
+
+                    <c:if test="${not empty entityError}"><p class="text-red-500 text-sm mt-2">${entityError}</p></c:if>
+                </div>
+            </div>
+
+            <div class="w-full">
                 <label for="title" class="block text-md font-medium text-gray-900">Tipo de barreira</label>
                 <div class="mt-2">
                     <select name="barrierType"

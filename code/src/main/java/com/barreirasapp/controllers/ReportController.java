@@ -1,5 +1,6 @@
 package com.barreirasapp.controllers;
 
+import com.barreirasapp.entities.Entity;
 import com.barreirasapp.entities.Moderator;
 import com.barreirasapp.entities.enums.UserRole;
 import com.barreirasapp.infra.annotation.HasRole;
@@ -64,6 +65,10 @@ public class ReportController extends Controller {
         req.setAttribute("barrierTypeOptions", BarrierType.values());
         req.setAttribute("environmentOptions", EnvironmentType.values());
         req.setAttribute("entityOptions", entityService.listAll());
+
+        for (Entity entity : entityService.listAll()) {
+            System.out.println(entity.getName());
+        }
 
         User reporter = (User) req.getAttribute("user");
 
