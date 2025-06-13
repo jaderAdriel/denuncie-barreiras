@@ -6,8 +6,8 @@
             <div class="header">
                 <a href="${pageContext.request.contextPath}/">
                     <div class="logo">
-                        <img src="static/images/logo-barreiras 2.png" alt="">
                         <img src="static/images/logo.png" alt="">
+                        Denuncie
                     </div>
                 </a>
                 <button class="menu-button" aria-label="Abrir menu de navegação">
@@ -31,6 +31,13 @@
                     <a href="/law/index/" class="nav-item">
                         <span class="material-symbols-outlined">gavel</span>
                         <span>Leis</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/entity/index/" class="nav-item">
+                        <span class="material-symbols-outlined">source_environment</span>
+                        <span class="ml-4">Entidades</span>
                     </a>
                 </li>
             </ul>
