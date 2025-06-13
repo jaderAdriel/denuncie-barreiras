@@ -12,7 +12,6 @@ skinparam groupInheritance 1
 skinparam defaultFontName "Arial"
 skinparam defaultFontSize 14
 
-left to right direction
 
 package "Users" <<Rectangle>> {
     class User {
@@ -22,11 +21,9 @@ package "Users" <<Rectangle>> {
         - birthDate : LocalDate
         - gender : GenderEnum
         - password : String
-
         + authenticate()
         + changePassword()
         + reportIncident()
-
         + getId() : Integer
         + setName() : String
         + getName() : String
@@ -41,7 +38,6 @@ package "Users" <<Rectangle>> {
 
     class Moderator {
         - phone : String
-
         + changePassword()
         + getPhone() : String
         + setPhone(phone : String) : void
@@ -52,7 +48,6 @@ package "Users" <<Rectangle>> {
         - state : String
         - street : String
         - zipCode : String
-
         + getCity() : String
         + setCity(city : String) : void
         + getState() : String
@@ -62,12 +57,6 @@ package "Users" <<Rectangle>> {
         + getZipCode() : String
         + setZipCode(zipCode : String) : void
     }
-
-    note right of User
-        Represents a system user who can
-        authenticate, report incidents,
-        and participate in discussions.
-    end note
 }
 
 package "Social" <<Rectangle>> {
@@ -80,7 +69,6 @@ package "Social" <<Rectangle>> {
         - creationDate : LocalDate
         - likes : List<User>
         - comments : List<Comment>
-
         + addComment()
         + addLiker(User : user)
         + getId() : Integer
@@ -102,7 +90,6 @@ package "Social" <<Rectangle>> {
         - dateTime : DateTime
         - content : Text
         - author : User
-
         + getId() : Integer
         + setId(id : Integer) : void
         + getDateTime() : DateTime
@@ -112,16 +99,6 @@ package "Social" <<Rectangle>> {
         + getAuthor() : User
         + setAuthor(author : User) : void
     }
-
-    note right of BarrierScenario
-        Represents real-world attitudinal
-        barrier situations, created by moderators.
-    end note
-
-    note right of Comment
-        User-generated content that allows
-        discussion and replies on scenarios.
-    end note
 }
 
 class Law {
@@ -130,7 +107,6 @@ class Law {
     - link : String
     - title: String
     - description: Text
-
     + getCode() : String
     + setCode(code : String) : void
     + getDate() : String
@@ -143,11 +119,6 @@ class Law {
     + setDescription(description : Text) : void
 }
 
-note right of Law
-    Legal information relevant to
-    attitudinal barriers and rights.
-end note
-
 package "Reports" <<Rectangle>> {
     class Report {
         - id : Integer
@@ -159,7 +130,7 @@ package "Reports" <<Rectangle>> {
         - incidentDetails: Text
         - relatedScenario : BarrierScenario
         - reporter : Optional<User>
-
+        - relatedEntity : Optional<Entity>
         + getId() : Integer
         + getType() : AttitudinalBarrierType
         + setType(type : AttitudinalBarrierType) : void
@@ -174,17 +145,15 @@ package "Reports" <<Rectangle>> {
         + getRelatedScenario() : BarrierScenario
         + setRelatedScenario(scenario : BarrierScenario) : void
         + getReporter() : User
+        + getRelatedEntity() : Entity
+        + setRelatedEntity(entity : Entity) : void
     }
-
-
-
 
     class ReportReview {
         - description : String
         - date : LocalDate
         - finalStatus : ReportStatus
         - author : Moderator
-
         + getDescription() : String
         + setDescription(desc : String) : void
         + getDate() : LocalDate
@@ -193,34 +162,39 @@ package "Reports" <<Rectangle>> {
         + getAuthor() : Moderator
     }
 
-    note right of Report
-        Represents a user-submitted complaint
-        about a specific barrier incident.
-    end note
-
-
-
-    note left of ReportReview
-        Moderator's evaluation and
-        decision on a reported incident.
-    end note
+    class Entity {
+        - cnpj : String
+        - name : String
+        - address : Address
+        - phone : String
+        - createAt : LocalDateTime
+        - type : EntityType
+        + getType() : EntityType
+        + setType(type : EntityType) : void
+        + getCnpj() : String
+        + setCnpj(cnpj : String) : void
+        + getName() : String
+        + setName(name : String) : void
+        + getAddress() : Address
+        + setAddress(address : Address) : void
+        + getPhone() : String
+        + setPhone(phone : String) : void
+        + getCreateAt() : LocalDateTime
+        + setCreateAt(createAt : LocalDateTime) : void
+    }
 }
 
-' Inheritance and relationships
 User <|-- Moderator
-
 User "1" -- "n" Report : "submits"
-
 ReportReview "n" -- "1" Moderator : "written by"
 ReportReview "n" -* "1" Report : "analyzes"
-
 Comment "n" -- "1" User : "authored by"
-
 Moderator *- Address : "has address"
 Moderator "1" -- "0..*" BarrierScenario : "creates"
-
 Report "*" -- "1" BarrierScenario : "describes"
 BarrierScenario "1" *-- "0..*" Comment : "has comments"
 Law "0..*" -- "0..*" BarrierScenario : "related to"
-
+Report "0..1" -- "0..1" Entity : "relates to"
+Entity *- Address : "has address"
+Moderator "0..1" -- "0..1" Entity : "associated with"
 @enduml

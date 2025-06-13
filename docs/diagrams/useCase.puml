@@ -1,6 +1,5 @@
 @startuml
 !pragma useVerticalIf on
-' Ajustar o espaçamento
 skinparam Nodesep 150
 skinparam Ranksep 150
 
@@ -10,12 +9,6 @@ skinparam usecase {
     FontSize 12
     ArrowColor #555555
     ArrowFontSize 10
-}
-
-skinparam actor {
-    BackgroundColor #F9F9F9
-    BorderColor #555555
-    FontSize 13
 }
 
 skinparam actor {
@@ -44,6 +37,8 @@ rectangle "Denúncia" <<boundary>> {
     (UC2: Anexar Arquivos) as uc2
     (UC3: Consultar Denúncia) as uc3
     (UC10: Vincular Cenário à Denúncia) as uc10
+    (UC12: Registrar Entidade) as uc12
+    (UC13: Associar Entidade à Denúncia) as uc13
 }
 
 ' ##### CENÁRIOS EDUCATIVOS #####
@@ -73,7 +68,6 @@ uc1 .down.> uc10 : <<extend>>
 uc3 .down.> uc10 : <<extend>>
 uc0 .down.> uc11 : <<extend>>
 
-
 ' Moderador
 m --> uc0
 m --> uc4
@@ -82,6 +76,8 @@ m --> uc9
 uc7 --> uc8 : <<extend>>
 uc0 .down.> uc7 : <<extend>>
 uc0 .down.> uc6 : <<extend>>
+uc0 .down.> uc12 : <<include>>
+uc0 .down.> uc13 : <<include>>
 
 note top of u
   <b>Permissões do Usuário:</b>
@@ -99,6 +95,7 @@ note top of m
   - Todas do Usuário +
   - Criar cenários
   - Vincular leis a denuncias
+  - Registrar entidades
+  - Associar entidade à denúncia
 end note
-
 @enduml
