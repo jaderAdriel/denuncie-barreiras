@@ -112,7 +112,7 @@ public class ReportController extends Controller {
             if (reporter != null && reporter.getRole() == UserRole.MODERATOR) {
                 resp.sendRedirect("/report/index/");
             } else {
-                resp.sendRedirect("/");
+                resp.sendRedirect("/home/");
             }
 
         } catch (ValidationError e) {

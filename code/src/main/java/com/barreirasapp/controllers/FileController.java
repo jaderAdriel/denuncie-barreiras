@@ -23,7 +23,6 @@ public class FileController extends Controller{
         fileRepository = getDaoFactory().createFileDao();
     }
 
-    @LoginRequired
     @Route(value = "report/{filename}", method = HttpMethod.GET)
     public void returnFile(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ValidationError {
         String filename = req.getAttribute("filename").toString();

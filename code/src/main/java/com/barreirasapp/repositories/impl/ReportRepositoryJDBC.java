@@ -320,7 +320,7 @@ public class ReportRepositoryJDBC implements ReportRepository {
             report.setReporter(reporter.get());
         }
 
-        if (!entityCnpj.isEmpty()) {
+        if (entityCnpj != null && !entityCnpj.isEmpty()) {
             entityRepository.findByCnpj(entityCnpj).ifPresent(report::setEntity);
         }
 

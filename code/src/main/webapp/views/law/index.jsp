@@ -9,78 +9,87 @@
 <div class="card card-default p-0 shadow-sm">
 
   <div class="card-header">
-                      <span>
-                        <h1 class="m-0">Denúncias</h1>
-                        <p class="">Gerenciamento de denúncias</p>
-                      </span>
+      <span>
+        <h1 class="m-0">Leis</h1>
+        <p class="">Gerenciamento de leis</p>
+      </span>
     <div class="card-header-action">
-      <a href="${pageContext.request.contextPath}/report/create/" class="btn btn-success py-1 px-3 mt-2" title="Adicionar nova denúncia"><i class="mdi mdi-plus mdi-18px"></i></a>
+      <a href="${pageContext.request.contextPath}/law/create/" class="btn btn-success py-1 px-3 mt-2" title="Adicionar nova denúncia"><i class="mdi mdi-plus mdi-18px"></i></a>
     </div>
   </div>
 
   <div class="card-body p-4">
-    <table class="table table-sm table-hover data-table">
-      <thead>
+    <table class="min-w-full divide-y divide-gray-200 table table-sm table-hover data-table">
+      <thead class="bg-gray-50">
       <tr>
-        <th>Código</th>
-        <th>Tipo</th>
-        <th>Descrição</th>
-        <th>Ambientes</th>
-        <th>Status</th>
-        <th>Ações</th>
+        <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500">
+          <div class="flex items-center gap-x-3">
+            <input type="checkbox" class="text-blue-500 border-gray-300 rounded">
+            <span>Código</span>
+          </div>
+        </th>
+
+        <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500">
+          <button class="flex items-center gap-x-2">
+            <span>Data</span>
+            <svg class="h-3" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.13347 0.0999756H2.98516L5.01902 4.79058H3.86226L3.45549 3.79907H1.63772L1.24366 4.79058H0.0996094L2.13347 0.0999756ZM2.54025 1.46012L1.96822 2.92196H3.11227L2.54025 1.46012Z" fill="currentColor" stroke="currentColor" stroke-width="0.1" />
+              <path d="M0.722656 9.60832L3.09974 6.78633H0.811638V5.87109H4.35819V6.78633L2.01925 9.60832H4.43446V10.5617H0.722656V9.60832Z" fill="currentColor" stroke="currentColor" stroke-width="0.1" />
+              <path d="M8.45558 7.25664V7.40664H8.60558H9.66065C9.72481 7.40664 9.74667 7.42274 9.75141 7.42691C9.75148 7.42808 9.75146 7.42993 9.75116 7.43262C9.75001 7.44265 9.74458 7.46304 9.72525 7.49314C9.72522 7.4932 9.72518 7.49326 9.72514 7.49332L7.86959 10.3529L7.86924 10.3534C7.83227 10.4109 7.79863 10.418 7.78568 10.418C7.77272 10.418 7.73908 10.4109 7.70211 10.3534L7.70177 10.3529L5.84621 7.49332C5.84617 7.49325 5.84612 7.49318 5.84608 7.49311C5.82677 7.46302 5.82135 7.44264 5.8202 7.43262C5.81989 7.42993 5.81987 7.42808 5.81994 7.42691C5.82469 7.42274 5.84655 7.40664 5.91071 7.40664H6.96578H7.11578V7.25664V0.633865C7.11578 0.42434 7.29014 0.249976 7.49967 0.249976H8.07169C8.28121 0.249976 8.45558 0.42434 8.45558 0.633865V7.25664Z" fill="currentColor" stroke="currentColor" stroke-width="0.3" />
+            </svg>
+          </button>
+        </th>
+
+        <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500">
+          <button class="flex items-center gap-x-2">
+            <span>Título</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+            </svg>
+          </button>
+        </th>
+
+        <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500">Descrição</th>
+
+        <th scope="col" class="px-4 py-3.5 text-sm font-normal rtl:text-right text-gray-500">
+          <span>Ações</span>
+        </th>
       </tr>
-
       </thead>
-      <tbody>
-      <c:forEach items="${reportList}" var="report">
-        <tr>
-          <td>${report.id}</td>
-          <td>${report.type.getTranslation()}</td>
-          <td>
-            <p class="text-truncate" style="max-width: 10rem; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                ${report.eventDetailing}
-            </p>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <c:if test="${not empty lawList}">
+        <c:forEach items="${lawList}" var="law">
+          <tr>
+            <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+              <div class="inline-flex items-center gap-x-3">
+                <input type="checkbox" class="text-blue-500 border-gray-300 rounded">
+                <div>
+                  <h2 class="font-medium text-gray-800">${law.code}</h2>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+                ${law.date.toString()}
+            </td>
+            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${law.title}</td>
+            <td class="px-4 py-4 text-sm text-gray-500 max-w-xs truncate">${law.description}</td>
+            <td class="px-4 py-4 text-sm whitespace-nowrap">
+              <div class="flex items-center gap-x-6">
+                <c:if test="${user.role.toString() eq 'MODERATOR'}">
+                  <a href="/law/update/${law.code}" class="text-gray-500 transition-colors duration-200 hover:text-blue-500 focus:outline-none">
+                    <span class="material-symbols-outlined text-md">edit_note</span>
+                  </a>
 
-          </td>
-          <td>${report.ambient.getTranslation()}</td>
-          <td class="px-4 text-sm text-nowrap">
-            <c:if test="${report.reviewStatus.toUpperCase() == 'NÃO VÁLIDO'}">
-                            <span class="badge text-danger fw-medium px-2 py-1">
-                                ${report.reviewStatus}
-                            </span>
-            </c:if>
+                  <a href="/law/delete/${law.code}" class="text-gray-500 transition-colors duration-200 hover:text-red-500 focus:outline-none">
+                    <span class="material-symbols-outlined text-md">delete</span>
+                  </a>
+                </c:if>
 
-            <c:if test="${report.reviewStatus.toUpperCase() == 'VÁLIDO'}">
-                            <span class="badge text-success fw-medium px-2 py-1">
-                                ${report.reviewStatus}
-                            </span>
-            </c:if>
-
-            <c:if test="${report.reviewStatus.toUpperCase() == 'PENDENTE'}">
-                            <span class="badge text-black fw-medium px-2 py-1">
-                                ${report.reviewStatus}
-                            </span>
-            </c:if>
-          </td>
-
-          <td class="text-end align-middle">
-            <c:if test="${user.role.toString() eq 'MODERATOR'}">
-              <a href="/report/review/${report.id}" class="mr-3 text-success" title="Review de denúncia">
-                <span class="material-symbols-rounded fs-5">data_loss_prevention</span>
-              </a>
-
-              <a href="/report/review/delete/${report.id}" class="mr-3 text-danger">
-                <span class="material-symbols-rounded fs-3">delete</span>
-              </a>
-            </c:if>
-
-            <a href="/public/report/${report.id}/" class="text-muted">
-              <span class="material-symbols-rounded fs-3">open_in_new</span>
-            </a>
-          </td>
-        </tr>
-      </c:forEach>
-
+              </div>
+            </td>
+          </tr>
+        </c:forEach>
+      </c:if>
       </tbody>
     </table>
   </div>

@@ -21,7 +21,6 @@ public class UserRepositoryJDBC implements UserRepository {
     public UserRepositoryJDBC() {
     }
 
-
     @Override
     public Integer insert(User user) {
         String sql = """

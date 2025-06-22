@@ -44,7 +44,7 @@ public class BarrierScenarioController extends Controller {
     @HasRole(UserRole.MODERATOR)
     @Route(value = "index/", method = HttpMethod.GET)
     public void renderList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/barrierScenario/index.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/scenario/index.jsp");
         req.setAttribute("barrierTypeOptions", BarrierType.values());
 
         List<BarrierScenario> scenarioList = this.service.listAll();

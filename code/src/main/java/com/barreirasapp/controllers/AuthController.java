@@ -53,7 +53,7 @@ public class AuthController extends Controller {
                 return;
             }
 
-            resp.sendRedirect("/");
+            resp.sendRedirect("/home/");
         } catch (ValidationError e) {
             ControllerDispatcher.sendErrors(e.getErrors(), req);
             dispatcher.forward(req, resp);

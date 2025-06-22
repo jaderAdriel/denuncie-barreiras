@@ -40,7 +40,7 @@ public class LawController extends Controller {
 
     @Route(value = "index/", method = HttpMethod.GET)
     public void renderList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/templates/law/index.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/law/index.jsp");
 
         List<Law> lawList = this.lawService.listAll();
 
